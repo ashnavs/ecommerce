@@ -1,0 +1,33 @@
+<!-- <h1>OTP Verification</h1>
+<p>Please enter the OTP sent to your email:</p>
+<form action="/verify" method="POST">
+    <input type="text" name="otp" placeholder="Enter OTP" required>
+    <button type="submit">Verify OTP</button>
+</form> -->
+
+<%- include('../partials/styleh') %>
+
+<div class="container mt-5 shadow p-3 mb-5 bg-white rounded align-items-center">
+    <div class="text-center ">
+        <h1 class="mb-4">OTP Verification</h1>
+        <p>Please enter the OTP sent to your email:</p>
+    </div>
+    <div class="d-flex justify-content-center">
+    <form action="/verify" method="POST" class="text-center">
+        <div class="form-group">
+            <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Verify OTP</button>
+        <br>
+        <div class="pt-2">
+        <button type="submit" class="btn btn-primary">Resend OTP</button>
+    </div>
+    </form>
+</div>
+</div>
+
+
+    <!-- Add the Bootstrap JS and jQuery CDN links before the closing </body> tag -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

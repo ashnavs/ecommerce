@@ -1,0 +1,221 @@
+//login
+
+
+
+<%- include('../layouts/header') %>
+
+
+<!-- <h2>User Registration</h2>
+            <form action="/register" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+        
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+        
+                <label for="mobile">Mobile:</label>
+                <input type="text" id="mobile" name="mno" required><br><br>
+        
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br><br>
+        
+                 <input type="submit" value="Register"> -->
+                <!-- <input type="submit" value="Register" onclick="redirectToPage('/otp-verification')">
+            </form>
+
+            <script>
+                function redirectToPage(pageUrl) {
+                  window.location.href = pageUrl;
+                }
+              </script>
+              
+
+            <%- include('../layouts/footer') %> --> 
+
+
+
+  <!-- Sign in / Register Modal -->
+
+              <div class="pt-5">
+              
+                <div class="form-box">
+                    <div class="form-tab">
+                        <!-- <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
+                                    role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
+                                    aria-controls="register" aria-selected="false">Register</a>
+                            </li>
+                        </ul> -->
+                        <h3>Log In</h3>
+                        <div class="tab-content" id="tab-content-5" >
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                aria-labelledby="signin-tab">
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        <label for="singin-email">Email address *</label>
+                                        <input type="email" class="form-control" id="singin-email"
+                                            name="singin-email" required>
+                                    </div><!-- End .form-group -->
+
+                        
+                                    <div class="form-group">
+                                        <label for="singin-password">Password *</label>
+                                        <input type="password" class="form-control" id="singin-password"
+                                            name="singin-password" required>
+                                    </div><!-- End .form-group -->
+
+
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>LOG IN</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        
+
+                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                                
+                            <!-- <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <label for="register-email">Your email address *</label>
+                                        <input type="email" class="form-control" id="register-email"
+                                            name="register-email" required>
+                                    </div><!-- End .form-group -->
+
+                                    <!-- <div class="form-group">
+                                        <label for="register-password">Password *</label>
+                                        <input type="password" class="form-control" id="register-password"
+                                            name="register-password" required>
+                                    </div>End .form-group -->
+
+                                    <!-- <div class="form-footer">
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SIGN UP</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="register-policy"
+                                                required>
+                                            <label class="custom-control-label" for="register-policy">I agree to the
+                                                <a href="#">privacy policy</a> *</label>
+                                        </div>End .custom-checkbox -->
+                                    <!-- </div>End .form-footer -->
+                                <!-- </form>
+                                <div class="form-choice">
+                                    <p class="text-center">or sign in with</p>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login btn-g">
+                                                <i class="icon-google"></i>
+                                                Login With Google
+                                            </a>
+                                        </div>End .col-6 -->
+                                        <!-- <div class="col-sm-6">
+                                            <a href="#" class="btn btn-login  btn-f">
+                                                <i class="icon-facebook-f"></i>
+                                                Login With Facebook
+                                            </a>
+                                        </div>End .col-6 -->
+                                    <!-- </div>End .row -->
+                                <!-- </div>End .form-choice -->
+                            <!-- </div>.End .tab-pane --> 
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->        
+</div>   
+
+
+
+
+
+//////////////////////////////////////////////////
+
+const verifyLogin = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+        console.log(email, password);
+
+        const userData = await User.findOne({ email: email });
+        
+
+        if (userData) {
+            
+            const passwordMatch = await bcrypt.compare(password, userData.password);
+            console.log(password, userData.password)
+
+            if (passwordMatch) {
+                if (userData.is_verified === 0) {
+                    res.render('login', { message: "Please verify your email" });
+                } else {
+                    req.session.user_id = userData._id;
+                res.render('home')
+                }
+        
+            }
+        else {
+            res.render('login', { message: 'Email or Password is incorrect' });
+            console.log("User not found");
+        }
+    } catch (error) {
+        console.log(error.message);
+        console.log("Error occurred");
+    }
+}
+/////////////////////////////////////////
+
+//verifylogin
+// const verifyLogin = async (req,res)=>{
+//     try {
+        
+//         const email = req.body.email;
+//         const password = req.body.password;
+//         console.log(email, password);
+
+//         const userData = await User.findOne({email:email})
+//         console.log(userData);
+//         if(userData){
+//             const passwordMatch = await bcrypt.compare(password,userData.password);
+            
+//             if(passwordMatch){
+//                 if(userData.is_verified===0){
+//                     res.render('login',{message:"please varify your mail"})
+
+//                 }
+
+//                 else{
+//                     req.session.user_id=userData._id;
+//                     res.render('/home',)
+//                     console.log("1");
+//                 // req.session.user_id = userData._id;
+//                 // res.redirect('/')
+//                 }
+//             }
+//             else{
+//                 res.render('login',{message:'Invalid Login'});
+//                 console.log("2");
+
+//             }
+//         }
+//         else{
+//             res.render('login',{message:'Email or Password is incorrect'})
+//             console.log("3");
+
+//         }
+
+//     } catch (error) {
+//         console.log(error.message,"4");
+//     }
+// }
