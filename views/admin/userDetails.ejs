@@ -30,12 +30,13 @@
                                                     <th>Phone</th>
                                                     <th>Email</th>
                                                     <th>Status</th>
-                                                    <th>Option</th>
+                                                    
                                                     
                                                 </tr>
                                             </thead>
 
                                             <tbody>
+                                               
                                                 <% datas.forEach((value)=>{ %>
 
                                                 
@@ -58,7 +59,7 @@
                                                     <td><%= value.mobile%></td>
 
                                                     <td><%= value.email%></td>
-                                                    <td>
+                                                    <td class="" style="text-align: center;">
                                                         <% if(value.is_blocked){%>
                                                         <a href="/admin/blockuser?id=<%=value._id.toString()%>">
                                                             <p class="text-danger">Unblock</p>
@@ -70,7 +71,7 @@
                                                   <%   } %>
                                                     </td>
 
-                                                    <td>
+                                                    <!-- <td>
                                                         <ul>
                                                             <li>
                                                                 <a href="order-detail.html">
@@ -91,7 +92,7 @@
                                                                 </a>
                                                             </li>
                                                         </ul>
-                                                    </td>
+                                                    </td> -->
                                                 </tr>
 
                                              

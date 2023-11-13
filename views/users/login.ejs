@@ -24,8 +24,11 @@
                                         <input type="password" class="form-control" id="singin-password"
                                             name="password" required>
                                     </div><!-- End .form-group -->
+                                   <% if(typeof message !== 'undefined' && message) { %>
+                                    <p style="color: red;" id="message"> <%= message %></p>
+                                 <%  } %> 
 
-
+                                   
                                     <div class="form-footer">
                                         <button type="submit" class="btn btn-outline-primary-2">
                                             <span>LOG IN</span>
@@ -35,6 +38,8 @@
                                         
 
                                         <a href="#" class="forgot-link">Forgot Your Password?</a>
+
+
                                     </div><!-- End .form-footer -->
                                 </form>
                         </div><!-- End .tab-content -->

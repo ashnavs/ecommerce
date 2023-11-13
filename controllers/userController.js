@@ -212,8 +212,15 @@ const verifyLogin=async(req,res)=>{
 
         }
         else{
-            req.session.user_id=userData._id;
-            res.render('home')
+            if(userData.is_blocked === false){
+                req.session.user_id=userData._id;
+                res.render('home')
+            }
+            else{
+                res.render('login',{message:'Your account has temporarily suspended'})
+               
+            }
+          
         }
 
       }

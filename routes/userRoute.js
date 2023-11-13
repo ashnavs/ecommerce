@@ -21,6 +21,7 @@ user_route.set('views','./views/users');
 
 //conneccting the controller
 const userController = require("../controllers/userController");
+const categoryController = require("../controllers/categoryController");
 
 //api
 user_route.get('/', userController.loadLandingHome);

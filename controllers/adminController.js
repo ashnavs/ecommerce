@@ -87,13 +87,7 @@ const blockUser = async (req, res) => {
     }
 }
 
-const loadCategory = async (req, res) => {
-    try {
-        res.render('category')
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+
 
 
 module.exports = {
@@ -102,6 +96,6 @@ module.exports = {
     verifyLogin,
     loaduserDetails,
     blockUser,
-    loadCategory
+    
 
 }
