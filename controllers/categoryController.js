@@ -25,11 +25,12 @@ const loadaddCategory = async(req,res) =>{
 
 const addCategory = async(req,res)=>{
     try {
-        const {  image,name, description } = req.body;
+        const { name, description } = req.body;
         console.log(req.file);
         console.log(req.body);
-        const category = Category ({
-            image:image,
+        
+        const category =new Category ({
+            image:req.file.filename,
             name:name,
             description:description,
             is_list:true
@@ -58,10 +59,19 @@ async function listCategory(req,res){
     }
 }
 
+const editCategory = async (req,res)=>{
+    try {
+        res.render('editCategory')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadCategory,
     addCategory,
     loadaddCategory,
-    listCategory
+    listCategory,
+    editCategory
 }
 

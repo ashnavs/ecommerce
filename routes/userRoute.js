@@ -38,7 +38,7 @@ user_route.get('/home',auth.isLogin,userController.loadHome)
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
 
-user_route.get('/landingHome',auth.isLogout,userController.loadLogout)
+user_route.get('/',auth.isLogout,userController.loadLogout)
 
 //SHOP
 user_route.get('/shop',userController.loadShop)
