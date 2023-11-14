@@ -6,6 +6,7 @@ const session = require('express-session')
 const auth = require('../middleware/auth')
 
 
+
 user_route.use(express.urlencoded({extended : true }))
 
 //setting session

@@ -3,10 +3,12 @@ const Category = require('../models/categoryModel')
 const Admin = require('../models/adminModel')
 
 
+
 const loadCategory = async (req, res) => {
     try {
         const categories = await Category.find();
         console.log(categories);
+       
         res.render('category',{categories})
     } catch (error) {
         console.log(error.message);
@@ -23,8 +25,9 @@ const loadaddCategory = async(req,res) =>{
 
 const addCategory = async(req,res)=>{
     try {
-        const { image, name, description } = req.body;
-        
+        const {  image,name, description } = req.body;
+        console.log(req.file);
+        console.log(req.body);
         const category = Category ({
             image:image,
             name:name,
@@ -38,6 +41,7 @@ const addCategory = async(req,res)=>{
         console.log(error.message);
     }
 }
+
 
 async function listCategory(req,res){
     try {
