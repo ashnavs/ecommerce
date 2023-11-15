@@ -32,7 +32,8 @@ admin_route.get('/category', categoryController.loadCategory);
 admin_route.get('/add-new-category',categoryController.loadaddCategory);
 
 admin_route.post('/add-new-category',upload.single('image'),categoryController.addCategory)
-admin_route.get('/list-category',categoryController.listCategory)
+admin_route.get('/listcategory',categoryController.listCategory)
 admin_route.get('/edit-category',categoryController.editCategory)
+admin_route.post('/edit-category',upload.single('image'),categoryController.updateCategory);
 
 module.exports = admin_route;
