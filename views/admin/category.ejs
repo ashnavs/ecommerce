@@ -1,4 +1,4 @@
-<%- include('../partials/adminStyle') %>
+
 
  <%- include('../partials/adminHeader') %>
 
@@ -29,8 +29,7 @@
                                     <thead>
                                         <tr>
                                             <th>Categories</th>
-                                            <th>Date</th>
-                                            <th>Product Image</th>
+                                          
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th>Option</th>
@@ -45,14 +44,9 @@
                                         <tr>
                                             <td><%= category.name%></td>
 
-                                            <td>26-12-2021</td>
+                            
 
-                                            <td>
-                                                <div class="table-image">
-                                                    <img src="/categoryImage/<%= category.image%>" class="img-fluid"
-                                                        alt="image">
-                                                </div>
-                                            </td>
+                                         
                                             
 
                                          
@@ -87,12 +81,7 @@
                                                         </a>
                                                     </li>
 
-                                                    <li>
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModalToggle">
-                                                            <i class="ri-delete-bin-line"></i>
-                                                        </a>
-                                                    </li>
+                                                   
                                                 </ul>
                                             </td>
                                         </tr>

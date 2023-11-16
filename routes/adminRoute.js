@@ -17,7 +17,8 @@ admin_route.set('views', './views/admin');
 // Connecting the controller
 const adminController = require("../controllers/adminController");
 const categoryController = require("../controllers/categoryController");
-// const upload = require('../helper/multer')
+const productController = require("../controllers/productController");
+
 
 admin_route.get('/', adminController.adminLogin);
 admin_route.post('/adminlogin', adminController.adminLogin);
@@ -31,9 +32,20 @@ admin_route.get('/category', categoryController.loadCategory);
 
 admin_route.get('/add-new-category',categoryController.loadaddCategory);
 
-admin_route.post('/add-new-category',upload.single('image'),categoryController.addCategory)
+admin_route.post('/add-new-category',categoryController.addCategory)
 admin_route.get('/listcategory',categoryController.listCategory)
 admin_route.get('/edit-category',categoryController.editCategory)
-admin_route.post('/edit-category',upload.single('image'),categoryController.updateCategory);
+admin_route.post('/edit-category',categoryController.updateCategory);
+
+
+
+//product
+admin_route.get('/products',productController.loadProduct);
+admin_route.get('/addnewProduct',productController.loadaddnewProduct)
+admin_route.post('/addnewProduct',upload.array('productImage'),productController.addnewProduct)
+admin_route.get('/listProduct',productController.listProduct)
+admin_route.get('/editProduct',productController.editProduct)
+admin_route.post('/editProduct',upload.array('productImage'),productController.updateProduct)
+
 
 module.exports = admin_route;

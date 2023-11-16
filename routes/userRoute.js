@@ -43,4 +43,7 @@ user_route.get('/',auth.isLogout,userController.loadLogout)
 //SHOP
 user_route.get('/shop',userController.loadShop)
 
+//productdetail
+user_route.get('/productDetails',userController.loadproductDetail)
+
 module.exports = user_route;

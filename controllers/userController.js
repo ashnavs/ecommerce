@@ -2,7 +2,8 @@ const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const otpGenerator = require('otp-generator')
 const nodemailer = require('nodemailer');
-const randomstring = require('randomstring')
+const randomstring = require('randomstring');
+const Product = require('../models/productModel');
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -49,7 +50,7 @@ function generateOTP() {
 function sendOtp(email,otp){
     const Email = email;
     const mailOptions = {
-        from:"ashnavs15@gmail.com",
+        from:process.env.node_email,
         to:Email,
         subject:'OTP Verification',
         text:`your OTP for verification is ${otp}`
@@ -61,8 +62,8 @@ function sendOtp(email,otp){
 const transporter = nodemailer.createTransport({
     service:'gmail',
     auth:{
-        user:'ashnavs15@gmail.com',
-        pass:'fqhj buwg qktr avwg'
+        user:process.env.node_email,
+        pass:process.env.node_password
     }
 });
 
@@ -175,7 +176,8 @@ const loadHome = async(req,res)=>{
 //home before signup
 const loadLandingHome= async(req,res)=>{
     try {
-        res.render('landingHome')
+        const allProduct = await Product.find();
+        res.render('landingHome',{allProduct})
     } catch (error) {
         console.log(error.message);
     }
@@ -247,6 +249,16 @@ const loadShop = async(req,res)=>{
     }
 }
 
+
+//load product details
+async function loadproductDetail(req,res){
+    try {
+        res.render('productDetails')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadRegister,
     insertUser,
@@ -257,5 +269,6 @@ module.exports = {
     loadLogin,
     loadLogout,
     verifyLogin,
-    loadShop
+    loadShop,
+    loadproductDetail
 }

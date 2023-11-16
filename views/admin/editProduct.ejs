@@ -1,0 +1,320 @@
+<%- include('../partials/adminHeader') %>
+
+    <%- include('../partials/adminSidebar') %>
+
+
+
+
+
+
+        <div class="page-body">
+            <!-- New Product Add Start -->
+            <form action="" method="post" enctype="multipart/form-data">
+
+                <div class="container-fluid">
+                    <div class="row theme-form theme-form-2 mega-form">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-sm-8 m-auto">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Product Information</h5>
+                                            </div>
+
+
+                                            <!-- <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Product
+                                                    Name</label>
+                                                <input type="text" name="name" placeholder="Product Name">
+
+                                                <div class="col-sm-9">
+
+                                                </div>
+                                            </div> -->
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Product Name</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="name" placeholder="Product Name"  value="<%=product.name%>">
+                                                </div>
+                                            </div>
+                                            
+
+                                            <!-- <input type="text" name="id" value="<%= product._id %>" style="display: none;">  -->
+             
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Category</label>
+                                                
+                                                
+                                      
+                                            </div>
+
+
+
+
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Brand</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="brand" placeholder="Brand" value="<%=product.brand%>">
+                                                </div>
+                                            </div>
+                                            
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Quantity</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control" name="quantity" placeholder="Quantity"  value="<%=product.quantity%>">
+                                                </div>
+                                            </div>
+                                            
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Product Specifiction</h5>
+                                            </div>
+
+
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Model</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="model" placeholder="Model"  value="<%=product.model %>">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Ram</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="ram" placeholder="RAM"  value="<%=product.quantity%>">
+
+                                                </div>
+                                            </div>
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Storage Space</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="storage" placeholder="Storage" value="<%=product.storage %>">
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Processor</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="processor" placeholder="Processor"  value="<%=product.processor %>">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Screen Size</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="screenSize" placeholder="Screen Size"  value="<%=product.screenSize %>">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">Graphics Card</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="graphicsCard" placeholder="Graphics Card" value="<%=product.graphicsCard %>">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">OS Architecture</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="osArchitecture"
+                                                        placeholder="OS Architecture" class="form-control" value="<%=product.osArchitecture %>">
+
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="form-label-title col-sm-3 mb-0">OS</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="os" placeholder="OS" class="form-control"  value="<%=product.os %>">
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Description</h5>
+                                            </div>
+                                            <div class="row theme-form theme-form-2 mega-form">
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <label class="form-label-title col-sm-3 mb-0 ">Product
+                                                            Description</label>
+                                                        <div class="col-sm-9">
+
+                                                            <div> <input type="text" name="description"
+                                                                    placeholder="Product Description" class="form-control" value="<%=product.description%>">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header-2">
+                                                <h5>Product Images</h5>
+                                            </div>
+
+
+                                            <div class="mb-4 row align-items-center">
+                                                <label class="col-sm-3 col-form-label form-label-title">Images</label>
+
+                                                <div class="col-sm-9">
+                                                    <input class="form-control form-choose" type="file" id="formFile"
+                                                        name="productImage" multiple >
+                                                </div>
+                                                <span>(upto - 4 images)</span>
+                                            </div>
+
+
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="card-header-2">
+                                                        <h5>Product Price</h5>
+                                                    </div>
+
+
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="col-sm-3 form-label-title">price</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" name="price" placeholder="Price" class="form-control" value="<%=product.price%>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-4 row align-items-center">
+                                                        <label class="col-sm-3 form-label-title">Discount Price</label>
+                                                        <div class="col-sm-9">
+                                                            <input type="number" name="discountPrice"
+                                                                placeholder="Discount Price" class="form-control" value="<%=product.discountPrice%>">
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-4 col-3 ">
+                                                <button type="submit" class="btn btn-primary w-70  h-100 ">Add
+                                                    Product</button>
+                                            </div>
+
+                                            <br>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+            </form>
+         
+
+        </div>
+        <!-- New Product Add End -->
+
+
+
+
+        <!-- Modal End -->
+
+        <!-- latest js -->
+        <script src="/assetsb/js/jquery-3.6.0.min.js"></script>
+
+        <!-- Bootstrap js -->
+        <script src="/assetsb/js/bootstrap/bootstrap.bundle.min.js"></script>
+
+        <!-- feather icon js -->
+        <script src="/assetsb/js/icons/feather-icon/feather.min.js"></script>
+        <script src="/assetsb/js/icons/feather-icon/feather-icon.js"></script>
+
+        <!-- scrollbar simplebar js -->
+        <script src="/assetsb/js/scrollbar/simplebar.js"></script>
+        <script src="/assetsb/js/scrollbar/custom.js"></script>
+
+        <!-- Sidebar js -->
+        <script src="/assetsb/js/config.js"></script>
+
+        <!-- bootstrap tag-input js -->
+        <script src="/assetsb/js/bootstrap-tagsinput.min.js"></script>
+        <script src="/assetsb/js/sidebar-menu.js"></script>
+
+        <!-- customizer js -->
+        <script src="/assetsb/js/customizer.js"></script>
+
+        <!--Dropzon js -->
+        <script src="/assetsb/js/dropzone/dropzone.js"></script> 
+        <script src="/assetsb/js/dropzone/dropzone-script.js"></script>
+
+        <!-- Plugins js -->
+        <script src="/assetsb/js/notify/bootstrap-notify.min.js"></script>
+        <script src="/assetsb/js/notify/index.js"></script>
+
+        <!-- ck editor js -->
+        <script src="/assetsb/js/ckeditor.js"></script>
+        <script src="/assetsb/js/ckeditor-custom.js"></script>
+
+        <!-- select2 js -->
+        <script src="/assetsb/js/select2.min.js"></script>
+        <script src="/assetsb/js/select2-custom.js"></script>
+
+        <!-- sidebar effect -->
+        <script src="/assetsb/js/sidebareffect.js"></script>
+
+        <!-- Theme js -->
+        <script src="/assetsb/js/script.js"></script>
+
+        </body>
+
+
+        <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Sep 2023 05:49:46 GMT -->
+
+    
+
+        </html>
