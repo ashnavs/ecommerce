@@ -18,45 +18,53 @@
                                             <h5>Category Information</h5>
                                         </div>
 
-                                        <form class="theme-form theme-form-2 mega-form" method="post" action="" >
+                                        <form class="theme-form theme-form-2 mega-form" method="post" action="" onclick="" id="categoryForm">
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Category Name</label>
                                                 <div class="col-sm-9">
-                                                    <input class="form-control" type="text" placeholder="Category Name" name="name">
+                                                    <!-- <input class="form-control" type="text" placeholder="Category Name" name="name"> -->
+                                                    <input class="form-control" type="text" placeholder="Category Name" name="name" id="name">
+                                            <small class="text-danger" id="nameError"></small>
                                                 </div>
                                             </div>
 
-                                            <!-- <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label form-label-title">Category
-                                                    Image</label>
-                                                <div class="form-group col-sm-9">
-                                                    <div class="dropzone-wrapper">
-                                                        <div class="dropzone-desc">
-                                                            <i class="ri-upload-2-line"></i>
-                                                            <p>Choose an image file or drag it here.</p>
-                                                        </div>
-                                                        <input type="file" name="image" >
-                                                    </div>
-                                                </div>
-                                            </div> -->
+                                         
+                                         
                            
 
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Category Description</label>
                                                 <div class="col-sm-9">
-                                                    <input name="description" class="form-control" type="text" placeholder="Category Description">
+                                                    <!-- <input name="description" class="form-control" type="text" placeholder="Category Description"> -->
+                                                    <input name="description" class="form-control" type="text" placeholder="Category Description" id="description">
+                                                    <small class="text-danger" id="descriptionError"></small>
                                                 </div>
                                             </div>
 
                                             <div class="col-6 col-lg-4 col-xl-2">
                                                 <div class="btn-wrap"></div>
-                                                  <button type="submit " class="btn btn-primary btn-round">submit</button>
-                                                </div><!-- End .btn-wrap -->
+                                                  <!-- <button type="submit " class="btn btn-primary btn-round">submit</button> -->
+                                                  <button type="button" class="btn btn-primary btn-round" onclick="validateForm()">Submit</button>
+                                                </div>
                                             
 
-                                        </form>
+                                        </form> 
+
+                                      
+
+
                                     </div>
                                 </div>
+
+                                <% if(typeof message !== 'undefined') { %> 
+                                    <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+                                        <%- message %>
+                                    </div>
+                                
+                           <%     }  %>
+
+                           
+
                             </div>
                         </div>
                     </div>
@@ -82,6 +90,7 @@
         </div>
         <!-- page-wrapper End -->
 
+      
         <!-- Modal Start -->
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -101,6 +110,42 @@
             </div>
         </div>
         <!-- Modal End -->
+
+        <script>
+            const message = document.getElementById('message');
+
+            const hide = ()=>{
+                message.style.display = 'none' ;
+            }
+            setTimeout(hide, 3000)
+
+            function validateForm() {
+        const nameField = document.getElementById('name');
+        const descriptionField = document.getElementById('description');
+
+        const nameError = document.getElementById('nameError');
+        const descriptionError = document.getElementById('descriptionError');
+
+        // Reset previous error messages
+        nameError.textContent = '';
+        descriptionError.textContent = '';
+
+        if (!nameField.value.trim()) {
+            nameError.textContent = 'Please enter a valid category name.';
+        }
+
+        if (!descriptionField.value.trim()) {
+            descriptionError.textContent = 'Please enter a valid category description.';
+        }
+
+        // Check if the form is valid
+        if (nameError.textContent === '' && descriptionError.textContent === '') {
+            // If the form is valid, submit it
+            document.getElementById('categoryForm').submit();
+        }
+    }
+        </script>
+
 
         <!-- latest js -->
         <script src="/assetsb/js/jquery-3.6.0.min.js"></script>

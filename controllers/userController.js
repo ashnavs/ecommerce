@@ -26,14 +26,6 @@ const loadRegister = async (req, res) => {
   }
 }
 
-const loadLogout = async(req,res)=>{
-    try {
-        res.render('landingHome');
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 
 
 
@@ -154,7 +146,7 @@ const verifyOtp = async (req,res)=>{
             })
 
             await user.save();
-            res.redirect('/home');
+            res.redirect('/landingHome');
             
         }
         else{
@@ -165,26 +157,30 @@ const verifyOtp = async (req,res)=>{
     }
 }
 
-const loadHome = async(req,res)=>{
-    try {
-        res.render('home')
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+// const loadHome = async(req,res)=>{
+//     try {
+//         const product = await Product.find();
+//         res.render('home',{product})
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
 
 //home before signup
-const loadLandingHome= async(req,res)=>{
+const loadLandingHome = async (req, res) => {
     try {
         const allProduct = await Product.find();
-        res.render('landingHome',{allProduct})
+        console.log(allProduct); // Log the products to the console
+
+        res.render('landingHome', { allProduct });
     } catch (error) {
         console.log(error.message);
     }
 }
 
+
 //login after signup
-const loadLogin = async(req,res)=>{
+const   loadLogin = async(req,res)=>{
     try {
         res.render('login')
     } catch (error) {
@@ -216,7 +212,9 @@ const verifyLogin=async(req,res)=>{
         else{
             if(userData.is_blocked === false){
                 req.session.user_id=userData._id;
-                res.render('home')
+                const allProduct = await Product.find();
+                console.log(allProduct);
+                res.render('landingHome',{ allProduct })
             }
             else{
                 res.render('login',{message:'Your account has temporarily suspended'})
@@ -241,9 +239,9 @@ const verifyLogin=async(req,res)=>{
 }
 
 //load shop page
-const loadShop = async(req,res)=>{
+const loadProduct = async(req,res)=>{
     try {
-        res.render('shop')
+        res.render('products')
     } catch (error) {
         console.log(error.message);
     }
@@ -264,11 +262,10 @@ module.exports = {
     insertUser,
     loadOtpVerification,
     verifyOtp,
-    loadHome,
     loadLandingHome,
     loadLogin,
-    loadLogout,
+    // loadLogout,
     verifyLogin,
-    loadShop,
+    loadProduct,
     loadproductDetail
-}
+};

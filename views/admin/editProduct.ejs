@@ -44,11 +44,28 @@
                                             <!-- <input type="text" name="id" value="<%= product._id %>" style="display: none;">  -->
              
 
-                                            <div class="mb-4 row align-items-center">
+                                            <!-- <div class="mb-4 row align-items-center">
                                                 <label class="col-sm-3 col-form-label form-label-title">Category</label>
                                                 
-                                                
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="name" placeholder="Product Name" >
+                                                </div>
                                       
+                                            </div> -->
+                                            <div class="mb-4 row align-items-center">
+                                                <label
+                                                    class="col-sm-3 col-form-label form-label-title">Category</label>
+                                                <div class="col-sm-9">
+                                                    <select class="js-example-basic-single w-100" name="category" >
+                                                        <option disabled>Category Menu</option>
+          
+                                                      <% category.forEach((value) => { %>
+                                                          <option value="<%= value._id %>"><%= value.name %></option>
+                                                      <% }) %>
+                                                         
+                                                       
+                                                    </select>
+                                                </div>
                                             </div>
 
 
@@ -302,7 +319,7 @@
 
         <!-- select2 js -->
         <script src="/assetsb/js/select2.min.js"></script>
-        <script src="/assetsb/js/select2-custom.js"></script>
+        <!-- <script src="/assetsb/js/select2-custom.js"></script> -->
 
         <!-- sidebar effect -->
         <script src="/assetsb/js/sidebareffect.js"></script>

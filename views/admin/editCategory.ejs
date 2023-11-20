@@ -15,32 +15,19 @@
                                     <h5>Edit Category</h5>
                                     <input type="file" name="id" value="<%= categories._id %>" style="display: none;"> 
 
-                                    <img src="/categoryImage/<%= categories.image%>" style="width:50px" alt="hello">
+                                    
                                 </div>
 
-                                <form class="theme-form theme-form-2 mega-form" method="post" action="" enctype="multipart/form-data">
+                                <form class="theme-form theme-form-2 mega-form" method="post" action="" >
+                                    
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Category Name</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" placeholder="Category Name" value="<%= categories.name%>" name="name">
+                                            <input  class="form-control" type="text" placeholder="Category Name" value="<%= categories.name%>" name="name">
                                         </div>
                                     </div>
 
-                                    <div class="mb-4 row align-items-center">
-                                        <label class="col-sm-3 col-form-label form-label-title">Category
-                                            Image</label>
-                                        <div class="form-group col-sm-9">
-                                            <div class="">
-                                                <div class="dropzone-desc">
-                                                    <i class="ri-upload-2-line"></i>
-                                                    <p>Choose an image file or drag it here.</p>
-                                                </div>
-                                                <input type="file" name="image"  placeholder="upload photo">
-                                            </div>
-                                        </div>
-                                
-                                       
-                                    </div>
+            
                                     <div class="mb-4 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Category Description</label>
                                         <div class="col-sm-9">
@@ -100,6 +87,12 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
 </div>
 </div>
 <!-- Modal End -->
+
+<!-- sweet alert -->
+<!-- Your existing HTML code -->
+
+
+
 
 <!-- latest js -->
 <script src="/assetsb/js/jquery-3.6.0.min.js"></script>

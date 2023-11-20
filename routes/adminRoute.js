@@ -6,6 +6,7 @@ const path = require('path');
 const otpGenerator = require('otp-generator');
 const session = require('express-session')
 const upload = require('../helper/multer')
+const auth = require('../middleware/adminAuth')
 
 
 
@@ -20,28 +21,28 @@ const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 
 
-admin_route.get('/', adminController.adminLogin);
+admin_route.get('/', auth.isLogout,adminController.adminLogin);
 admin_route.post('/adminlogin', adminController.adminLogin);
 admin_route.post('/', adminController.verifyLogin);
-admin_route.get('/user-details', adminController.loaduserDetails);
-admin_route.get('/blockuser', adminController.blockUser);
+admin_route.get('/userDetails',auth.isLogin, adminController.loaduserDetails);
+admin_route.get('/blockuser',auth.isLogin, adminController.blockUser);
 
-admin_route.get('/adminDashboard', adminController.loadDashboard);
+admin_route.get('/adminDashboard',auth.isLogin, adminController.loadDashboard);
 
-admin_route.get('/category', categoryController.loadCategory);
+admin_route.get('/category',auth.isLogin, categoryController.loadCategory);
 
-admin_route.get('/add-new-category',categoryController.loadaddCategory);
+admin_route.get('/add-new-category',auth.isLogin,categoryController.loadaddCategory);
 
 admin_route.post('/add-new-category',categoryController.addCategory)
-admin_route.get('/listcategory',categoryController.listCategory)
-admin_route.get('/edit-category',categoryController.editCategory)
+admin_route.get('/listcategory',auth.isLogin,categoryController.listCategory)
+admin_route.get('/edit-category',auth.isLogin,categoryController.editCategory)
 admin_route.post('/edit-category',categoryController.updateCategory);
 
 
 
 //product
-admin_route.get('/products',productController.loadProduct);
-admin_route.get('/addnewProduct',productController.loadaddnewProduct)
+admin_route.get('/products',auth.isLogin,productController.loadProduct);
+admin_route.get('/addnewProduct',auth.isLogin,productController.loadaddnewProduct)
 admin_route.post('/addnewProduct',upload.array('productImage'),productController.addnewProduct)
 admin_route.get('/listProduct',productController.listProduct)
 admin_route.get('/editProduct',productController.editProduct)

@@ -26,19 +26,23 @@ const loadaddCategory = async(req,res) =>{
 
 const addCategory = async(req,res)=>{
     try {
-        const { name, description } = req.body;
-        console.log(req.file);
-        console.log(req.body);
         
+        const { name, description } = req.body;
+        const existingCategory = await Category.findOne({name});
+        if(existingCategory){
+            const message = 'Category already exist';
+            res.render('addnewCategory',{message})
+        }
+        else{
         const category =new Category ({
-            // image:req.file.filename,
             name:name,
             description:description,
             is_list:true
         })
+       
         await category.save();
         res.redirect('/admin/category')
-
+    }
     } catch (error) {
         console.log(error.message);
     }
@@ -76,25 +80,12 @@ const editCategory = async (req,res)=>{
 const updateCategory = async (req, res) => {
     try {
         const id = req.query.id;
-        const { name, description } = req.body;
+        
+        const name = req.body.name
+        const description = req.body.description
+    
 
-        // Handle image update if a new image is provided
-        // if (req.file) {
-        //     // Assuming the image field in your Category model is named 'image'
-        //     const imagePath = req.file.filename;
-        //     // Update the image field along with other fields
-        //     const updateCategory = await Category.findByIdAndUpdate(
-        //         { _id: id },
-        //         { name, description, image: imagePath },
-        //         { new: true }
-        //     );
-        //     if (updateCategory) {
-        //         console.log('Category Updated:', updateCategory);
-        //     } else {
-        //         console.log('Category not found or update failed.');
-        //     }
-        // } else {
-            // If no new image is provided, update other fields without the image
+        
             const updateCategory = await Category.findByIdAndUpdate(
                 { _id: id },
                 { name, description },

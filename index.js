@@ -3,18 +3,29 @@ const app = express();
 const path = require('path')
 const port = 3001;
 const dotenv = require('dotenv')
+const {  configureFlash } = require('./middleware/flash');
+
 dotenv.config()
 
  //for userRoute
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute)
 
+// Use custom middleware
+
+configureFlash(app);
+
+
 //for adminRoute
 const adminRoute = require('./routes/adminRoute')
 app.use('/admin',adminRoute)
 
+function connectDB(){
+    mongoose.connect(process.env.mongoo_connect)
+}
+
 const mongoose = require('mongoose');
-mongoose.connect(process.env.mongoo_connect)
+connectDB();
 
 app.use(express.static('public'))
 app.use(express.static(path.join(__dirname, 'public')));
