@@ -3,23 +3,84 @@ const Category = require('../models/categoryModel');
 const { model } = require('mongoose');
 const path = require('path')
 const uploads = require('../helper/multer')
+const multer = require('multer');
+const sharp = require('sharp');
+const fs = require('fs-extra');
 
 
-async function loadProduct (req,res){
-    try {
 
-        const productdata = await Product.find()
-        res.render('products',{productdata})
-        console.log(productdata);
-    } catch (error) {
-        console.log(error.message);
-    }
+const async = require('async');
+
+
+
+async function loadProducts(req, res) {
+  try {
+    const brands = await Product.distinct('brand');
+    const categories = await Category.find();
+    const user = req.session.user_id
+
+    // Get the current page from the query parameters, default to 1 if not provided
+    const page = parseInt(req.query.page, 10) || 1;
+    const productsPerPage = 4; // Number of products per page
+
+    // Use async.parallel to fetch productdata and totalProducts concurrently
+    const results = await async.parallel({
+      productdata: async function () {
+        return Product.find({list:true})
+          .skip((page - 1) * productsPerPage)
+          .limit(productsPerPage)
+          .exec();
+      },
+      totalProducts: async function () {
+        return Product.countDocuments().exec();
+      },
+    });
+
+    const { productdata, totalProducts } = results;
+
+    // Render your view with the fetched productdata, categories, brands, and pagination information
+    res.render('productsView', {
+      productdata,
+      categories,
+      brands,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / productsPerPage),
+      user
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
 }
+
+
+
+//pagination
+async function loadProduct(req, res) {
+  try {
+      const page = parseInt(req.query.page) || 1;
+      const perPage = 10; // Adjust this value based on the number of products you want to display per page
+
+      const totalCount = await Product.countDocuments();
+      const totalPages = Math.ceil(totalCount / perPage);
+
+      const products = await Product.find()
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+
+      res.render('products', { products, currentPage: page, totalPages });
+      
+  } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Internal Server Error');
+  }
+}
+
 
 
 const loadaddnewProduct = async(req,res) =>{
     try {
-        const allCategory = await Category.find()
+        const allCategory = await Category.find({is_list:true})
         res.render('addnewProduct',{allCategory})
     } catch (error) {
         console.log(error.message);
@@ -32,10 +93,10 @@ async function editProduct(req,res){
     const productId = req.query.id;
     const category=await Category.find();
 
-    console.log(productId);
+    
     const product = await Product.findById(productId);
 
-    console.log(category);
+    
     res.render('editProduct',{product,category})
   } catch (error) {
     console.log(error.message);
@@ -43,18 +104,14 @@ async function editProduct(req,res){
 }
 
 
-//gpt
+
+
+
+
+
 // async function addnewProduct(req, res) {
 //   try {
-//     const productId = req.query._id;
-
-//     const productdata = await Product.findById(productId);
-//     if (!productdata) {
-//       return res.render('editProduct', { message: "Product not found", product: {} });
-//       // Changed 'product' to '{}', assuming you want to pass an empty object to the view
-//     }
-
-//     const product = {
+//     const product = new Product({
 //       name: req.body.name,
 //       description: req.body.description,
 //       model: req.body.model,
@@ -67,36 +124,52 @@ async function editProduct(req,res){
 //       storage: req.body.storage,
 //       processor: req.body.processor,
 //       category: req.body.category,
-//       graphicsCard: req.body.graphicsCard, // Fixed key name here
+//       graphicsCard: req.body.graphicsCard,
 //       osArchitecture: req.body.osArchitecture,
 //       os: req.body.os,
 //       list: true
-//     };
+//     });
 
-//     console.log(product);
-
-//     if (req.file && req.file.length > 0) {
-//       product.productImages = req.files.map((file) => file.filename);
-//       // Changed 'productdata' to 'product' here
+//     if (req.files && req.files.length > 0) {
+//       product.productImage = req.files.map((file) => file.filename);
 //     }
 
-//     console.log(product);
+//         // Create a temporary directory for resized images
+//         const tempDir = path.join(__dirname, "temp");
+//         await fs.mkdir(tempDir, { recursive: true });
 
-//     const updated = await Product.insertMany(product);
-//     console.log(updated);
+//         // Resize and crop the uploaded images to 277x277
+//         await Promise.all(product.productImage.map(async (filename) => {
+//             const inputImagePath = `./public/productImage/${filename}`;
+//             const outputImagePath = path.join(tempDir, filename);
+
+//             await sharp(inputImagePath)
+//                 .resize({ width: 150, height: 150, fit: 'cover' })
+//                 .toFile(outputImagePath);
+//         }));
+
+//         // Move the resized images back to the original directory
+//         await Promise.all(product.productImage.map(async (filename) => {
+//             const tempImagePath = path.join(tempDir, filename);
+//             const finalImagePath = `./public/productImage/${filename}`;
+
+//             await fs.rename(tempImagePath, finalImagePath);
+//         }));
+
+//         // Remove the temporary directory
+//         await fs.rmdir(tempDir, { recursive: true });
+
+//         console.log("Success");
+//     await product.save();
 //     res.redirect('/admin/products');
 //   } catch (error) {
-//     console.log(error.message);
+//     console.error(error.message);
 //     res.status(500).send('Internal Server Error');
 //   }
 // }
 
 async function addnewProduct(req, res) {
-
   try {
-
-    console.log("/////////////"+req.body.category);
-
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -116,23 +189,22 @@ async function addnewProduct(req, res) {
       list: true
     });
 
-    console.log(product);
-
     if (req.files && req.files.length > 0) {
       product.productImage = req.files.map((file) => file.filename);
     }
 
-    console.log(product);
-
+    console.log("Success");
     await product.save();
     res.redirect('/admin/products');
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     res.status(500).send('Internal Server Error');
   }
 }
 
 
+
+// Assuming that Product is a mongoose model defined somewhere in your code
 
 async function listProduct(req, res) {
   try {
@@ -157,10 +229,184 @@ async function listProduct(req, res) {
   }
 }
 
+// const updateProduct = async (req, res) => {
+//   try {
+//       const productId = req.query.id;
+//       const {
+//           name,
+//           description,
+//           model,
+//           screenSize,
+//           price,
+//           discountPrice,
+//           quantity,
+//           brand,
+//           ram,
+//           storage,
+//           processor,
+//           category,
+//           graphicsCard,
+//           osArchitecture,
+//           os
+//       } = req.body;
+
+//       // Handle image update if a new image is provided
+//       if (req.files && req.files.length > 0) {
+//           // Assuming the productImages field in your Product model is an array
+//           const imagePaths = req.files.map((file) => file.filename);
+          
+//           // Update the product details along with productImages
+//           const updatedProduct = await Product.findByIdAndUpdate(
+//               { _id: productId },
+//               {
+//                   name,
+//                   description,
+//                   model,
+//                   screenSize,
+//                   price,
+//                   discountPrice,
+//                   quantity,
+//                   brand,
+//                   ram,
+//                   storage,
+//                   processor,
+//                   category,
+//                   graphicsCard,
+//                   osArchitecture,
+//                   os,
+//                   productImage: imagePaths
+//               },
+//               { new: true }
+//           );
+
+//           if (updatedProduct) {
+//               console.log('Product Updated:', updatedProduct);
+//           } else {
+//               console.log('Product not found or update failed.');
+//           }
+//       } else {
+//           // If no new image is provided, update other fields without changing productImages
+//           const updatedProduct = await Product.findByIdAndUpdate(
+//               { _id: productId },
+//               {
+//                   name,
+//                   description,
+//                   model,
+//                   screenSize,
+//                   price,
+//                   discountPrice,
+//                   quantity,
+//                   brand,
+//                   ram,
+//                   storage,
+//                   processor,
+//                   category,
+//                   graphicsCard,
+//                   osArchitecture,
+//                   os
+//               },
+//               { new: true }
+//           );
+
+//           if (updatedProduct) {
+//               console.log('Product Updated:', updatedProduct);
+//           } else {
+//               console.log('Product not found or update failed.');
+//           }
+//       }
+
+//       res.redirect('/admin/products');
+//   } catch (error) {
+//       console.log(error.message);
+//       res.status(500).send('Internal Server Error');
+//   }
+// };
+
 const updateProduct = async (req, res) => {
   try {
-      const productId = req.query.id;
-      const {
+    const productId = req.query.id;
+    const {
+      name,
+      description,
+      model,
+      screenSize,
+      price,
+      discountPrice,
+      quantity,
+      brand,
+      ram,
+      storage,
+      processor,
+      category,
+      graphicsCard,
+      osArchitecture,
+      os
+    } = req.body;
+
+    // Handle image update if a new image is provided
+    if (req.files && req.files.length > 0) {
+      // Assuming the productImages field in your Product model is an array
+      const imagePaths = req.files.map((file) => file.filename);
+
+      // Create a temporary directory for resized images
+      const tempDir = path.join(__dirname, "temp");
+      await fs.mkdir(tempDir, { recursive: true });
+
+      // Resize and crop the uploaded images to 277x277
+      await Promise.all(imagePaths.map(async (filename) => {
+        const inputImagePath = `./public/productImage/${filename}`;
+        const outputImagePath = path.join(tempDir, filename);
+
+        await sharp(inputImagePath)
+          .resize({ width: 277, height: 277, fit: 'contain' })
+          .toFile(outputImagePath);
+      }));
+
+      // Move the resized images back to the original directory
+      await Promise.all(imagePaths.map(async (filename) => {
+        const tempImagePath = path.join(tempDir, filename);
+        const finalImagePath = `./public/productImage/${filename}`;
+
+        await fs.rename(tempImagePath, finalImagePath);
+      }));
+
+      // Remove the temporary directory
+      await fs.rmdir(tempDir, { recursive: true });
+
+      // Update the product details along with productImages
+      const updatedProduct = await Product.findByIdAndUpdate(
+        { _id: productId },
+        {
+          name,
+          description,
+          model,
+          screenSize,
+          price,
+          discountPrice,
+          quantity,
+          brand,
+          ram,
+          storage,
+          processor,
+          category,
+          graphicsCard,
+          osArchitecture,
+          os,
+          productImage: imagePaths
+        },
+        { new: true }
+      );
+
+      if (updatedProduct) {
+        console.log('Product Updated:', updatedProduct);
+      } else {
+        console.log('Product not found or update failed.');
+      }
+    } else {
+      // If no new image is provided, update other fields without changing productImages
+      const updatedProduct = await Product.findByIdAndUpdate(
+        { _id: productId },
+        {
           name,
           description,
           model,
@@ -176,84 +422,23 @@ const updateProduct = async (req, res) => {
           graphicsCard,
           osArchitecture,
           os
-      } = req.body;
+        },
+        { new: true }
+      );
 
-      // Handle image update if a new image is provided
-      if (req.files && req.files.length > 0) {
-          // Assuming the productImages field in your Product model is an array
-          const imagePaths = req.files.map((file) => file.filename);
-          
-          // Update the product details along with productImages
-          const updatedProduct = await Product.findByIdAndUpdate(
-              { _id: productId },
-              {
-                  name,
-                  description,
-                  model,
-                  screenSize,
-                  price,
-                  discountPrice,
-                  quantity,
-                  brand,
-                  ram,
-                  storage,
-                  processor,
-                  category,
-                  graphicsCard,
-                  osArchitecture,
-                  os,
-                  productImages: imagePaths
-              },
-              { new: true }
-          );
-
-          if (updatedProduct) {
-              console.log('Product Updated:', updatedProduct);
-          } else {
-              console.log('Product not found or update failed.');
-          }
+      if (updatedProduct) {
+        console.log('Product Updated:', updatedProduct);
       } else {
-          // If no new image is provided, update other fields without changing productImages
-          const updatedProduct = await Product.findByIdAndUpdate(
-              { _id: productId },
-              {
-                  name,
-                  description,
-                  model,
-                  screenSize,
-                  price,
-                  discountPrice,
-                  quantity,
-                  brand,
-                  ram,
-                  storage,
-                  processor,
-                  category,
-                  graphicsCard,
-                  osArchitecture,
-                  os
-              },
-              { new: true }
-          );
-
-          if (updatedProduct) {
-              console.log('Product Updated:', updatedProduct);
-          } else {
-              console.log('Product not found or update failed.');
-          }
+        console.log('Product not found or update failed.');
       }
+    }
 
-      res.redirect('/admin/products');
+    res.redirect('/admin/products');
   } catch (error) {
-      console.log(error.message);
-      res.status(500).send('Internal Server Error');
+    console.log(error.message);
+    res.status(500).send('Internal Server Error');
   }
 };
-
-
-
-
-
 
 module.exports = {
     loadProduct,
@@ -261,6 +446,7 @@ module.exports = {
     addnewProduct,
     listProduct,
     editProduct,
-   updateProduct
+   updateProduct,
+   loadProducts
 
 }

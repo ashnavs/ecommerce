@@ -1,18 +1,3 @@
-const { loadLogin } = require("../controllers/userController")
-
-// const isLogin = async(req,res,next)=>{
-//     try {
-//         if(req.session.admin_id){
-
-//         }
-//         else{
-//             res.render('adminDashboard')
-//         }
-//         next()
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 const isLogin = async (req, res, next) => {
     try {

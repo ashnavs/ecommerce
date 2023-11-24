@@ -8,6 +8,7 @@ const auth = require('../middleware/auth')
 
 
 
+
 user_route.use(express.urlencoded({extended : true }))
 
 //setting session
@@ -24,9 +25,13 @@ user_route.set('views','./views/users');
 //conneccting the controller
 const userController = require("../controllers/userController");
 const categoryController = require("../controllers/categoryController");
-
+const productController = require("../controllers/productController");
+const cartController = require("../controllers/cartController");
 //api
 user_route.get('/', userController.loadLandingHome);
+user_route.get('/logout',auth.isLogin,userController.loadLogout)
+
+
 
 user_route.get('/register',userController.loadRegister);
 user_route.post('/register',userController.insertUser);
@@ -34,17 +39,21 @@ user_route.post('/register',userController.insertUser);
 user_route.get('/otpverification',userController.loadOtpVerification);
 user_route.post('/verify',userController.verifyOtp);
 
-user_route.get('/landingHome',auth.isLogin,userController.loadLandingHome)
+user_route.get('/landingHome',userController.loadLandingHome)
 
 user_route.get('/login',userController.loadLogin)
 user_route.post('/login',userController.verifyLogin)
 
 // user_route.get('/',auth.isLogout,userController.loadLogout)
 
-//SHOP
-user_route.get('/products',userController.loadProduct)
+//products
+user_route.get('/productsView',productController.loadProducts)
 
 //productdetail
 user_route.get('/productDetails',userController.loadproductDetail)
 
+//cart
+
+user_route.get('/cart',auth.isLogin, cartController.addToCart);
+user_route.get('/cartPage',cartController.loadCart)
 module.exports = user_route;

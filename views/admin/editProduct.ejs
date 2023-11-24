@@ -36,13 +36,14 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Product Name</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="name" placeholder="Product Name"  value="<%=product.name%>">
+                                                    <input type="text" class="form-control" name="name"
+                                                        placeholder="Product Name" value="<%=product.name%>">
                                                 </div>
                                             </div>
-                                            
+
 
                                             <!-- <input type="text" name="id" value="<%= product._id %>" style="display: none;">  -->
-             
+
 
                                             <!-- <div class="mb-4 row align-items-center">
                                                 <label class="col-sm-3 col-form-label form-label-title">Category</label>
@@ -53,17 +54,18 @@
                                       
                                             </div> -->
                                             <div class="mb-4 row align-items-center">
-                                                <label
-                                                    class="col-sm-3 col-form-label form-label-title">Category</label>
+                                                <label class="col-sm-3 col-form-label form-label-title">Category</label>
                                                 <div class="col-sm-9">
-                                                    <select class="js-example-basic-single w-100" name="category" >
+                                                    <select class="js-example-basic-single w-100" name="category">
                                                         <option disabled>Category Menu</option>
-          
-                                                      <% category.forEach((value) => { %>
-                                                          <option value="<%= value._id %>"><%= value.name %></option>
-                                                      <% }) %>
-                                                         
-                                                       
+
+                                                        <% category.forEach((value)=> { %>
+                                                            <option value="<%= value._id %>">
+                                                                <%= value.name %>
+                                                            </option>
+                                                            <% }) %>
+
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -75,18 +77,20 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Brand</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="brand" placeholder="Brand" value="<%=product.brand%>">
+                                                    <input type="text" class="form-control" name="brand"
+                                                        placeholder="Brand" value="<%=product.brand%>">
                                                 </div>
                                             </div>
-                                            
+
 
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Quantity</label>
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="quantity" placeholder="Quantity"  value="<%=product.quantity%>">
+                                                    <input type="number" class="form-control" name="quantity"
+                                                        placeholder="Quantity" value="<%=product.quantity%>">
                                                 </div>
                                             </div>
-                                            
+
 
 
 
@@ -106,21 +110,24 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Model</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="model" placeholder="Model"  value="<%=product.model %>">
+                                                    <input type="text" class="form-control" name="model"
+                                                        placeholder="Model" value="<%=product.model %>">
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Ram</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="ram" placeholder="RAM"  value="<%=product.quantity%>">
+                                                    <input type="text" class="form-control" name="ram" placeholder="RAM"
+                                                        value="<%=product.quantity%>">
 
                                                 </div>
                                             </div>
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Storage Space</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="storage" placeholder="Storage" value="<%=product.storage %>">
+                                                    <input type="text" class="form-control" name="storage"
+                                                        placeholder="Storage" value="<%=product.storage %>">
                                                 </div>
                                             </div>
 
@@ -129,7 +136,8 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Processor</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="processor" placeholder="Processor"  value="<%=product.processor %>">
+                                                    <input type="text" class="form-control" name="processor"
+                                                        placeholder="Processor" value="<%=product.processor %>">
 
                                                 </div>
                                             </div>
@@ -137,7 +145,8 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Screen Size</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="screenSize" placeholder="Screen Size"  value="<%=product.screenSize %>">
+                                                    <input type="text" class="form-control" name="screenSize"
+                                                        placeholder="Screen Size" value="<%=product.screenSize %>">
 
                                                 </div>
                                             </div>
@@ -145,7 +154,8 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Graphics Card</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="graphicsCard" placeholder="Graphics Card" value="<%=product.graphicsCard %>">
+                                                    <input type="text" class="form-control" name="graphicsCard"
+                                                        placeholder="Graphics Card" value="<%=product.graphicsCard %>">
 
                                                 </div>
                                             </div>
@@ -154,7 +164,8 @@
                                                 <label class="form-label-title col-sm-3 mb-0">OS Architecture</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" name="osArchitecture"
-                                                        placeholder="OS Architecture" class="form-control" value="<%=product.osArchitecture %>">
+                                                        placeholder="OS Architecture" class="form-control"
+                                                        value="<%=product.osArchitecture %>">
 
                                                 </div>
                                             </div>
@@ -162,7 +173,8 @@
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">OS</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" name="os" placeholder="OS" class="form-control"  value="<%=product.os %>">
+                                                    <input type="text" name="os" placeholder="OS" class="form-control"
+                                                        value="<%=product.os %>">
 
                                                 </div>
                                             </div>
@@ -193,7 +205,9 @@
                                                         <div class="col-sm-9">
 
                                                             <div> <input type="text" name="description"
-                                                                    placeholder="Product Description" class="form-control" value="<%=product.description%>">
+                                                                    placeholder="Product Description"
+                                                                    class="form-control"
+                                                                    value="<%=product.description%>">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -217,10 +231,16 @@
 
                                                 <div class="col-sm-9">
                                                     <input class="form-control form-choose" type="file" id="formFile"
-                                                        name="productImage" multiple >
+                                                        name="productImage" multiple>
                                                 </div>
                                                 <span>(upto - 4 images)</span>
                                             </div>
+
+
+
+
+
+
 
 
                                             <div class="card">
@@ -233,14 +253,16 @@
                                                     <div class="mb-4 row align-items-center">
                                                         <label class="col-sm-3 form-label-title">price</label>
                                                         <div class="col-sm-9">
-                                                            <input type="number" name="price" placeholder="Price" class="form-control" value="<%=product.price%>">
+                                                            <input type="number" name="price" placeholder="Price"
+                                                                class="form-control" value="<%=product.price%>">
                                                         </div>
                                                     </div>
                                                     <div class="mb-4 row align-items-center">
                                                         <label class="col-sm-3 form-label-title">Discount Price</label>
                                                         <div class="col-sm-9">
                                                             <input type="number" name="discountPrice"
-                                                                placeholder="Discount Price" class="form-control" value="<%=product.discountPrice%>">
+                                                                placeholder="Discount Price" class="form-control"
+                                                                value="<%=product.discountPrice%>">
 
 
                                                         </div>
@@ -271,7 +293,7 @@
 
                     </div>
             </form>
-         
+
 
         </div>
         <!-- New Product Add End -->
@@ -306,7 +328,7 @@
         <script src="/assetsb/js/customizer.js"></script>
 
         <!--Dropzon js -->
-        <script src="/assetsb/js/dropzone/dropzone.js"></script> 
+        <script src="/assetsb/js/dropzone/dropzone.js"></script>
         <script src="/assetsb/js/dropzone/dropzone-script.js"></script>
 
         <!-- Plugins js -->
@@ -332,6 +354,6 @@
 
         <!-- Mirrored from themes.pixelstrap.com/fastkart/back-end/add-new-product.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 Sep 2023 05:49:46 GMT -->
 
-    
+
 
         </html>

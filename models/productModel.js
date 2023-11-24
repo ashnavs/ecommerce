@@ -77,7 +77,11 @@ const productSchema = new mongoose.Schema({
     },
     os: {
         type: String,
-        default: "Windows 11"
+        default: String
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
     }
 
 });

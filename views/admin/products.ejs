@@ -12,14 +12,9 @@
                             <h5>Products List</h5>
                             <div class="right-options">
                                 <ul>
+                                   
                                     <li>
-                                        <a href="javascript:void(0)">import</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">Export</a>
-                                    </li>
-                                    <li>
-                                        <a class="btn btn-solid" href="add-new-product.html">Add Product</a>
+                                        <a class="btn btn-solid" href="addnewProduct">Add Product</a>
                                     </li>
                                 </ul>
                             </div>
@@ -45,7 +40,7 @@
                                  
 
                                     <tbody>
-                                        <% productdata.forEach((product)=>{ %>
+                                        <% products.forEach((product)=>{ %>
 
                                         <tr>
                                             <td>
@@ -108,6 +103,21 @@
         </div>
     </div>
     <!-- Container-fluid Ends-->
+
+<!-- Pagination links -->
+<div class="pagination">
+    <% if (currentPage > 1) { %>
+        <a href="/admin/products?page=<%= currentPage - 1 %>">Previous</a>
+    <% } %>
+
+    <!-- Show page numbers or other pagination style -->
+    <span>Page <%= currentPage %> of <%= totalPages %></span>
+
+    <% if (currentPage < totalPages) { %>
+        <a href="/admin/products?page=<%= currentPage + 1 %>">Next</a>
+    <% } %>
+</div>
+
 
     <div class="container-fluid">
         <!-- footer start-->

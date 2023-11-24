@@ -1,14 +1,3 @@
-// const isLogin = async(req,res,next)=>{
-//     try {
-//         if(req.session.user_id){}
-//         else{
-//             res.render('landingHome' ,{allProduct})
-//         }
-//         next();
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 const isLogin = async (req, res, next) => {
     try {
@@ -23,18 +12,6 @@ const isLogin = async (req, res, next) => {
 };
 
 
-
-// const isLogout = async(req,res,next)=>{
-//     try {
-//         if(req.session.user_id){}
-//         else{
-//             res.render('landingHome')
-//         }
-//         next();
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 const isLogout = async (req, res, next) => {
     try {

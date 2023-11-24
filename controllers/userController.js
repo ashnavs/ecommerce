@@ -4,6 +4,7 @@ const otpGenerator = require('otp-generator')
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const Product = require('../models/productModel');
+const Category = require('../models/categoryModel')
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -169,10 +170,14 @@ const verifyOtp = async (req,res)=>{
 //home before signup
 const loadLandingHome = async (req, res) => {
     try {
-        const allProduct = await Product.find();
+        const user = req.session.user_id;
+        const allProduct = await Product.find().sort({ createdAt: -1}).limit(8);
+        const newArrivals = await Product.find().sort({ createdAt: -1}).limit(6)
+        // const products = await Product.find().sort({createdAt: -1})
+        console.log("////////////////"+allProduct.createdAt);
         console.log(allProduct); // Log the products to the console
 
-        res.render('landingHome', { allProduct });
+        res.render('landingHome', { allProduct , newArrivals , user});
     } catch (error) {
         console.log(error.message);
     }
@@ -182,7 +187,8 @@ const loadLandingHome = async (req, res) => {
 //login after signup
 const   loadLogin = async(req,res)=>{
     try {
-        res.render('login')
+        const user = req.session.user_id
+        res.render('login',{user})
     } catch (error) {
         console.log(error.message);
     }
@@ -212,9 +218,11 @@ const verifyLogin=async(req,res)=>{
         else{
             if(userData.is_blocked === false){
                 req.session.user_id=userData._id;
+                const user  = req.session.user_id
                 const allProduct = await Product.find();
+                const newArrivals = await Product.find().sort({createdAt:-1}).limit(6)
                 console.log(allProduct);
-                res.render('landingHome',{ allProduct })
+                res.render('landingHome',{ allProduct , newArrivals , user })
             }
             else{
                 res.render('login',{message:'Your account has temporarily suspended'})
@@ -241,7 +249,8 @@ const verifyLogin=async(req,res)=>{
 //load shop page
 const loadProduct = async(req,res)=>{
     try {
-        res.render('products')
+        const categories = await Category.find();
+        res.render('products',{categories})
     } catch (error) {
         console.log(error.message);
     }
@@ -251,11 +260,33 @@ const loadProduct = async(req,res)=>{
 //load product details
 async function loadproductDetail(req,res){
     try {
-        res.render('productDetails')
+        const user  = req.session.user_id
+        const id = req.query.id;
+        console.log(id);
+        const products = await Product.findById(id);
+        
+        console.log(products + "oooooooooooooooooo");
+        res.render('productDetails',{products , user })
     } catch (error) {
         console.log(error.message);
     }
 }
+
+const loadLogout=async(req,res)=>{
+
+    try{
+        req.session.user_id = null;
+        // const user=req.session.user_id
+        // const newArrivals = await Product.find()
+        // const allProduct = await Product.find()
+        res.redirect('/landingHome'); 
+  
+    }catch(error){
+        console.log(error.message)
+  
+    }
+  
+  }
 
 module.exports = {
     loadRegister,
@@ -264,7 +295,7 @@ module.exports = {
     verifyOtp,
     loadLandingHome,
     loadLogin,
-    // loadLogout,
+    loadLogout,
     verifyLogin,
     loadProduct,
     loadproductDetail
