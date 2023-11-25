@@ -28,16 +28,12 @@
             
                                     </div>
                                     <div class="form-group">
-                                        <label for="singin-password">Password *</label>
+                                        <label for="singin-password">Password </label>
                                         <input type="password" class="form-control" id="signin-password" name="password">
                                         <small class="text-danger" id="passError"></small>
                                     </div><!-- End .form-group -->
 
-                                    <!-- <div class="form-group">
-                                        <label for="singin-confirm-password">Confirm Password *</label>
-                                        <input type="password" class="form-control" id="singin-confirm-password"
-                                            name="singin-confirm-password" required>
-                                    </div>End .form-group -->
+                                    
 
                                     <div class="form-footer">
                                         <button type="submit" class="btn btn-outline-primary-2" id="submitButton" onclick="validateForm()">
@@ -49,15 +45,23 @@
 
                                         <a href="#" class="forgot-link">Forgot Your Password?</a>
                                     </div><!-- End .form-footer -->
+                                    <% if(errorMessage) { %>
+                                        <div class="alert alert-danger">
+                                            <%= errorMessage %>
+                                        </div>
+                                    <% } %>
+                            
                                 </form>
                                 
-                           
+                           <!-- Add this code where you want to display the error message -->
+
+
                         </div><!-- End .tab-content -->
                     </div><!-- End .form-tab -->
                 </div><!-- End .form-box -->
             </div><!-- End .modal-body -->
         </div><!-- End .modal-content -->
-
+     
         <script>
             function validateForm() {
                 // Reset error messages
@@ -75,7 +79,7 @@
                 // Regular expressions
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 var mnoRegex = /^[0-9]{10}$/;
-                // var passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
         
                 // Validate name
                 if (name === '') {
@@ -95,18 +99,18 @@
                     return false;
                 }
         
-                // Validate password
-                // if (!passRegex.test(password)) {
-                //     document.getElementById('passError').innerText = 'Password must be at least 8 characters long and include at least one letter and one number';
-                //     return false;
-                // }
+                if (!passRegex.test(password)) {
+                document.getElementById('passError').innerText = 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit';
+                return false;
+            }
 
-                 if (document.getElementById('nameError').innerText || document.getElementById('emailError').innerText || document.getElementById('mnoError').innerText ) {
+                 if (document.getElementById('nameError').innerText || document.getElementById('emailError').innerText || document.getElementById('mnoError').innerText || document.getElementById('passError').innerText ) {
             document.getElementById('generalError').innerText = 'Please fix the errors in the form';
             return false; // Prevent form submission
         }
         
                 // Form is valid, continue with submission
+           
                 return true;
             }
         </script>

@@ -22,11 +22,12 @@ user_route.use(session({
 user_route.set('view engine','ejs');
 user_route.set('views','./views/users');
 
-//conneccting the controller
+//connecting the controller
 const userController = require("../controllers/userController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 const cartController = require("../controllers/cartController");
+
 //api
 user_route.get('/', userController.loadLandingHome);
 user_route.get('/logout',auth.isLogin,userController.loadLogout)
@@ -56,4 +57,16 @@ user_route.get('/productDetails',userController.loadproductDetail)
 
 user_route.get('/cart',auth.isLogin, cartController.addToCart);
 user_route.get('/cartPage',cartController.loadCart)
+
+
+//user-profile
+user_route.get('/user',userController.loaduserProfile)
+
+//resend
+user_route.post('/resendOtp', userController.verifyResendOtp);
+user_route.get('/resendOtp', userController.resendOtp);
+
+
+
 module.exports = user_route;
+

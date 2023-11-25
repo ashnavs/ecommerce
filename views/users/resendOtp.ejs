@@ -13,7 +13,7 @@
         <p>Please enter the OTP sent to your email:</p>
     </div>
     <div class="d-flex justify-content-center">
-        <form action="/verify" method="POST" class="text-center" id="otpForm">
+        <form action="/resendOtp" method="POST" class="text-center" id="otpForm">
             <!-- Timer Display -->
             <div id="otp-timer" class="error-message"></div>
             <div id="error-message" class="text-danger"></div>
@@ -26,7 +26,7 @@
                 <button href="/resendOtp" type="button" class="btn btn-primary" onclick="resendOtp()">Resend OTP</button>
             </div> -->
             <div class="pt-2">
-                <a href="/resendOtp" class="btn btn-primary" onclick="resendOtp()">Resend OTP</a>
+                <a class="btn btn-primary" onclick="resendOtp()">Resend OTP</a>
              </div>
              
         </form>
