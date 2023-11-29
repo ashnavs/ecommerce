@@ -13,7 +13,11 @@ const categorySchema = new mongoose.Schema({
     is_list:{
         type:Boolean,
         default:true
-    }
+    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 
 })
 

@@ -66,7 +66,11 @@ user_route.get('/user',userController.loaduserProfile)
 user_route.post('/resendOtp', userController.verifyResendOtp);
 user_route.get('/resendOtp', userController.resendOtp);
 
+user_route.get('/forgot-password',userController.loadforgotPass)
+user_route.post('/forgot-password',userController.forgotPass)
 
+user_route.get('/resetPassword/:token',userController.loadResestPass);
+user_route.post('/resetPassword',userController.resetPass)
 
 module.exports = user_route;
 

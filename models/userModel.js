@@ -1,4 +1,7 @@
-const mongoose =require("mongoose")
+
+const mongoosePaginate = require('mongoose-paginate-v2');
+const mongoose =require("mongoose");
+
 
 
 const userSchema=new mongoose.Schema({
@@ -29,8 +32,12 @@ const userSchema=new mongoose.Schema({
     is_blocked:{
         type:Boolean,
         default:false
-    }
+    },
+    resetToken: String,
+    resetTokenExpiration: Date,
 })
+
+userSchema.plugin(mongoosePaginate);
 
 
 module.exports=mongoose.model('User',userSchema)

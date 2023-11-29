@@ -4,6 +4,9 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const randomstring = require('randomstring')
 // const { loadLogin } = require('./userController')
+const mongoosePaginate = require('mongoose-paginate-v2');
+
+
 
 
 const adminLogin = async (req, res) => {
@@ -57,20 +60,46 @@ const loadDashboard = async (req, res) => {
 }
 
 
+// const loaduserDetails = async (req, res) => {
+
+//     try {
+
+//         const datas = await User.find({}).sort({ name: 1 });
+//         console.log(datas);
+//         res.render('userDetails', {datas})
+
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+
+
+// }
+
 const loaduserDetails = async (req, res) => {
-
     try {
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 10; // Adjust this value based on the number of users you want to display per page
+      
+        const totalCount = await User.countDocuments();
+        const totalPages = Math.ceil(totalCount / perPage);
 
-        const datas = await User.find({}).sort({ name: 1 });
-        console.log(datas);
-        res.render('userDetails', {datas})
-
+        const users = await User.find()
+            .sort({ name: 1 })
+            .skip((page - 1) * perPage)
+            .limit(perPage)
+            .sort({name: 1});
+       
+        res.render('userDetails', { users, currentPage: page, totalPages });
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
     }
+};
 
 
-}
+
+
+
 
 const blockUser = async (req, res) => {
     try {

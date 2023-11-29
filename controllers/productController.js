@@ -16,7 +16,7 @@ const async = require('async');
 async function loadProducts(req, res) {
   try {
     const brands = await Product.distinct('brand');
-    const categories = await Category.find();
+    const categories = await Category.find({is_list:true});
     const user = req.session.user_id
 
     // Get the current page from the query parameters, default to 1 if not provided
@@ -64,7 +64,7 @@ async function loadProduct(req, res) {
       const totalCount = await Product.countDocuments();
       const totalPages = Math.ceil(totalCount / perPage);
 
-      const products = await Product.find()
+      const products = await Product.find({list:true})
           .skip((page - 1) * perPage)
           .limit(perPage);
 
@@ -81,7 +81,7 @@ async function loadProduct(req, res) {
 const loadaddnewProduct = async(req,res) =>{
     try {
         const allCategory = await Category.find({is_list:true})
-        res.render('addnewProduct',{allCategory})
+        res.render('addnewProduct',{allCategory , errorMessage:""})
     } catch (error) {
         console.log(error.message);
     }
@@ -144,7 +144,7 @@ async function editProduct(req,res){
 //             const outputImagePath = path.join(tempDir, filename);
 
 //             await sharp(inputImagePath)
-//                 .resize({ width: 150, height: 150, fit: 'cover' })
+//                 .resize({ width: 1000, height: 1000, fit: 'cover' })
 //                 .toFile(outputImagePath);
 //         }));
 
@@ -164,8 +164,10 @@ async function editProduct(req,res){
 //     res.redirect('/admin/products');
 //   } catch (error) {
 //     console.error(error.message);
-//     res.status(500).send('Internal Server Error');
-//   }
+//   //   res.status(500).send('Internal Server Error');
+//   const allCategory = await Category.find({is_list:true})
+//     res.render('addnewProduct', { errorMessage: 'Internal Server Error' , allCategory});
+//    }
 // }
 
 async function addnewProduct(req, res) {
@@ -198,14 +200,15 @@ async function addnewProduct(req, res) {
     res.redirect('/admin/products');
   } catch (error) {
     console.error(error.message);
-    res.status(500).send('Internal Server Error');
+    // res.status(500).send('Internal Server Error');
+    const allCategory = await Category.find({is_list:true})
+    res.render('addnewProduct', { errorMessage: 'Internal Server Error' , allCategory});
   }
 }
 
 
 
 // Assuming that Product is a mongoose model defined somewhere in your code
-
 async function listProduct(req, res) {
   try {
     const productId = req.query.id;

@@ -9,7 +9,7 @@
 
         <div class="page-body">
             <!-- New Product Add Start -->
-            <form action="" method="post" enctype="multipart/form-data" id="productForm">
+            <form action="" method="post" enctype="multipart/form-data" id="productForm" onclick="">
 
                 <div class="container-fluid">
                     <div class="row theme-form theme-form-2 mega-form">
@@ -23,15 +23,7 @@
                                             </div>
 
 
-                                            <!-- <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Product
-                                                    Name</label>
-                                                <input type="text" name="name" placeholder="Product Name">
 
-                                                <div class="col-sm-9">
-
-                                                </div>
-                                            </div> -->
 
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Product Name</label>
@@ -95,7 +87,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="card-header-2">
-                                                <h5>Product Specifiction</h5>
+                                                <h5>Product Specification</h5>
                                             </div>
 
 
@@ -145,7 +137,7 @@
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="screenSize"
                                                         placeholder="Screen Size" id="screenSize">
-                                                    <small class="text-danger" id="szError"></small>
+                                                    <small class="text-danger" id="screenSizeError"></small>
 
                                                 </div>
                                             </div>
@@ -155,7 +147,7 @@
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" name="graphicsCard"
                                                         id="graphicsCard" placeholder="Graphics Card">
-                                                    <small class="text-danger" id="gcError"></small>
+                                                    <small class="text-danger" id="graphicsCardError"></small>
 
                                                 </div>
                                             </div>
@@ -166,7 +158,7 @@
                                                     <input type="text" name="osArchitecture"
                                                         placeholder="OS Architecture" class="form-control"
                                                         id="osArchitecture">
-                                                    <small class="text-danger" id="osaError"></small>
+                                                    <small class="text-danger" id="osArchitectureError"></small>
 
                                                 </div>
                                             </div>
@@ -225,19 +217,19 @@
                                                 <h5>Product Images</h5>
                                             </div>
 
-                                    <div class="mb-4 row align-items-center">
+                                            <div class="mb-4 row align-items-center">
                                                 <label class="col-sm-3 col-form-label form-label-title">Images</label>
 
                                                 <div class="col-sm-9">
                                                     <input class="form-control form-choose" type="file" id="formFile"
-                                                        name="productImage" multiple >
+                                                        name="productImage" multiple>
                                                 </div>
                                                 <span>(upto - 4 images)</span>
                                             </div>
 
 
 
-                                  
+
 
 
                                             <div class="card">
@@ -251,15 +243,17 @@
                                                         <label class="col-sm-3 form-label-title">price</label>
                                                         <div class="col-sm-9">
                                                             <input type="number" name="price" placeholder="Price"
-                                                                class="form-control">
+                                                                class="form-control" id="price">
+                                                            <small class="text-danger" id="priceError"></small>
                                                         </div>
                                                     </div>
                                                     <div class="mb-4 row align-items-center">
                                                         <label class="col-sm-3 form-label-title">Discount Price</label>
                                                         <div class="col-sm-9">
                                                             <input type="number" name="discountPrice"
-                                                                placeholder="Discount Price" class="form-control">
-
+                                                                placeholder="Discount Price" class="form-control"
+                                                                id="discountPrice">
+                                                            <small class="text-danger" id="discountPriceError"></small>
 
                                                         </div>
                                                     </div>
@@ -268,10 +262,16 @@
                                                 </div>
                                             </div>
 
+                                            <div class="mb-4 row align-items-center">
+                                                <div class="col-sm-9 offset-sm-3">
+                                                    <small class="text-danger" id="generalError"></small>
+                                                </div>
+                                            </div>
+
 
 
                                             <div class="col-4 col-3 ">
-                                                <button type="submit" class="btn btn-primary w-70  h-100 ">Add
+                                                <button type="submit" class="btn btn-primary w-70  h-100 " onclick="addProduct()">Add
                                                     Product</button>
                                             </div>
 
@@ -300,13 +300,162 @@
         <!-- Modal End -->
 
         <!--image preview-->
-     
-        
-        
-        
-        
 
-   
+
+
+
+        <!--form validation-->
+        <script>
+               function addProduct() {
+                console.log('addProduct() called');
+                event.preventDefault(); 
+            if (validateForm()) {
+                document.getElementById('productForm').submit();
+            }
+        }
+
+            function validateForm() {
+                console.log('validateForm() called');
+                // Reset error messages
+                document.getElementById('nameError').innerText = '';
+                document.getElementById('brandError').innerText = '';
+                document.getElementById('quantityError').innerText = '';
+                document.getElementById('modelError').innerText = '';
+                document.getElementById('ramError').innerText = '';
+                document.getElementById('storageError').innerText = '';
+                document.getElementById('processorError').innerText = '';
+                document.getElementById('screenSizeError').innerText = '';
+                document.getElementById('graphicsCardError').innerText = '';
+                document.getElementById('osArchitectureError').innerText = '';
+                document.getElementById('osError').innerText = '';
+                document.getElementById('descriptionError').innerText = '';
+                document.getElementById('priceError').innerText = '';
+                document.getElementById('discountPriceError').innerText = '';
+                
+
+
+                // Get form values
+                var name = document.getElementById('name').value.trim();
+                var brand = document.getElementById('brand').value.trim();
+                var quantity = document.getElementById('quantity').value.trim();
+                var model = document.getElementById('model').value.trim();
+                var ram = document.getElementById('ram').value.trim();
+                var storage = document.getElementById('storage').value.trim();
+                var processor = document.getElementById('processor').value.trim();
+                var screenSize = document.getElementById('screenSize').value.trim();
+                var graphicsCard = document.getElementById('graphicsCard').value.trim();
+                var osArchitecture = document.getElementById('osArchitecture').value.trim();
+                var os = document.getElementById('os').value.trim();
+                var description = document.getElementById('description').value.trim();
+                var price = document.getElementById('price').value.trim();
+                var discountPrice = document.getElementById('discountPrice').value.trim();
+
+
+                 // Check if at least one field is filled
+                 // Check if at least one field is filled
+    if (
+        name === '' && brand === '' && quantity === '' && model === '' &&
+        ram === '' && storage === '' && processor === '' && screenSize === '' &&
+        graphicsCard === '' && osArchitecture === '' && os === '' &&
+        description === '' && price === '' && discountPrice === ''
+    ) {
+        document.getElementById('generalError').innerText = 'Please fill in at least one field';
+        return false;
+    } else {
+        document.getElementById('generalError').innerText = ''; // Clear general error message
+    }
+
+
+
+                // Validate name
+                if (name === '') {
+                    document.getElementById('nameError').innerText = 'Please enter a product name';
+                    return false;
+                }
+
+                // Validate brand
+                if (brand === '') {
+                    document.getElementById('brandError').innerText = 'Please enter a brand';
+                    return false;
+                }
+
+                // Validate quantity
+                if (quantity === '' || isNaN(quantity) || parseInt(quantity) <= 0) {
+                document.getElementById('quantityError').innerText = 'Please enter a valid quantity';
+                return false;
+                }
+
+                // Validate model
+                if (model === '') {
+                    document.getElementById('modelError').innerText = 'Please enter a model';
+                    return false;
+                }
+
+                // Validate RAM
+                if (ram === '') {
+                    document.getElementById('ramError').innerText = 'Please enter RAM information';
+                    return false;
+                }
+
+                // Validate Storage
+                if (storage === '') {
+                    document.getElementById('storageError').innerText = 'Please enter storage information';
+                    return false;
+                }
+
+                //Validate Processor
+                if(processor === '') {
+                    document.getElementById('processorError').innerText = 'Please enter processor information';
+                }
+
+                 //Validate Screen Size
+                 if(screenSize === '') {
+                    document.getElementById('screenSizeError').innerText = 'Please enter screenSize information';
+                }
+
+                 //Validate Graphics Card
+                 if(graphicsCard === '') {
+                    document.getElementById('graphicsCardError').innerText = 'Please enter graphicsCard information';
+                }
+
+                //Validate OS Architecture
+                if (osArchitecture === '' || isNaN(osArchitecture) || osArchitecture <= 0) {
+                document.getElementById('osArchitectureError').innerText = 'Please enter a valid OS Architecture';
+                return false;
+                }
+
+                //Validate OS
+                if(os === '') {
+                    document.getElementById('osError').innerText = 'Please enter os information';
+                }
+
+                //Validate Description
+                if (description === '') {
+                document.getElementById('descriptionError').innerText = 'Please enter a product description';
+                return false;
+                }
+
+                //Validate Price
+                if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
+                document.getElementById('priceError').innerText = 'Please enter a valid price';
+                return false;
+                }
+                //Validate Discount Price
+                if (discountPrice === '' || isNaN(discountPrice) || parseFloat(discountPrice) <= 0) {
+                document.getElementById('discountPriceError').innerText = 'Please enter a valid discountPrice';
+                return false;
+                }
+
+
+                
+
+                // Form is valid, continue with submission
+                return true;
+            }
+        </script>
+
+
+
 
         <!-- latest js -->
         <script src="/assetsb/js/jquery-3.6.0.min.js"></script>

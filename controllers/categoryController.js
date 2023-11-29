@@ -2,19 +2,44 @@ const User = require('../models/userModel')
 const Category = require('../models/categoryModel')
 const Admin = require('../models/adminModel')
 const multerConfig = require('../helper/multer')
+const Product = require('../models/productModel')
 
 
+
+// const loadCategory = async (req, res) => {
+//     try {
+//         const categories = await Category.find();
+//         console.log(categories);
+       
+//         res.render('category',{categories})
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+const ITEMS_PER_PAGE = 2;
 
 const loadCategory = async (req, res) => {
     try {
-        const categories = await Category.find();
-        console.log(categories);
-       
-        res.render('category',{categories})
+        const page = parseInt(req.query.page) || 1;
+
+        const categoriesCount = await Category.countDocuments();
+        const totalPages = Math.ceil(categoriesCount / ITEMS_PER_PAGE);
+
+        const categories = await Category.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE);
+
+        res.render('category', {
+            categories,
+            currentPage: page,
+            totalPages,
+        });
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 const loadaddCategory = async(req,res) =>{
     try {
@@ -49,20 +74,55 @@ const addCategory = async(req,res)=>{
 }
 
 
-async function listCategory(req,res){
+// async function listCategory(req,res){
+//     try {
+//         const id = req.query.id;
+//         const category = await Category.findById(id);
+//         if(!category){
+//             console.log("User not found");
+//         }
+//         category.is_list = !category.is_list
+//         await category.save();
+//         res.redirect('/admin/category')
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+const listCategory = async (req, res) => {
     try {
-        const id = req.query.id;
-        const category = await Category.findById(id);
-        if(!category){
-            console.log("User not found");
+        const categoryId = req.query.id;
+        const category = await Category.findById(categoryId);
+
+        if (!category) {
+            console.log("Category not found");
+            return res.status(404).send("Category not found");
         }
-        category.is_list = !category.is_list
+
+        // Toggle the is_list property of the category
+        category.is_list = !category.is_list;
         await category.save();
-        res.redirect('/admin/category')
+
+        // Unlist or list associated products based on the category's is_list property
+        const productListAction = category.is_list ? { $set: { list: true } } : { $set: { list: false } };
+        await Product.updateMany({ category: categoryId }, productListAction);
+
+        console.log(`Category and associated products ${category.is_list ? 'listed' : 'unlisted'} successfully.`);
+        res.redirect('/admin/category');
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
+
+
+
+
+
+
+
+
 
 
 const editCategory = async (req,res)=>{

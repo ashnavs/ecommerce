@@ -62,14 +62,15 @@
 
                                             <td>
                                                 <% if(product.list) { %>
-                                                    <a href="/admin/listProduct?id=<%=product._id.toString()%>">
-                                                <span class="text-danger">Unlist</span>
-                                            </a>
+                                                    
+                                                <a href="/admin/listProduct?id=<%=product._id.toString()%>">
+                                                    <span class="text-primary">List</span>
+                                                   
                                             <% } else { %>
 
                                                 <a href="/admin/listProduct?id=<%=product._id.toString()%>">
-                                                    <span class="text-primary">List</span>
-
+                                                    <span class="text-danger">Unlist</span>
+                                                </a>
                                                <% } %>
                                             </td>
 

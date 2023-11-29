@@ -1,123 +1,123 @@
 <%- include('../partials/styleh') %>
 
-              <div class="pt-5">
-              
-                <div class="form-box">
-                    <div class="form-tab">
-                        <h3>Sign Up</h3>
-                        <div class="tab-content" id="tab-content-5" >
-                            <div class="tab-pane fade show active" id="signin" role="tabpanel"
-                                aria-labelledby="signin-tab">
-                                <form action="" method="post" id="regForm" onsubmit="return validateForm()">
-                                    <div class="form-group">
-                                        <label for="singin-name">Username *</label>
-                                        <input type="text" class="form-control" id="signin-name" name="name">
-                                        <small class="text-danger" id="nameError"></small>
-                                    </div><!-- End .form-group -->
+    <div class="pt-5">
 
-                                    <div class="form-group">
-                                        <label for="singin-email">Email address *</label>
-                                        <input type="email" class="form-control" id="signin-email" name="email">
-                                        <small class="text-danger" id="emailError"></small>
-                                    </div><!-- End .form-group -->
+        <div class="form-box">
+            <div class="form-tab">
+                <h3>Sign Up</h3>
+                <div class="tab-content" id="tab-content-5">
+                    <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
 
-                                  <div>
-                                        <label for="singin-mobile">Mobile *</label>
-                                        <input type="text" class="form-control" id="signin-mno" name="mno">
-                                        <small class="text-danger" id="mnoError"></small>
-            
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="singin-password">Password </label>
-                                        <input type="password" class="form-control" id="signin-password" name="password">
-                                        <small class="text-danger" id="passError"></small>
-                                    </div><!-- End .form-group -->
+                        <form action="" method="post" id="regForm" onsubmit="return validateForm()">
+                            <div class="form-group">
+                                <label for="singin-name">Username *</label>
+                                <input type="text" class="form-control" id="signin-name" name="name">
+                                <small class="text-danger" id="nameError"></small>
+                            </div><!-- End .form-group -->
 
-                                    
+                            <div class="form-group">
+                                <label for="singin-email">Email address *</label>
+                                <input type="email" class="form-control" id="signin-email" name="email">
+                                <small class="text-danger" id="emailError"></small>
+                            </div><!-- End .form-group -->
 
-                                    <div class="form-footer">
-                                        <button type="submit" class="btn btn-outline-primary-2" id="submitButton" onclick="validateForm()">
-                                            <span>SIGN UP</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </button>
+                            <div>
+                                <label for="singin-mobile">Mobile *</label>
+                                <input type="text" class="form-control" id="signin-mno" name="mno">
+                                <small class="text-danger" id="mnoError"></small>
 
-                                        
-
-                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
-                                    </div><!-- End .form-footer -->
-                                    <% if(errorMessage) { %>
-                                        <div class="alert alert-danger">
-                                            <%= errorMessage %>
-                                        </div>
-                                    <% } %>
-                            
-                                </form>
-                                
-                           <!-- Add this code where you want to display the error message -->
+                            </div>
+                            <div class="form-group">
+                                <label for="singin-password">Password </label>
+                                <input type="password" class="form-control" id="signin-password" name="password">
+                                <small class="text-danger" id="passError"></small>
+                            </div><!-- End .form-group -->
 
 
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .form-tab -->
-                </div><!-- End .form-box -->
-            </div><!-- End .modal-body -->
-        </div><!-- End .modal-content -->
-     
-        <script>
-            function validateForm() {
-                // Reset error messages
-                document.getElementById('nameError').innerText = '';
-                document.getElementById('emailError').innerText = '';
-                document.getElementById('mnoError').innerText = '';
-                document.getElementById('passError').innerText = '';
-        
-                // Get form values
-                var name = document.getElementById('signin-name').value.trim();
-                var email = document.getElementById('signin-email').value.trim();
-                var mno = document.getElementById('signin-mno').value.trim();
-                var password = document.getElementById('signin-password').value.trim();
-        
-                // Regular expressions
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                var mnoRegex = /^[0-9]{10}$/;
-                var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-        
-                // Validate name
-                if (name === '') {
-                    document.getElementById('nameError').innerText = 'Please enter your username';
-                    return false;
-                }
-        
-                // Validate email
-                if (!emailRegex.test(email)) {
-                    document.getElementById('emailError').innerText = 'Please enter a valid email address';
-                    return false;
-                }
-        
-                // Validate mobile number
-                if (!mnoRegex.test(mno)) {
-                    document.getElementById('mnoError').innerText = 'Please enter a valid 10-digit mobile number';
-                    return false;
-                }
-        
-                if (!passRegex.test(password)) {
+
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-outline-primary-2" id="submitButton"
+                                    onclick="validateForm()">
+                                    <span>SIGN UP</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+
+
+
+                                <a href="/forgot-password" class="forgot-link">Forgot Your Password?</a>
+                            </div><!-- End .form-footer -->
+                            <% if(errorMessage) { %>
+                                <div class="alert alert-danger">
+                                    <%= errorMessage %>
+                                </div>
+                                <% } %>
+
+                        </form>
+
+                        <!-- Add this code where you want to display the error message -->
+
+
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .modal-body -->
+    </div><!-- End .modal-content -->
+
+    <script>
+        function validateForm() {
+            // Reset error messages
+            document.getElementById('nameError').innerText = '';
+            document.getElementById('emailError').innerText = '';
+            document.getElementById('mnoError').innerText = '';
+            document.getElementById('passError').innerText = '';
+
+            // Get form values
+            var name = document.getElementById('signin-name').value.trim();
+            var email = document.getElementById('signin-email').value.trim();
+            var mno = document.getElementById('signin-mno').value.trim();
+            var password = document.getElementById('signin-password').value.trim();
+
+            // Regular expressions
+            var namePattern = /^[A-Za-z '-]+$/;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var mnoRegex = /^[0-9]{10}$/;
+            var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+            // Validate name
+            if (name === '') {
+                document.getElementById('nameError').innerText = 'Please enter your username';
+                return false;
+            }
+
+            if (!namePattern.test(name)) {
+                document.getElementById('nameError').innerText = 'Invalid name format';
+                return false;
+            }
+
+            // Validate email
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').innerText = 'Please enter a valid email address';
+                return false;
+            }
+
+            // Validate mobile number
+            if (!mnoRegex.test(mno)) {
+                document.getElementById('mnoError').innerText = 'Please enter a valid 10-digit mobile number';
+                return false;
+            }
+
+            if (!passRegex.test(password)) {
                 document.getElementById('passError').innerText = 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit';
                 return false;
             }
 
-                 if (document.getElementById('nameError').innerText || document.getElementById('emailError').innerText || document.getElementById('mnoError').innerText || document.getElementById('passError').innerText ) {
-            document.getElementById('generalError').innerText = 'Please fix the errors in the form';
-            return false; // Prevent form submission
-        }
-        
-                // Form is valid, continue with submission
-           
-                return true;
+            if (document.getElementById('nameError').innerText || document.getElementById('emailError').innerText || document.getElementById('mnoError').innerText || document.getElementById('passError').innerText) {
+                document.getElementById('generalError').innerText = 'Please fix the errors in the form';
+                return false; // Prevent form submission
             }
-        </script>
 
+            // Form is valid, continue with submission
 
-  
-
-
-       
-      
+            return true;
+        }
+    </script>
