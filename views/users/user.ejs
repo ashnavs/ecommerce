@@ -67,66 +67,143 @@
 
 								    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
 								    	<p>The following addresses will be used on the checkout page by default.</p>
+                                <!-- Add a billing address form (initially hidden) -->
+<div id="billingAddressForm" style="display: none;">
+  <form id="billingForm" action="/add-billing-address" method="post">
+    <!-- Your form fields go here -->
+    <div class="row">
+        <div class="col-lg-9">
+            <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Name *</label>
+                        <input type="text"  class="form-control" name="name" required >
+                    </div><!-- End .col-sm-6 -->
 
-								    	<div class="row">
-								    		<div class="col-lg-6">
-								    			<div class="card card-dashboard">
-								    				<div class="card-body">
-								    					<h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                  
+                </div><!-- End .row -->
 
-														<p>User Name<br>
-														User Company<br>
-														John str<br>
-														New York, NY 10001<br>
-														1-234-987-6543<br>
-														yourmail@mail.com<br>
-														<a href="#">Edit <i class="icon-edit"></i></a></p>
-								    				</div><!-- End .card-body -->
-								    			</div><!-- End .card-dashboard -->
-								    		</div><!-- End .col-lg-6 -->
+                <label>Company Name (Optional)</label>
+                <input type="text" class="form-control">
 
-								    		<div class="col-lg-6">
-								    			<div class="card card-dashboard">
-								    				<div class="card-body">
-								    					<h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
+                <label>Country *</label>
+                <input type="text" class="form-control" name="country" required>
 
-														<p>You have not set up this type of address yet.<br>
-														<a href="#">Edit <i class="icon-edit"></i></a></p>
-								    				</div><!-- End .card-body -->
-								    			</div><!-- End .card-dashboard -->
-								    		</div><!-- End .col-lg-6 -->
-								    	</div><!-- End .row -->
+                <label>Street address *</label>
+                <input type="text" class="form-control" placeholder="House number and Street name" name="street" required>
+
+                <label>House no *</label>
+                <input type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." name="houseno" required>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Town / City *</label>
+                        <input type="text" class="form-control" name="city" required>
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>State / County *</label>
+                        <input type="text" class="form-control" name="state" required>
+                    </div><!-- End .col-sm-6 -->
+                </div><!-- End .row -->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Postcode / ZIP *</label>
+                        <input type="text" class="form-control" name="pincode" required>
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>Phone *</label>
+                        <input type="tel" class="form-control" name="mobile" required>
+                    </div><!-- End .col-sm-6 -->
+                </div><!-- End .row -->
+
+                <label>Email address *</label>
+                <input type="email" class="form-control" name="email" required>
+
+             
+
+                <!-- <label>Order notes (optional)</label>
+                <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea> -->
+        </div><!-- End .col-lg-9 -->
+    
+    </div><!-- End .row -->
+    
+    <!-- Add more form fields as needed -->
+
+    <button type="submit" id="addAddressButton">Add Address</button>
+
+  </form>
+</div>
+
+<!-- Display billing address -->
+<div class="row">
+    <% address.map((item) => { %>
+    <div class="col-lg-6">
+ 
+        <div class="card card-dashboard">
+          <div class="card-body">
+            <h3 class="card-title">Billing Address</h3>
+            <!-- End .card-title -->
+            <p>
+              <%= item.name %><br>
+              <%= item.email %><br>
+              <%= item.mobile %><br>
+              <%=item.houseno %><br>
+              <%=item.street %><br>
+              <%=item.landmark %><br>
+              <%=item.pincode%><br>
+              <%=item.city %><br>
+              <%=item.country %><br>
+              <!-- <a href="#">Edit <i class="icon-edit"></i></a> -->
+            </p>
+          </div>
+          <!-- End .card-body -->
+        </div>
+        <!-- End .card-dashboard -->
+     
+    </div>
+    <% }) %>
+    <!-- End .col-lg-6 -->
+  </div>
+  
+
+<p>No billing address found. <a href="#" onclick="showBillingForm()">Add a billing address</a></p>
+
+
+<script>
+  function showBillingForm() {
+    // Show the billing address form
+    document.getElementById('billingAddressForm').style.display = 'block';
+  }
+</script>
+
+                                          
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-								    	<form action="#">
-			                				<div class="row">
-			                					<div class="col-sm-6">
-			                						<label>First Name *</label>
-			                						<input type="text" class="form-control" required>
-			                					</div><!-- End .col-sm-6 -->
-
-			                					<div class="col-sm-6">
-			                						<label>Last Name *</label>
-			                						<input type="text" class="form-control" required>
-			                					</div><!-- End .col-sm-6 -->
-			                				</div><!-- End .row -->
+								    	<form action="/editUserDetails" method="post">
+			                				
 
 		            						<label>Display Name *</label>
-		            						<input type="text" class="form-control" required>
+   
+		            						<input type="text" class="form-control" value="<%=userDetail.name%>" name="displayName">
 		            						<small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
 
-		                					<label>Email address *</label>
-		        							<input type="email" class="form-control" required>
+                                            <label>Phone Number</label>
+                                            <input type="number" class="form-control" value="<%=userDetail.mobile%>" name="phoneNumber">
+
+		                					
 
 		            						<label>Current password (leave blank to leave unchanged)</label>
 		            						<input type="password" class="form-control">
 
 		            						<label>New password (leave blank to leave unchanged)</label>
-		            						<input type="password" class="form-control">
+		            						<input type="password" class="form-control" name="newPassword">
 
 		            						<label>Confirm new password</label>
-		            						<input type="password" class="form-control mb-2">
+		            						<input type="password" class="form-control mb-2" name="confirmNewPassword">
 
 		                					<button type="submit" class="btn btn-outline-primary-2">
 			                					<span>SAVE CHANGES</span>

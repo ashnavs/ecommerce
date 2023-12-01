@@ -64,7 +64,7 @@ async function loadProduct(req, res) {
       const totalCount = await Product.countDocuments();
       const totalPages = Math.ceil(totalCount / perPage);
 
-      const products = await Product.find({list:true})
+      const products = await Product.find()
           .skip((page - 1) * perPage)
           .limit(perPage);
 

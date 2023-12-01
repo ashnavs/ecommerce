@@ -6,7 +6,7 @@ const randomstring = require('randomstring');
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const { v4: uuidv4 } = require('uuid');
-
+const Address = require('../models/addressModel');
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -338,15 +338,9 @@ const loadLogout=async(req,res)=>{
   
   }
 
-  const loaduserProfile = async(req,res)=>{
-    try {
-        const user = req.session.user_id;
-        const userDetail = await User.findById(user)
-        res.render('user' ,{user , userDetail})
-    } catch (error) {
-        console.log(error.message);
-    }
-  }
+
+
+ 
 
 
 
@@ -535,6 +529,102 @@ const resetPass = async (req, res) => {
     }
 };
 
+const loaduserProfile = async(req,res)=>{
+    try {
+        const user = req.session.user_id;
+        const userDetail = await User.findById(user);
+        const address = await Address.find({user:user})
+        res.render('user' ,{user , userDetail , address})
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
+
+
+const addBillingAddress = async (req, res) => {
+  try {
+    // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
+    const userId = req.session.user_id;
+    
+
+    // Extract address data from the form submission
+    const {
+      name,
+      email,
+      mobile,
+      houseno,
+      street,
+      landmark,
+      pincode,
+      city,
+      country,
+    } = req.body;
+
+    // Create a new address instance
+    const newAddress = new Address({
+      user: userId,
+      name,
+      email,
+      mobile,
+      houseno,
+      street,
+      landmark,
+      pincode,
+      city,
+      country,
+    });
+
+    // Save the new address to the database
+    await newAddress.save();
+
+    // Respond with success message
+    res.redirect('/user');
+    // res.json({ success: true, message: 'Address added successfully' });
+  } catch (error) {
+    // Handle any errors that may occur during the process
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+
+const updateUserProfile = async(req,res) => {
+    try {
+        const userId = req.session.user_id;
+        const {displayName , phoneNumber , currPassword , newPassword , confirmNewPassword} = req.body;
+
+        const user = await User.findById(userId);
+
+         // Check if the provided current password matches the stored hashed password
+         if (currPassword && !bcrypt.compareSync(currPassword, user.password)) {
+            return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+        }
+
+        user.name = displayName;
+        user.mobile = phoneNumber;
+
+         // If a new password is provided, hash and update the password
+         if (newPassword) {
+            if (newPassword !== confirmNewPassword) {
+                return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
+            }
+
+            // Hash the new password
+            const hashedPassword = bcrypt.hashSync(newPassword, 10);
+            user.password = hashedPassword;
+        }
+
+        // Save the updated user details to the database
+        await user.save();
+
+        // Redirect to the user profile page or display a success message
+        res.redirect('/user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+}
+
 
 module.exports = {
     loadRegister,
@@ -553,6 +643,9 @@ module.exports = {
     loadforgotPass,
     forgotPass   ,
     loadResestPass,
-    resetPass
+    resetPass,
+    addBillingAddress,
+    updateUserProfile
+
 
 };

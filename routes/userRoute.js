@@ -66,6 +66,7 @@ user_route.get('/removeProduct',cartController.removeProduct);
 //user-profile
 user_route.get('/user',userController.loaduserProfile)
 
+
 //resend
 user_route.post('/resendOtp', userController.verifyResendOtp);
 user_route.get('/resendOtp', userController.resendOtp);
@@ -75,6 +76,10 @@ user_route.post('/forgot-password',userController.forgotPass)
 
 user_route.get('/resetPassword/:token',userController.loadResestPass);
 user_route.post('/resetPassword',userController.resetPass)
+// Update the server-side route to handle form submission
+user_route.post('/add-billing-address', userController.addBillingAddress);
+user_route.post('/editUserDetails',userController.updateUserProfile)
+
 
 module.exports = user_route;
 
