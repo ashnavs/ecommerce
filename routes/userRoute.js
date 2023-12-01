@@ -58,6 +58,10 @@ user_route.get('/productDetails',userController.loadproductDetail)
 user_route.get('/cart',auth.isLogin, cartController.addToCart);
 user_route.get('/cartPage',cartController.loadCart)
 
+user_route.post('/updateQuantity',cartController.updateQuantity);
+user_route.get('/removeProduct',cartController.removeProduct);
+
+
 
 //user-profile
 user_route.get('/user',userController.loaduserProfile)

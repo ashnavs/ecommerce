@@ -225,6 +225,7 @@
 
                             <div class="products mb-3">
                                 <div class="row">
+                            
                                     <% productdata.forEach((product)=>{ %>
                                     <div class="col-6 col-md-4 col-xl-3">
                                         <div class="product">
@@ -251,7 +252,7 @@
                                                 </div><!-- End .product-cat -->
                                                 <h3 class="product-title"><a href="productDetails"><%=product.name%></a></h3><!-- End .product-title -->
                                                 <div class="product-price">
-                                                    ₹<%=product.price%>
+                                                    ₹<span style="text-decoration: line-through;margin-right: 5px;"><%=product.price%></span> ₹<%=product.discountPrice%> 
                                                 </div><!-- End .product-price -->
                                                 <div class="ratings-container">
                                                     <div class="ratings">
@@ -264,6 +265,7 @@
                                     </div><!-- End .col-sm-6 col-md-4 col-xl-3 -->
 
                                     <% }) %>
+                                   
                                 </div><!-- End .row -->
                                   
                                 
