@@ -3,10 +3,11 @@ const app = express();
 const path = require('path')
 const port = 3001;
 const dotenv = require('dotenv')
+const bodyParser = require('body-parser');
 const {  configureFlash } = require('./middleware/flash');
 
 dotenv.config()
-
+app.use(bodyParser.json());
  //for userRoute
 const userRoute= require('./routes/userRoute');
 app.use('/',userRoute)

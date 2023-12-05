@@ -19,6 +19,7 @@ admin_route.set('views', './views/admin');
 const adminController = require("../controllers/adminController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
+const orderController = require('../controllers/orderController')
 
 
 admin_route.get('/', auth.isLogout,adminController.adminLogin);
@@ -48,5 +49,9 @@ admin_route.get('/listProduct',productController.listProduct)
 admin_route.get('/editProduct',productController.editProduct)
 admin_route.post('/editProduct',upload.array('productImage'),productController.updateProduct)
 
+//order
+admin_route.get('/orders',orderController.loadOrderList);
+admin_route.get('/order-details',orderController.loadOrderDetails);
+admin_route.post('/ChangeOrderStatus',orderController.orderStatus);
 
 module.exports = admin_route;

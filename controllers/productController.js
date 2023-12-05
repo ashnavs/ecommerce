@@ -401,7 +401,7 @@ const updateProduct = async (req, res) => {
       );
 
       if (updatedProduct) {
-        console.log('Product Updated:', updatedProduct);
+        // console.log('Product Updated:', updatedProduct);
       } else {
         console.log('Product not found or update failed.');
       }
@@ -430,7 +430,7 @@ const updateProduct = async (req, res) => {
       );
 
       if (updatedProduct) {
-        console.log('Product Updated:', updatedProduct);
+        // console.log('Product Updated:', updatedProduct);
       } else {
         console.log('Product not found or update failed.');
       }

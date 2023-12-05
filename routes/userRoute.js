@@ -27,6 +27,8 @@ const userController = require("../controllers/userController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 const cartController = require("../controllers/cartController");
+const checkoutController = require('../controllers/orderController')
+const orderController = require('../controllers/orderController')
 
 //api
 user_route.get('/', userController.loadLandingHome);
@@ -61,12 +63,6 @@ user_route.get('/cartPage',cartController.loadCart)
 user_route.post('/updateQuantity',cartController.updateQuantity);
 user_route.get('/removeProduct',cartController.removeProduct);
 
-
-
-//user-profile
-user_route.get('/user',userController.loaduserProfile)
-
-
 //resend
 user_route.post('/resendOtp', userController.verifyResendOtp);
 user_route.get('/resendOtp', userController.resendOtp);
@@ -76,9 +72,17 @@ user_route.post('/forgot-password',userController.forgotPass)
 
 user_route.get('/resetPassword/:token',userController.loadResestPass);
 user_route.post('/resetPassword',userController.resetPass)
-// Update the server-side route to handle form submission
+
+//user-profile
+user_route.get('/user',userController.loaduserProfile)
 user_route.post('/add-billing-address', userController.addBillingAddress);
 user_route.post('/editUserDetails',userController.updateUserProfile)
+
+//checkout
+user_route.get('/checkOut',orderController.loadCheckOut);
+user_route.post('/confirm-order', orderController.confirmOrder);
+user_route.get('/success-page',orderController.loadSuccess)
+
 
 
 module.exports = user_route;

@@ -130,7 +130,7 @@ const editCategory = async (req,res)=>{
         const id = req.query.id;
         console.log(id);
         const categories = await Category.findById(id);
-        console.log(categories);
+        // console.log(categories);
         res.render('editCategory',{categories})
     } catch (error) {
         console.log(error.message);
@@ -152,7 +152,7 @@ const updateCategory = async (req, res) => {
                 { new: true }
             );
             if (updateCategory) {
-                console.log('Category Updated:', updateCategory);
+                // console.log('Category Updated:', updateCategory);
             } else {
                 console.log('Category not found or update failed.');
             }

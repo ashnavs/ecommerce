@@ -72,18 +72,17 @@ const loadCart = async (req, res) => {
 
     let subtotal = 0;
     userCart.products.forEach((item) => {
-      item.total = item.product.discountPrice * item.quantity;
-      subtotal += item.total;
+      item.subTotal = item.product.discountPrice * item.quantity;
+      subtotal += item.subTotal;
     });
 
     const total = subtotal;
-    console.log(total);
+    userCart.subTotal = subtotal;
+    console.log(total,subtotal);
     userCart.total = total;
     await userCart.save();
 
-
-   
-    res.render('cart', { userCart, user, total, subtotal });
+    res.render('cart', { userCart, user});
 
 
   } catch (error) {

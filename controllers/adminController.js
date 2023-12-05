@@ -1,5 +1,7 @@
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
+const orderModel = require('../models/orderModel')
+const productModel = require('../models/productModel')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const randomstring = require('randomstring')
@@ -114,7 +116,11 @@ const blockUser = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+};
+
+
+
+
 
 
 
@@ -125,6 +131,7 @@ module.exports = {
     verifyLogin,
     loaduserDetails,
     blockUser,
+    
     
 
 }

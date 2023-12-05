@@ -7,6 +7,7 @@ const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const { v4: uuidv4 } = require('uuid');
 const Address = require('../models/addressModel');
+const Order = require('../models/orderModel')
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -224,8 +225,8 @@ const loadLandingHome = async (req, res) => {
         const allProduct = await Product.find().sort({ createdAt: -1}).limit(8);
         const newArrivals = await Product.find().sort({ createdAt: -1}).limit(6)
         // const products = await Product.find().sort({createdAt: -1})
-        console.log("////////////////"+allProduct.createdAt);
-        console.log(allProduct); // Log the products to the console
+        // console.log("////////////////"+allProduct.createdAt);
+        // console.log(allProduct); // Log the products to the console
 
         res.render('landingHome', { allProduct , newArrivals , user});
     } catch (error) {
@@ -271,7 +272,7 @@ const verifyLogin=async(req,res)=>{
                 const user  = req.session.user_id
                 const allProduct = await Product.find();
                 const newArrivals = await Product.find().sort({createdAt:-1}).limit(6)
-                console.log(allProduct);
+                // console.log(allProduct);
                 res.render('landingHome',{ allProduct , newArrivals , user })
             }
             else{
@@ -506,9 +507,8 @@ const resetPass = async (req, res) => {
             return res.render('resetPassword', { message: 'Invalid or expired token' , token ,user });
         }
 
-        if (newPassword === undefined || newPassword.trim() === '') {
-            return res.render('landingHome', { message: 'New password is required',token , users , newArrivals , user , allProduct});
-        }
+        
+        
 
         // Update the user's password with the new hashed password
         const hashedPassword = await bcrypt.hash(newPassword, 10); // 10 is the number of salt rounds
@@ -534,7 +534,8 @@ const loaduserProfile = async(req,res)=>{
         const user = req.session.user_id;
         const userDetail = await User.findById(user);
         const address = await Address.find({user:user})
-        res.render('user' ,{user , userDetail , address})
+        const orderDetails = await Order.find({user:user})
+        res.render('user' ,{user , userDetail , address , orderDetails})
     } catch (error) {
         console.log(error.message);
     }
