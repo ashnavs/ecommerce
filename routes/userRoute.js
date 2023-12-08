@@ -77,7 +77,7 @@ user_route.post('/resetPassword',userController.resetPass)
 user_route.get('/user',userController.loaduserProfile)
 user_route.post('/add-billing-address', userController.addBillingAddress);
 user_route.get('/editAddress',userController.loadeditAddress)
-// user_route.post('/editAddress',userController.editAddress)
+user_route.post('/editAddress',userController.editAddress)
 user_route.post('/editUserDetails',userController.updateUserProfile)
 
 //checkout

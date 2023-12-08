@@ -670,9 +670,12 @@ const editAddress = async (req, res) => {
   
       // Assuming you're passing the address ID as a query parameter (e.g., /edit-address?id=address_id)
       const addressId = req.query.id;
+
+      console.log('Received addressId:', addressId);
+      console.log('Received userId:', userId);
   
       // Find the address in the database
-      const existingAddress = await Address.findOne({ _id: addressId, user: userId });
+      const existingAddress = await Address.findOne({ user: userId });
   
       // Check if the address exists
       if (!existingAddress) {
@@ -708,8 +711,9 @@ const editAddress = async (req, res) => {
         const user = req.session.user_id;
         const addressId = req.query.addressId;
         const address = await Address.findById(addressId);
+        
     
-        res.render('editAddress',{address , user})
+        res.render('editAddress',{address , user , addressId})
     } catch (error) {
         console.log(error.message);
     }
