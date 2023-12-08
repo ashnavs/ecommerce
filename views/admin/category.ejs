@@ -9,6 +9,17 @@
 <div class="page-body">
     <!-- All User Table Start -->
     <div class="container-fluid">
+        <% if (successMessage) { %>
+            <div class="alert alert-success fade show mt-3" role="alert">
+                <%- successMessage %>
+            </div>
+        <% } %>
+
+        <% if (editSuccess) { %>
+            <div class="alert alert-success fade show mt-3" role="alert">
+                <%- editSuccess %>
+            </div>
+        <% } %>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
@@ -90,6 +101,7 @@
 
                                     </tbody>
                                 </table>
+                              
                                 <br>
                                   <!-- Pagination -->
                                   <nav aria-label="Page navigation">

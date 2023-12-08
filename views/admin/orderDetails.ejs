@@ -48,9 +48,7 @@
                                                                     <tr>
                                                                         <th colspan="2">Items</th>
                                                                         <th class="text-end" colspan="2">
-                                                                            <a href="javascript:void(0)"
-                                                                                class="theme-color">Edit
-                                                                                Items</a>
+                                                                            
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
@@ -88,7 +86,7 @@
                                                                             <h5>Subtotal :</h5>
                                                                         </td>
                                                                         <td>
-                                                                            <h4><%=orderDetails.grandTotal%></h4>
+                                                                            <h4>₹<%=orderDetails.grandTotal%></h4>
                                                                         </td>
                                                                     </tr>
 
@@ -116,7 +114,7 @@
                                                                                 :</h4>
                                                                         </td>
                                                                         <td>
-                                                                            <h4 class="theme-color fw-bold"><%=orderDetails.grandTotal+80%>
+                                                                            <h4 class="theme-color fw-bold">₹<%=orderDetails.grandTotal+80%>
                                                                             </h4>
                                                                         </td>
                                                                     </tr>
@@ -247,7 +245,7 @@
                 const statusDropdwon = document.getElementById('statusDropdown');
                 const orderStatus = '<%=orderDetails.status%>';
         
-                 if (orderStatus === 'Canceled') {
+                 if (orderStatus === 'Cancel Order') {
                       statusDropdwon.style.display = 'none'
                  }else{
         

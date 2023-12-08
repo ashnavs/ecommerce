@@ -5,6 +5,7 @@ const port = 3001;
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser');
 const {  configureFlash } = require('./middleware/flash');
+const flash = require('flash');
 
 dotenv.config()
 app.use(bodyParser.json());

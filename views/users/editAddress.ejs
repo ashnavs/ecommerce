@@ -1,0 +1,85 @@
+
+<%- include('../partials/styleh') %>
+<%- include('../partials/header') %>
+
+
+<div>
+    <form  action="/editAddress" method="post">
+        <!-- Your form fields go here -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-9">
+                <h3>Billing Details</h3>
+                <!-- End .checkout-title -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Name *</label>
+                        <input type="text" class="form-control"
+                            name="name" required value="<%=address.name%>">
+                    </div><!-- End .col-sm-6 -->
+
+
+                </div><!-- End .row -->
+
+                <label>Company Name (Optional)</label>
+                <input type="text" class="form-control">
+
+                <label>Country </label>
+                <input type="text" class="form-control" name="country"
+                    required value="<%=address.country%>">
+
+                <label>Street address *</label>
+                <input type="text" class="form-control"
+                    placeholder="House number and Street name"
+                    name="street" required value="<%=address.street%>">
+
+                <label>House no *</label>
+                <input type="text" class="form-control"
+                    placeholder="Appartments, suite, unit etc ..."
+                    name="houseno" required value="<%=address.houseno%>">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Town / City *</label>
+                        <input type="text" class="form-control"
+                            name="city" required value="<%=address.city%>">
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>State</label>
+                        <input type="text" class="form-control"
+                            name="state" required value="<%=address.state%>">
+                    </div><!-- End .col-sm-6 -->
+                </div><!-- End .row -->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Postcode / ZIP *</label>
+                        <input type="text" class="form-control"
+                            name="pincode" required value="<%=address.pincode%>">
+                    </div><!-- End .col-sm-6 -->
+
+                    <div class="col-sm-6">
+                        <label>Phone *</label>
+                        <input type="tel" class="form-control"
+                            name="mobile" required value="<%=address.mobile%>">
+                    </div><!-- End .col-sm-6 -->
+                </div><!-- End .row -->
+
+                <label>Email address *</label>
+                <input type="email" class="form-control" name="email"
+                    required value="<%=address.email%>">
+
+
+
+                <!-- <label>Order notes (optional)</label>
+                <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea> -->
+            </div><!-- End .col-lg-9 -->
+
+        </div><!-- End .row -->
+
+        <!-- Add more form fields as needed -->
+
+        <button type="submit" id="addAddressButton">Add Address</button>
+
+    </form>
+</div>

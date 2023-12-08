@@ -19,8 +19,40 @@ const Product = require('../models/productModel')
 
 const ITEMS_PER_PAGE = 2;
 
+// const loadCategory = async (req, res) => {
+//     try {
+//         const page = parseInt(req.query.page) || 1;
+   
+
+//         const categoriesCount = await Category.countDocuments();
+//         const totalPages = Math.ceil(categoriesCount / ITEMS_PER_PAGE);
+
+//         const categories = await Category.find()
+//             .skip((page - 1) * ITEMS_PER_PAGE)
+//             .limit(ITEMS_PER_PAGE);
+
+//         res.render('category', {
+//             categories,
+//             currentPage: page,
+//             totalPages,
+           
+//         });
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
+
 const loadCategory = async (req, res) => {
     try {
+        // Check if there is a success message in the session
+        const successMessage = req.session.successMessage;
+        // Clear the message from the session
+        delete req.session.successMessage;
+        const editSuccess = req.session.successMessge
+        delete req.session.successMessage;
+
         const page = parseInt(req.query.page) || 1;
 
         const categoriesCount = await Category.countDocuments();
@@ -34,12 +66,15 @@ const loadCategory = async (req, res) => {
             categories,
             currentPage: page,
             totalPages,
+            successMessage,
+            editSuccess // Pass the successMessage to the view
         });
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 const loadaddCategory = async(req,res) =>{
     try {
@@ -66,33 +101,23 @@ const addCategory = async(req,res)=>{
         })
        
         await category.save();
+
+         // Set success message in the session
+         req.session.successMessage = 'Category added successfully';
         res.redirect('/admin/category')
+        const errorMessage = 'Error adding category';
+        res.render('addnewCategory', { errorMessage });
     }
     } catch (error) {
         console.log(error.message);
     }
 }
 
-
-// async function listCategory(req,res){
-//     try {
-//         const id = req.query.id;
-//         const category = await Category.findById(id);
-//         if(!category){
-//             console.log("User not found");
-//         }
-//         category.is_list = !category.is_list
-//         await category.save();
-//         res.redirect('/admin/category')
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
 const listCategory = async (req, res) => {
     try {
         const categoryId = req.query.id;
         const category = await Category.findById(categoryId);
+
 
         if (!category) {
             console.log("Category not found");
@@ -125,12 +150,17 @@ const listCategory = async (req, res) => {
 
 
 
+
+
+
 const editCategory = async (req,res)=>{
     try {
         const id = req.query.id;
         console.log(id);
         const categories = await Category.findById(id);
         // console.log(categories);
+
+        req.session.successMessge = 'Category edited successfully'
         res.render('editCategory',{categories})
     } catch (error) {
         console.log(error.message);

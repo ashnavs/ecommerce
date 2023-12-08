@@ -4,6 +4,16 @@
  <!-- Container-fluid starts-->
  <div class="page-body">
     <div class="container-fluid">
+        <% if (successMessage) { %>
+            <div class="alert alert-success fade show mt-3" role="alert">
+                <%- successMessage %>
+            </div>
+        <% } %>
+        <% if (editproduct) { %>
+            <div class="alert alert-success fade show mt-3" role="alert">
+                <%- editproduct %>
+            </div>
+        <% } %>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
@@ -95,6 +105,7 @@
 
                               <%      }) %>
                                     </tbody>
+                                    
                                 </table>
                             </div>
                         </div>

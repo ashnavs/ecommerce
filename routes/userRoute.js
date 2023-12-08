@@ -76,6 +76,8 @@ user_route.post('/resetPassword',userController.resetPass)
 //user-profile
 user_route.get('/user',userController.loaduserProfile)
 user_route.post('/add-billing-address', userController.addBillingAddress);
+user_route.get('/editAddress',userController.loadeditAddress)
+// user_route.post('/editAddress',userController.editAddress)
 user_route.post('/editUserDetails',userController.updateUserProfile)
 
 //checkout
@@ -83,6 +85,7 @@ user_route.get('/checkOut',orderController.loadCheckOut);
 user_route.post('/confirm-order', orderController.confirmOrder);
 user_route.get('/success-page',orderController.loadSuccess)
 
+user_route.get('/orderdetails',userController.orderdetails);
 
 
 module.exports = user_route;

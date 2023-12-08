@@ -50,18 +50,22 @@
 
                                         </form> 
 
-                                      
+                                       
+                                        <% if(typeof message !== 'undefined') { %> 
+                                            <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+                                                <%- message %>
+                                            </div>
+                                        
+                                   <%     }  %>
 
 
                                     </div>
                                 </div>
 
-                                <% if(typeof message !== 'undefined') { %> 
-                                    <div class="alert alert-danger fade show mt-3" id="message" role="alert">
-                                        <%- message %>
-                                    </div>
+                               
+
+                            
                                 
-                           <%     }  %>
 
                            
 

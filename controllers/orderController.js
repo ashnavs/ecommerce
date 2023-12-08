@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const otpGenerator = require('otp-generator')
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
-const product = require('../models/productModel');
+const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const { v4: uuidv4 } = require('uuid');
 const Address = require('../models/addressModel');
@@ -91,16 +91,16 @@ const confirmOrder = async(req,res)=>{
        
         await Order.insertMany(order);
   
-        // for (const item of cart.products) {
-        //   const product = item.product;
+        for (const item of cart.products) {
+          const product = item.product;
           
-        //   const updatedQuantity = product.quantity - item.quantity;
-        //   const updatedOrders = product.orders + item.quantity;
+          const updatedQuantity = product.quantity - item.quantity;
+          const updatedOrders = product.orders + item.quantity;
 
-        //   console.log(updatedOrders);
-        //   console.log("//////////" +product.product);
-        //   await productModel.findByIdAndUpdate(product._id, { quantity: updatedQuantity , orders:updatedOrders});
-        // }
+          console.log(updatedOrders);
+          console.log("//////////" +product.product);
+          await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity , orders:updatedOrders});
+        }
           await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
           res.status(200).json({message:"success"});
           
@@ -147,9 +147,9 @@ const orderStatus = async (req,res)=>{
     if(!status || !orderId){
       return res.status(400).json({ error: 'Invalid input parameters' });
     }
-    const updateOrder = await Order.findById(
+    const updateOrder = await Order.findByIdAndUpdate(
       {_id:orderId},
-      {$set:{status:status}},
+      { $set: { status:status }},
       {new:true}
     );
     console.log(updateOrder);

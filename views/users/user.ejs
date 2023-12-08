@@ -126,8 +126,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <p>No order has been made yet.</p>
-                                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
+                                                <!-- <p>No order has been made yet.</p> -->
+                                                <a href="productsView" class="btn btn-outline-primary-2"><span>GO
                                                         SHOP</span><i class="icon-long-arrow-right"></i></a>
                                                         
                                             </div><!-- .End .tab-pane -->
@@ -240,16 +240,15 @@
                                                                     <!-- End .card-title -->
                                                                     <p>
                                                                         <%= item.name %><br>
-                                                                            <%= item.email %><br>
-                                                                                <%= item.mobile %><br>
-                                                                                    <%=item.houseno %><br>
-                                                                                        <%=item.street %><br>
-                                                                                            <%=item.landmark %><br>
-                                                                                                <%=item.pincode%><br>
-                                                                                                    <%=item.city %><br>
-                                                                                                        <%=item.country
-                                                                                                            %><br>
-                                                                                                            <!-- <a href="#">Edit <i class="icon-edit"></i></a> -->
+                                                                        <%= item.email %><br>
+                                                                        <%= item.mobile %><br>
+                                                                        <%=item.houseno %><br>
+                                                                        <%=item.street %><br>
+                                                                        <%=item.landmark %><br>
+                                                                        <%=item.pincode%><br>
+                                                                        <%=item.city %><br>
+                                                                        <%=item.country %><br>
+                                                                        <a href="/editAddress?addressId=<%=item._id%>" >Edit <i class="icon-edit"></i></a>
                                                                     </p>
                                                                 </div>
                                                                 <!-- End .card-body -->
@@ -625,6 +624,25 @@
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
 
+
+
+        <script>
+            function editAddress(name, email, mobile, houseno, street, landmark, pincode, city, country) {
+              // Set form values with the selected address
+              document.getElementById('billingForm').name.value = name;
+              document.getElementById('billingForm').email.value = email;
+              document.getElementById('billingForm').mobile.value = mobile;
+              document.getElementById('billingForm').houseno.value = houseno;
+              document.getElementById('billingForm').street.value = street;
+              document.getElementById('billingForm').landmark.value = landmark;
+              document.getElementById('billingForm').pincode.value = pincode;
+              document.getElementById('billingForm').city.value = city;
+              document.getElementById('billingForm').country.value = country;
+          
+              // Show the billing address form
+              document.getElementById('billingAddressForm').style.display = 'block';
+            }
+          </script>
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/bootstrap.bundle.min.js"></script>

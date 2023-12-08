@@ -6,7 +6,7 @@ const uploads = require('../helper/multer')
 const multer = require('multer');
 const sharp = require('sharp');
 const fs = require('fs-extra');
-
+const flash = require('flash');
 
 
 const async = require('async');
@@ -67,8 +67,11 @@ async function loadProduct(req, res) {
       const products = await Product.find()
           .skip((page - 1) * perPage)
           .limit(perPage);
-
-      res.render('products', { products, currentPage: page, totalPages });
+    const successMessage = req.session.successmessage;
+    delete req.session.successmessage;
+    const editproduct = req.session.successMessage;
+    delete req.session.successmessage;
+      res.render('products', { products, currentPage: page, totalPages , successMessage , editproduct});
       
   } catch (error) {
       console.error(error.message);
@@ -95,9 +98,12 @@ async function editProduct(req,res){
 
     
     const product = await Product.findById(productId);
-
+ 
+    req.session.successMessage = 'Product successfully edited'
+  
     
-    res.render('editProduct',{product,category})
+    res.render('editProduct',{product,category});
+   
   } catch (error) {
     console.log(error.message);
   }
@@ -197,6 +203,8 @@ async function addnewProduct(req, res) {
 
     console.log("Success");
     await product.save();
+
+    req.session.successmessage = 'Product added successfully';
     res.redirect('/admin/products');
   } catch (error) {
     console.error(error.message);

@@ -624,7 +624,97 @@ const updateUserProfile = async(req,res) => {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
+};
+
+async function orderdetails(req,res){
+    try {
+      const user = req.session.user_id;
+      const orderId = req.query.orderId;
+      const orderDetails = await Order.findById(orderId).populate('address').populate('products.product')
+      res.render('orderDetails',{orderDetails , user})
+
+
+    } catch (error) {
+      console.log(error);
+    }
 }
+
+
+// const editAddress = async(req,res) => {
+//     try {
+//         const addressId = req.query.addressId;
+//         console.log(addressId);
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+
+const editAddress = async (req, res) => {
+    try {
+      // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
+      const userId = req.session.user_id;
+  
+      // Extract address data from the form submission
+      const {
+        name,
+        email,
+        mobile,
+        houseno,
+        street,
+        landmark,
+        pincode,
+        city,
+        country,
+      } = req.body;
+  
+      // Assuming you're passing the address ID as a query parameter (e.g., /edit-address?id=address_id)
+      const addressId = req.query.id;
+  
+      // Find the address in the database
+      const existingAddress = await Address.findOne({ _id: addressId, user: userId });
+  
+      // Check if the address exists
+      if (!existingAddress) {
+        return res.status(404).json({ success: false, message: 'Address not found' });
+      }
+  
+      // Update the existing address fields
+      existingAddress.name = name;
+      existingAddress.email = email;
+      existingAddress.mobile = mobile;
+      existingAddress.houseno = houseno;
+      existingAddress.street = street;
+      existingAddress.landmark = landmark;
+      existingAddress.pincode = pincode;
+      existingAddress.city = city;
+      existingAddress.country = country;
+  
+      // Save the updated address to the database
+      await existingAddress.save();
+  
+      // Respond with success message
+      res.redirect('/user');
+      // res.json({ success: true, message: 'Address updated successfully' });
+    } catch (error) {
+      // Handle any errors that may occur during the process
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
+
+  const loadeditAddress = async(req,res) => {
+    try {
+        const user = req.session.user_id;
+        const addressId = req.query.addressId;
+        const address = await Address.findById(addressId);
+    
+        res.render('editAddress',{address , user})
+    } catch (error) {
+        console.log(error.message);
+    }
+  }
+  
 
 
 module.exports = {
@@ -646,7 +736,10 @@ module.exports = {
     loadResestPass,
     resetPass,
     addBillingAddress,
-    updateUserProfile
+    updateUserProfile,
+    orderdetails,
+    editAddress,
+    loadeditAddress
 
 
 };
