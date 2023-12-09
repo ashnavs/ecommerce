@@ -175,6 +175,9 @@ const insertUser = async (req, res) => {
 
 
 
+
+
+
 //loadotpverification page
 const loadOtpVerification = async(req,res)=>{
     try {

@@ -149,7 +149,7 @@
                                                 </p>
                                                 <!-- Add a billing address form (initially hidden) -->
                                                 <div id="billingAddressForm" style="display: none;">
-                                                    <form id="billingForm" action="/add-billing-address" method="post">
+                                                    <form id="billingForm" action="/add-billing-address" method="post" onsubmit="return validateForm()">
                                                         <!-- Your form fields go here -->
                                                         <div class="row">
                                                             <div class="col-lg-9">
@@ -157,62 +157,71 @@
                                                                 <!-- End .checkout-title -->
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
-                                                                        <label>Name *</label>
+                                                                        <label>Name </label>
                                                                         <input type="text" class="form-control"
-                                                                            name="name" required>
+                                                                            name="name" id="name">
+                                                                            <small class="text-danger" id="nameError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
 
                                                                 </div><!-- End .row -->
 
-                                                                <label>Company Name (Optional)</label>
-                                                                <input type="text" class="form-control">
+                                                                <!-- <label>Company Name (Optional)</label>
+                                                                <input type="text" class="form-control"> -->
 
-                                                                <label>Country *</label>
+                                                                <label>Country </label>
                                                                 <input type="text" class="form-control" name="country"
-                                                                    required>
+                                                                 id="country">
+                                                                 <small class="text-danger" id="countryError"></small>
 
-                                                                <label>Street address *</label>
+                                                                <label>Street address </label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="House number and Street name"
-                                                                    name="street" required>
+                                                                    name="street" id="street">
+                                                                    <small class="text-danger" id="streetError"></small>
 
-                                                                <label>House no *</label>
+                                                                <label>House no </label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Appartments, suite, unit etc ..."
-                                                                    name="houseno" required>
+                                                                    name="houseno" id="houseno">
+                                                                    <small class="text-danger" id="housenoError"></small>
 
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
                                                                         <label>Town / City *</label>
                                                                         <input type="text" class="form-control"
-                                                                            name="city" required>
+                                                                            name="city" id="city">
+                                                                            <small class="text-danger" id="cityError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
                                                                     <div class="col-sm-6">
-                                                                        <label>State / County *</label>
+                                                                        <label>State</label>
                                                                         <input type="text" class="form-control"
-                                                                            name="state" required>
+                                                                            name="state" id="state">
+                                                                            <small class="text-danger" id="stateError"></small>
                                                                     </div><!-- End .col-sm-6 -->
                                                                 </div><!-- End .row -->
 
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
-                                                                        <label>Postcode / ZIP *</label>
+                                                                        <label>Postcode / ZIP </label>
                                                                         <input type="text" class="form-control"
-                                                                            name="pincode" required>
+                                                                            name="pincode" id="pincode">
+                                                                            <small class="text-danger" id="pincodeError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
                                                                     <div class="col-sm-6">
-                                                                        <label>Phone *</label>
+                                                                        <label>Phone </label>
                                                                         <input type="tel" class="form-control"
-                                                                            name="mobile" required>
+                                                                            name="mobile" id="mobile">
+                                                                            <small class="text-danger" id="mobileError"></small>
                                                                     </div><!-- End .col-sm-6 -->
                                                                 </div><!-- End .row -->
 
-                                                                <label>Email address *</label>
+                                                                <label>Email address </label>
                                                                 <input type="email" class="form-control" name="email"
-                                                                    required>
+                                                                    id="email">
+                                                                    <small class="text-danger" id="emailError"></small>
 
 
 
@@ -244,7 +253,7 @@
                                                                         <%= item.mobile %><br>
                                                                         <%=item.houseno %><br>
                                                                         <%=item.street %><br>
-                                                                        <%=item.landmark %><br>
+                                                                        
                                                                         <%=item.pincode%><br>
                                                                         <%=item.city %><br>
                                                                         <%=item.country %><br>
@@ -291,9 +300,14 @@
                                                     <input type="number" class="form-control"
                                                         value="<%=userDetail.mobile%>" name="phoneNumber">
 
+                                                        
+                                                    <label>Email</label>
+                                                    <input type="email" class="form-control"
+                                                        value="<%=userDetail.email%>" name="Email Address">
 
 
-                                                    <label>Current password (leave blank to leave unchanged)</label>
+
+                                                    <!-- <label>Current password (leave blank to leave unchanged)</label>
                                                     <input type="password" class="form-control">
 
                                                     <label>New password (leave blank to leave unchanged)</label>
@@ -301,7 +315,7 @@
 
                                                     <label>Confirm new password</label>
                                                     <input type="password" class="form-control mb-2"
-                                                        name="confirmNewPassword">
+                                                        name="confirmNewPassword"> -->
 
                                                     <button type="submit" class="btn btn-outline-primary-2">
                                                         <span>SAVE CHANGES</span>
@@ -624,7 +638,86 @@
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
 
-
+        <script>
+            function validateForm() {
+                // Reset error messages
+                document.getElementById('nameError').innerText = '';
+                document.getElementById('countryError').innerText = '';
+                document.getElementById('streetError').innerText = '';
+                document.getElementById('housenoError').innerText = '';
+                document.getElementById('cityError').innerText = '';
+                document.getElementById('stateError').innerText = '';
+                document.getElementById('pincodeError').innerText = '';
+                document.getElementById('mobileError').innerText = '';
+                document.getElementById('emailError').innerText = '';
+        
+                var name = document.getElementById('name').value.trim();
+                var country = document.getElementById('country').value.trim();
+                var street = document.getElementById('street').value.trim();
+                var houseno = document.getElementById('houseno').value.trim();
+                var city = document.getElementById('city').value.trim();
+                var state = document.getElementById('state').value.trim();
+                var pincode = document.getElementById('pincode').value.trim();
+                var mobile = document.getElementById('mobile').value.trim();
+                var emailValue = document.getElementById('email').value.trim(); // Fix variable name
+        
+                var nameRegex = /^[A-Za-z\s]+$/;
+                var mobileRegex = /^[0-9]{10}$/;
+                var emailRegex = /^\S+@\S+\.\S+$/; // Add email regex
+        
+                if (name === '' || !nameRegex.test(name)) {
+                    document.getElementById('nameError').innerText = 'Please enter a valid name';
+                    return false;
+                }
+        
+                if (country === '') {
+                    document.getElementById('countryError').innerText = 'Please enter the country';
+                    return false;
+                }
+        
+                if (street === '') {
+                    document.getElementById('streetError').innerText = 'Please enter the street';
+                    return false;
+                }
+        
+                if (houseno === '') {
+                    document.getElementById('housenoError').innerText = 'Please enter the houseno';
+                    return false;
+                }
+        
+                if (city === '') {
+                    document.getElementById('cityError').innerText = 'Please enter the city';
+                    return false;
+                }
+        
+                if (state === '') {
+                    document.getElementById('stateError').innerText = 'Please enter the state';
+                    return false;
+                }
+        
+                if (pincode === '' || !/^\d+$/.test(pincode)) {
+                    document.getElementById('pincodeError').innerText = 'Enter a valid numeric Pincode.';
+                    return false;
+                }
+        
+                if (!mobileRegex.test(mobile)) {
+                    document.getElementById('mobileError').innerText = 'Please enter a valid 10-digit mobile number';
+                    return false;
+                }
+        
+                if (!emailRegex.test(emailValue)) {
+                    document.getElementById('emailError').innerText = 'Please enter a valid email address';
+                    return false;
+                }
+        
+                // If all client-side validations pass, submit the form
+                // ...
+        
+                return true;
+            }
+        
+        </script>
+        
 
         <script>
             function editAddress(name, email, mobile, houseno, street, landmark, pincode, city, country) {

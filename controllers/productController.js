@@ -70,7 +70,7 @@ async function loadProduct(req, res) {
     const successMessage = req.session.successmessage;
     delete req.session.successmessage;
     const editproduct = req.session.successMessage;
-    delete req.session.successmessage;
+    delete req.session.successMessage;
       res.render('products', { products, currentPage: page, totalPages , successMessage , editproduct});
       
   } catch (error) {

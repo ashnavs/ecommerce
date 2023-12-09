@@ -10,19 +10,19 @@
 
                         <form action="" method="post" id="regForm" onsubmit="return validateForm()">
                             <div class="form-group">
-                                <label for="singin-name">Username *</label>
+                                <label for="singin-name">Username </label>
                                 <input type="text" class="form-control" id="signin-name" name="name">
                                 <small class="text-danger" id="nameError"></small>
                             </div><!-- End .form-group -->
 
                             <div class="form-group">
-                                <label for="singin-email">Email address *</label>
+                                <label for="singin-email">Email address </label>
                                 <input type="email" class="form-control" id="signin-email" name="email">
                                 <small class="text-danger" id="emailError"></small>
                             </div><!-- End .form-group -->
 
                             <div>
-                                <label for="singin-mobile">Mobile *</label>
+                                <label for="singin-mobile">Mobile </label>
                                 <input type="text" class="form-control" id="signin-mno" name="mno">
                                 <small class="text-danger" id="mnoError"></small>
 
@@ -63,7 +63,7 @@
         </div><!-- End .modal-body -->
     </div><!-- End .modal-content -->
 
-    <script>
+    <!-- <script>
         function validateForm() {
             // Reset error messages
             document.getElementById('nameError').innerText = '';
@@ -120,4 +120,70 @@
 
             return true;
         }
+    </script>   -->
+
+  
+ 
+    
+    <script>
+        function validateForm() {
+            // Reset error messages
+            document.getElementById('nameError').innerText = '';
+            document.getElementById('emailError').innerText = '';
+            document.getElementById('mnoError').innerText = '';
+            document.getElementById('passError').innerText = '';
+    
+            // Get form values
+            var name = document.getElementById('signin-name').value.trim();
+            var email = document.getElementById('signin-email').value.trim();
+            var mno = document.getElementById('signin-mno').value.trim();
+            var password = document.getElementById('signin-password').value.trim();
+    
+            // Regular expressions
+            var namePattern = /^[A-Za-z '-]+$/;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var mnoRegex = /^[0-9]{10}$/;
+            var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    
+            // Validate name
+            if (name === '') {
+                document.getElementById('nameError').innerText = 'Please enter your username';
+            } else if (!namePattern.test(name)) {
+                document.getElementById('nameError').innerText = 'Invalid name format';
+            }
+    
+            // Validate email
+            if (email === '') {
+                document.getElementById('emailError').innerText = 'Please enter your email';
+            } else if (!emailRegex.test(email)) {
+                document.getElementById('emailError').innerText = 'Please enter a valid email address';
+            }
+    
+            // Validate mobile number
+            if (mno === '') {
+                document.getElementById('mnoError').innerText = 'Please enter your mobile number';
+            } else if (!mnoRegex.test(mno)) {
+                document.getElementById('mnoError').innerText = 'Please enter a valid 10-digit mobile number';
+            }
+    
+            // Validate password
+            if (password === '') {
+                document.getElementById('passError').innerText = 'Please enter a password';
+            } else if (!passRegex.test(password)) {
+                document.getElementById('passError').innerText = 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit';
+            }
+    
+            // Check if any errors occurred
+            return (
+                document.getElementById('nameError').innerText === '' &&
+                document.getElementById('emailError').innerText === '' &&
+                document.getElementById('mnoError').innerText === '' &&
+                document.getElementById('passError').innerText === ''
+            );
+        }
     </script>
+    
+    
+    
+    
+    
