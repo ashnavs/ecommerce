@@ -18,13 +18,13 @@
                                             <h5>Category Information</h5>
                                         </div>
 
-                                        <form class="theme-form theme-form-2 mega-form" method="post" action="" onclick="" id="categoryForm">
+                                        <form class="theme-form theme-form-2 mega-form" method="post" action="">
                                             <div class="mb-4 row align-items-center">
                                                 <label class="form-label-title col-sm-3 mb-0">Category Name</label>
                                                 <div class="col-sm-9">
                                                     <!-- <input class="form-control" type="text" placeholder="Category Name" name="name"> -->
                                                     <input class="form-control" type="text" placeholder="Category Name" name="name" id="name">
-                                            <small class="text-danger" id="nameError"></small>
+                                                    <small class="text-danger" id="nameError"></small>
                                                 </div>
                                             </div>
 
@@ -114,7 +114,7 @@
             </div>
         </div>
         <!-- Modal End -->
-
+<!-- 
         <script>
             const message = document.getElementById('message');
 
@@ -123,7 +123,7 @@
             }
             setTimeout(hide, 3000)
 
-            function validateForm() {
+        function validateForm() {
         const nameField = document.getElementById('name');
         const descriptionField = document.getElementById('description');
 
@@ -148,9 +148,137 @@
             document.getElementById('categoryForm').submit();
         }
     }
-        </script>
+        </script> -->
+
+    <!-- <script>
+            const message = document.getElementById('message');
+
+            const hide = ()=>{
+                message.style.display = 'none' ;
+            }
+            setTimeout(hide, 3000);
+
+            function validateForm(){
+                console.log('form validate');
+                document.getElementById('nameError').innerText = '';
+                document.getElementById('descriptionError').innerText = '';
+
+                var name = document.getElementById('name').value.trim();
+                var description = document.getElementById('description').value.trim();
+
+                var namePattern = /^[A-Za-z '-]+$/;
+                var descriptionPattern = /^[A-Za-z '-]+$/;
+
+                if (name === '') {
+                document.getElementById('nameError').innerText = 'Please enter your username';
+                } else if (!namePattern.test(name)) {
+                document.getElementById('nameError').innerText = 'Invalid name format';
+                }  
+
+                if (description === '') {
+                document.getElementById('descriptionError').innerText = 'Please enter your description';
+                } else if (descriptionPattern.test(description)) {
+                document.getElementById('descriptionError').innerText = 'Invalid description format';
+                }  
+
+                return (
+                    document.getElementById('nameError').innerText === '' &&
+                    document.getElementById('descriptionError').innerText === '' 
+                    
+        );
+
+            }
+    </script> -->
 
 
+
+        <!-- <script>
+            const message = document.getElementById('message');
+        
+            const hide = () => {
+                message.style.display = 'none';
+            }
+            setTimeout(hide, 3000)
+        
+            function validateForm(event) {
+                // const nameField = document.getElementById('name');
+                // const descriptionField = document.getElementById('description');
+        
+                const nameError = document.getElementById('nameError');
+                const descriptionError = document.getElementById('descriptionError');
+        
+                // Reset previous error messages
+                nameError.textContent = '';
+                descriptionError.textContent = '';
+        
+                // Check if the name field is empty or contains only spaces
+                if (nameField.value.trim() === '') {
+                    nameError.textContent = 'Please enter a valid category name.';
+                }
+        
+                // Check if the description field is empty or contains only spaces
+                if (descriptionField.value.trim() === '') {
+                    descriptionError.textContent = 'Please enter a valid category description.';
+                }
+        
+                // Check if the form is valid
+                if (nameError.textContent === '' && descriptionError.textContent === '') {
+                    // If the form is valid, prevent the default form submission
+                    event.preventDefault();
+                    
+                    // Submit the form using AJAX or any other method you prefer
+                    // Example using fetch API:
+                    fetch('/your-form-endpoint', {
+                        method: 'POST',
+                        body: new FormData(document.getElementById('categoryForm')),
+                    })
+                    .then(response => {
+                        // Handle the response if needed
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        console.error('Error submitting form:', error);
+                    });
+                }
+            }
+        </script> -->
+        
+       
+       
+       
+        <script>
+         const message = document.getElementById('message');
+            const hide = () => {
+            message.style.display = 'none';
+        }
+        setTimeout(hide, 3000)
+            function validateForm() {
+                var name = document.getElementById('name').value;
+                var description = document.getElementById('description').value;
+        
+                document.getElementById('nameError').innerText = '';
+                document.getElementById('descriptionError').innerText = '';
+        
+                var isValid = true;
+        
+                // Check if the name is empty or contains only whitespace
+                if (name.trim() === '') {
+                    document.getElementById('nameError').innerText = 'Please enter a category name';
+                    isValid = false;
+                }
+        
+                // Check if the description is empty or contains only whitespace
+                if (description.trim() === '') {
+                    document.getElementById('descriptionError').innerText = 'Please enter a category description';
+                    isValid = false;
+                }
+        
+                if (!isValid) {
+                    event.preventDefault(); // Prevent the form from submitting if there are errors
+                }
+            }
+        </script>       
+       
         <!-- latest js -->
         <script src="/assetsb/js/jquery-3.6.0.min.js"></script>
 

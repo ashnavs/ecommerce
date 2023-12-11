@@ -537,7 +537,7 @@ const loaduserProfile = async(req,res)=>{
         const user = req.session.user_id;
         const userDetail = await User.findById(user);
         const address = await Address.find({user:user})
-        const orderDetails = await Order.find({user:user})
+        const orderDetails = await Order.find({user:user}).sort({createdAt:-1})
         res.render('user' ,{user , userDetail , address , orderDetails})
     } catch (error) {
         console.log(error.message);
@@ -671,7 +671,6 @@ const editAddress = async (req, res) => {
         country,
       } = req.body;
   
-      // Assuming you're passing the address ID as a query parameter (e.g., /edit-address?id=address_id)
       const addressId = req.query.id;
 
       console.log('Received addressId:', addressId);

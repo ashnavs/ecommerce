@@ -122,7 +122,8 @@ const loadSuccess = async(req,res)=>{
 
 const loadOrderList = async (req,res) => {
   try {
-      const order = await Order.find().populate('address')
+      const order = await Order.find().populate('address').sort({createdAt:-1});
+      console.log(order);
       res.render('orderList',{order});
   } catch (error) {
       console.log(error.message);

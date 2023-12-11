@@ -20,9 +20,20 @@
                                             </a>
                                         </form>
                                     </div>
-
+                                    
+                                 
+                                    
+                                                                      
                                     <div class="table-responsive table-product">
+                                        <form method="get" action="" style="display: flex;flex-direction: row-reverse; margin-right: 12px;">
+                                            <select name="filterBy" class="form-control" style="position: relative; left: 3px; width:170px">
+                                                <option value="blocked" <%= filterBy === "blocked" ? "selected" : "" %>>Blocked</option>
+                                                <option value="unblocked" <%= filterBy === "unblocked" ? "selected" : "" %>>UnBlocked</option>
+                                            </select>
+                                            <input class="btn btn-light rounded btn-sm font-sm" type="submit" value="Filter" name="button">
+                                        </form>
                                         <table class="table all-package theme-table" id="table_id">
+                                          
                                             <thead>
                                                 <tr>
                                                   
@@ -213,6 +224,7 @@
     <p> <%= users.username %></p>
     <!-- Delete Modal Box End -->
 
+  
 
         
 

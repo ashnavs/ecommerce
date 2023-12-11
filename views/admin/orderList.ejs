@@ -59,7 +59,11 @@
                                                                 </td> -->
                                                                 <td><%=items._id%></td>
 
-                                                                <td> <%= items.address.mobile%></td>
+                                                                <% if (items.address) { %>
+                                                                    <td><%= items.address.mobile %></td>
+                                                                <% } else { %>
+                                                                    <td>N/A</td> <!-- or any default value or placeholder -->
+                                                                <% } %>
         
                                                                 <td> <%= items.createdAt.toLocaleDateString()%></td>
         

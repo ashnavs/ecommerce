@@ -77,26 +77,65 @@ const loadDashboard = async (req, res) => {
 
 // }
 
+// const loaduserDetails = async (req, res) => {
+//     try {
+//         const page = parseInt(req.query.page) || 1;
+//         const perPage = 7; 
+        
+        
+
+
+//         const totalCount = await User.countDocuments();
+        
+//         const totalPages = Math.ceil(totalCount / perPage);
+
+//         const users = await User.find()
+//             .sort({ name: 1 })
+//             .skip((page - 1) * perPage)
+//             .limit(perPage)
+//             .sort({name: 1});
+       
+//         res.render('userDetails', { users, currentPage: page, totalPages });
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
 const loaduserDetails = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const perPage = 10; // Adjust this value based on the number of users you want to display per page
-      
-        const totalCount = await User.countDocuments();
+        const perPage = 7;
+        const filterBy = req.query.filterBy; // Retrieve the filter parameter from the query string
+
+        let query = {};
+
+        // Adjust the query based on the selected filter
+        if (filterBy === 'blocked') {
+            query = { is_blocked: true };
+        } else if (filterBy === 'unblocked') {
+            query = { is_blocked: false };
+        }
+
+        const totalCount = await User.countDocuments(query);
         const totalPages = Math.ceil(totalCount / perPage);
 
-        const users = await User.find()
+        const users = await User.find(query)
             .sort({ name: 1 })
             .skip((page - 1) * perPage)
             .limit(perPage)
-            .sort({name: 1});
-       
-        res.render('userDetails', { users, currentPage: page, totalPages });
+            .sort({ name: 1 });
+
+        res.render('userDetails', { users, currentPage: page, totalPages, filterBy });
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
+
+
+
 
 
 
@@ -117,6 +156,25 @@ const blockUser = async (req, res) => {
         console.log(error.message);
     }
 };
+
+// const blockUser = async (req, res) => {
+//     try {
+//         const id = req.query.id;
+//         const user = await User.findById(id);
+
+//         if (!user) {
+//             console.log("User not found!");
+//             return res.redirect('/admin/userDetails');
+//         }
+
+//         user.is_blocked = !user.is_blocked;
+//         await user.save();
+//         res.redirect('/admin/userDetails');
+//     } catch (error) {
+//         console.log(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
 
 
 

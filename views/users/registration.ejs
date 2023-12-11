@@ -123,7 +123,18 @@
     </script>   -->
 
   
- 
+    <!-- Bootstrap Notify CSS -->
+    <link rel="stylesheet" href="/path/to/bootstrap-notify.min.css">
+
+    <!-- Latest jQuery -->
+    <script src="/path/to/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Notify JS -->
+    <script src="/path/to/bootstrap-notify.min.js"></script>
+
+    <!-- Your index.js script comes after including Bootstrap Notify -->
+    <script src="/path/to/index.js"></script>
+    
     
     <script>
         function validateForm() {
@@ -146,11 +157,7 @@
             var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     
             // Validate name
-            if (name === '') {
-                document.getElementById('nameError').innerText = 'Please enter your username';
-            } else if (!namePattern.test(name)) {
-                document.getElementById('nameError').innerText = 'Invalid name format';
-            }
+          
     
             // Validate email
             if (email === '') {
@@ -185,5 +192,5 @@
     
     
     
-    
+
     
