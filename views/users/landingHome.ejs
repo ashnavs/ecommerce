@@ -257,7 +257,17 @@
                                     <h3 class="product-title"><a href="/productDetails?id=<%=product._id%>"><%=product.name%></a>
                                     </h3><!-- End .product-title -->
                                     <div class="product-price">
-                                        ₹<span style="text-decoration: line-through;margin-right: 5px;"><%=product.price%></span> ₹<%=product.discountPrice%> 
+                                        <% if (product.price <= product.discountPrice) { %>
+                                        ₹<span style="margin-right: 5px;"><%=product.price%></span>
+                                        <span style="text-decoration: line-through; margin-right: 5px;">Discount not available</span> 
+                                        
+                                        <% }  else {%>
+                                            ₹<span style="text-decoration: line-through;margin-right: 5px;"><%=product.price%></span> 
+                                            ₹<%=product.discountPrice%> 
+                                     <%   }   %> 
+                                     
+                                     
+
                                     </div><!-- End .product-price -->
                                     <div class="ratings-container">
                                         <div class="ratings">
@@ -1568,8 +1578,17 @@
                                     </div><!-- End .product-cat -->
                                     <h3 class="product-title"><a href="product.html"><%=product.name%></a></h3><!-- End .product-title -->
                                     <div class="product-price">
-                                        <span class="new-price">₹<%=product.discountPrice%></span>
-                                        <span class="old-price">Was ₹<%=product.price%></span>
+                                        <% if (product.price <= product.discountPrice) { %>
+                                        ₹<span style="margin-right: 5px;"><%=product.price%></span>
+                                        <span style="text-decoration: line-through; margin-right: 5px;">Discount not available</span> 
+                                        
+                                        <% }  else {%>
+                                            ₹<span style="text-decoration: line-through;margin-right: 5px;"><%=product.price%></span> 
+                                            ₹<%=product.discountPrice%> 
+                                     <%   }   %> 
+                                     
+                                     
+
                                     </div><!-- End .product-price -->
                                     <div class="ratings-container">
                                         <div class="ratings">

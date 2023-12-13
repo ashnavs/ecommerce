@@ -86,7 +86,8 @@ user_route.post('/confirm-order', orderController.confirmOrder);
 user_route.get('/success-page',orderController.loadSuccess)
 
 user_route.get('/orderdetails',userController.orderdetails);
-
+user_route.post('/updatedPayment',orderController.updatedPayment);
+  
 
 module.exports = user_route;
 

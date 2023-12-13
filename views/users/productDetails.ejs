@@ -56,8 +56,17 @@
                                             </div><!-- End .rating-container -->
 
                                             <div class="product-price">
-                                                <span class="new-price">₹<%=products.discountPrice%></span>
-                                                <span class="old-price">₹<%=products.price%></span>
+                                                <% if (products.price <= products.discountPrice) { %>
+                                                ₹<span style="margin-right: 5px;"><%=products.price%></span>
+                                                <span style="text-decoration: line-through; margin-right: 5px;">Discount not available</span> 
+                                                
+                                                <% }  else {%>
+                                                    ₹<span style="text-decoration: line-through;margin-right: 5px;"><%=products.price%></span> 
+                                                    ₹<%=products.discountPrice%> 
+                                             <%   }   %> 
+                                             
+                                             
+
                                             </div><!-- End .product-price -->
 
                                             <div class="product-content">

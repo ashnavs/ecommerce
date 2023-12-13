@@ -9,6 +9,10 @@ const { v4: uuidv4 } = require('uuid');
 const Address = require('../models/addressModel');
 const Cart = require('../models/cartModel')
 const Order = require('../models/orderModel')
+const Razorpay = require('razorpay')
+const transactionModel = require('../models/transactionModel')
+
+
 
 
 const loadCheckOut = async(req,res) => {
@@ -24,91 +28,343 @@ const loadCheckOut = async(req,res) => {
     }
 };
 
-// ... (existing imports)
+// const craeteRazorpayOrder = async(amount)=>{
+// try{
+//   const razorpay = new Razorpay({
+//     key_id: process.env.razorpay_key_id,
+//     key_secret: process.env.razorpay_key_secret
 
-// async function confirmOrder(req, res) {
-//     try {
-//         // Extract order details from the request body
-//         const { billingAddress, paymentMethod, products /* Add other necessary details */ } = req.body;
+//   });
 
-//         // Create a new order in the database
-//         const newOrder = new Order({
-//             user: req.session.user_id, // Assuming you have a user session
-//             address: await Address.create(billingAddress),
-//             products: products.map(product => ({
-//                 product: product.productId,
-//                 quantity: product.quantity,
-//                 price: product.price,
-//                 total: product.total,
-//                 // Add other product details
-//             })),
-//             paymentMethod,
-//             // Add other order details
-//         });
+//   const options = {
+//     amount: amount*100,
+//     currency:'INR',
+//     receipt:'order_receipt_' + Date.now(), t,
+//     payment_capture:1
 
-//         const savedOrder = await newOrder.save();
+//    };
 
-//         // Update the cart or perform other necessary actions
-
-//         // Send a response indicating success
-//         res.json({ success: true, orderId: savedOrder._id });
-//     } catch (error) {
-//         // Handle errors and send an error response
-//         console.error('Error confirming order:', error);
-//         res.status(500).json({ success: false, error: 'Internal Server Error' });
-//     }
+//    const order = await razorpay.orders.create(options);
+//    return order;
+// }
+// catch(error){
+//   console.log(error.message);
+// }
+ 
+  
 // }
 
-const confirmOrder = async(req,res)=>{
-        console.log("jsfhbsdfhvfjidkvffsvn snmzd vnmzs");
-    try {
+// const confirmOrder = async (req, res) => {
+//   try {
+
+//     const userId = req.session.user_id;
+//     const addressId = req.body.addressId;
+//     const paymentMethod = req.body.PaymentMethod;
+
+//     console.log(addressId, paymentMethod);
+
+//     const cart = await Cart.findOne({ user: userId }).populate('products.product');
+
+    
+
+
+//     for (const item of cart.products) {
+//       const product = item.product;
+//       const requestedQuantity = item.quantity;
+
+//       if (requestedQuantity > product.quantity) {``
+//         const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
+//         return res.status(400).json({ message });
+//       }
+//     }
+
+//     const order = {
+//       user: req.session.user_id,
+//       address: addressId,
+//       paymentMethod: paymentMethod,
+//       products: cart.products.map((item) => {
+//         return {
+//           product: item.product,
+//           quantity: item.quantity,
+//           price: item.product.price,
+//           total: item.subTotal,
+//         };
+//       }),
+//       grandTotal: cart.total,
+//     };
+
+//     await Order.insertMany(order);
+
+//     // Update product stock after successful order
+//     for (const item of cart.products) {
+//       const product = item.product;
+//       const updatedQuantity = product.quantity - item.quantity;
+//       const updatedOrders = product.orders + item.quantity; // Increment orders field
+
+//       console.log(updatedOrders);
+//       console.log("//////////" + product.product);
+//       await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+//     }
+
+//     await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
+//     res.status(200).json({ message: "success" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+const createRazorpayOrder = async (amount) => {
+  try{
+    const razorpay = new Razorpay({
+      key_id: process.env.razorpay_key_id,
+      key_secret: process.env.razorpay_key_secret
   
-        console.log(req.body);
-       const userId = req.session.user_id;
-       const addressId = req.body.addressId;
-       const paymentMethod = req.body.PaymentMethod;
-       
-       console.log(addressId,paymentMethod);
-       
-       const cart = await Cart.findOne({user:userId}).populate('products.product')
-      
+    });
+    
+    const options = {
+      amount: amount*100,
+      currency:'INR',
+      receipt:'order_receipt_' + Date.now(), 
+      payment_capture:1
   
-       const order = {
-        user : req.session.user_id,
-        address : addressId,
+     };
+  
+     const order = await razorpay.orders.create(options);
+     return order;
+
+  }
+  catch(error){
+    console.log(error.message);
+  }
+   
+};
+
+
+
+// const confirmOrder = async (req, res) => {
+//   try {
+
+//     const userId = req.session.user_id;
+//     const addressId = req.body.addressId;
+//     const paymentMethod = req.body.PaymentMethod;
+
+//     console.log(addressId, paymentMethod);
+
+//     const cart = await Cart.findOne({ user: userId }).populate('products.product');
+
+    
+
+
+//     for (const item of cart.products) {
+//       const product = item.product;
+//       const requestedQuantity = item.quantity;
+
+//       if (requestedQuantity > product.quantity) {``
+//         const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
+//         return res.status(400).json({ message });
+//       }
+//     }
+
+//     const order = {
+//       user: req.session.user_id,
+//       address: addressId,
+//       paymentMethod: paymentMethod,
+//       products: cart.products.map((item) => {
+//         return {
+//           product: item.product,
+//           quantity: item.quantity,
+//           price: item.product.price,
+//           total: item.subTotal,
+//         };
+//       }),
+//       grandTotal: cart.total,
+//     };
+
+//     await Order.insertMany(order);
+
+//     // Update product stock after successful order
+//     for (const item of cart.products) {
+//       const product = item.product;
+//       const updatedQuantity = product.quantity - item.quantity;
+//       const updatedOrders = product.orders + item.quantity; // Increment orders field
+
+//       console.log(updatedOrders);
+//       console.log("//////////" + product.product);
+//       await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+//     }
+
+//     await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
+//     res.status(200).json({ message: "success" });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
+
+
+
+const confirmOrder = async (req, res) => {
+  try {
+
+    const userId = req.session.user_id;
+    const addressId = req.body.addressId;
+    const paymentMethod = req.body.PaymentMethod;
+
+    console.log(addressId, paymentMethod);
+
+    const cart = await Cart.findOne({ user: userId }).populate('products.product');
+
+    if (paymentMethod === "Cash On Delivery" ) {
+
+      for (const item of cart.products) {
+        const product = item.product;
+        const requestedQuantity = item.quantity;
+  
+        if (requestedQuantity > product.quantity) {``
+          const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
+          return res.status(400).json({ message });
+        }
+      }
+  
+      const order = {
+        user: req.session.user_id,
+        address: addressId,
         paymentMethod: paymentMethod,
-        products: cart.products.map((item)=> {
-          return{
+        products: cart.products.map((item) => {
+          return {
             product: item.product,
             quantity: item.quantity,
             price: item.product.price,
             total: item.subTotal,
-            
-          }
+          };
         }),
-        grandTotal: cart.total
-       }
-       
-        await Order.insertMany(order);
+        grandTotal: cart.total,
+      };
   
-        for (const item of cart.products) {
-          const product = item.product;
-          
-          const updatedQuantity = product.quantity - item.quantity;
-          const updatedOrders = product.orders + item.quantity;
+      await Order.insertMany(order);
+  
+      // Update product stock after successful order
+      for (const item of cart.products) {
+        const product = item.product;
+        const updatedQuantity = product.quantity - item.quantity;
+        const updatedOrders = product.orders + item.quantity; // Increment orders field
+  
+        console.log(updatedOrders);
+        console.log("//////////" + product.product);
+        await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+      }
+  
+      await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
+      res.status(200).json({ message: "success" });
 
-          console.log(updatedOrders);
-          console.log("//////////" +product.product);
-          await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity , orders:updatedOrders});
-        }
-          await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
-          res.status(200).json({message:"success"});
-          
+    }else if(paymentMethod === "Razorpay" ){
+
+      // for checking the product quantity
+      for (const item of cart.products) {
+        const product = item.product;
+        const requestedQuantity = item.quantity;
   
-        } catch (error) {
-          console.log(error);
+        if (requestedQuantity > product.quantity) {``
+          const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
+          return res.status(400).json({ message });
         }
+      }
+      try {
+        const rezorpayOrder = await createRazorpayOrder(cart.total);
+        res.status(201).json({
+          message:"success",
+          orderId: rezorpayOrder.id,
+          amount:rezorpayOrder.amount,
+          currency:rezorpayOrder.currency       
+        })
+        
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log('No payment method choosed');
+    }
+
+
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
+};
+
+
+
+const updatedPayment = async (req,res) => {
+  try {
+    const { paymentDetails, address} = req.body;
+    let paymentMethod = 'RazorPay';
+    console.log(paymentDetails);
+
+    console.log(address);
+
+        // Check if paymentMethod is provided
+        if (!paymentMethod) {
+          return res.status(400).json({ message: 'Payment method is required' });
+        }
+
+        const paymentId = paymentDetails.razorpay_payment_id;
+        const orderId = paymentDetails.razorpay_order_id;
+        const userId = req.session.user_id;
+        
+
+    const cart = await Cart.findOne({user:userId}).populate('products.product');
+
+    const order = {
+      user: userId,
+      address: address,
+      paymentMethod: paymentMethod,
+      payment_Id: paymentId,
+      order_Id: orderId,
+      products: cart.products.map((item)=>{
+        return{
+          product: item.product,
+          quantity: item.quantity,
+          price: item.product.price,
+          total: item.subTotal
+        }
+      }),
+      grandTotal: cart.total
+    }
+     
+
+    await Order.insertMany(order);
+
+    const transfer ={
+      user:userId,
+      amount:paymentDetails.amount,
+      paymentMethod:paymentMethod,
+      type:'debited',
+      orderId:orderId
+    }
+
+    console.log(transfer.amount);
+
+    await transactionModel.insertMany(transfer);
+
+    for (const item of cart.products) {
+      const product = item.product;
+      
+      const updatedQuantity = product.quantity - item.quantity;
+      const updatedOrders = product.orders + item.quantity;
+      await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity , orders:updatedOrders});
+    }
+      await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], Total: 0 } });
+      res.status(201).json({message:"success"});
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+
 
 
 const loadSuccess = async(req,res)=>{
@@ -173,5 +429,6 @@ module.exports = {
     loadSuccess,
     loadOrderList,
     loadOrderDetails,
-    orderStatus
+    orderStatus,
+    updatedPayment
 }

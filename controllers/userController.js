@@ -8,6 +8,7 @@ const Category = require('../models/categoryModel');
 const { v4: uuidv4 } = require('uuid');
 const Address = require('../models/addressModel');
 const Order = require('../models/orderModel')
+const Cart = require('../models/cartModel')
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -231,7 +232,7 @@ const loadLandingHome = async (req, res) => {
         // console.log("////////////////"+allProduct.createdAt);
         // console.log(allProduct); // Log the products to the console
 
-        res.render('landingHome', { allProduct , newArrivals , user});
+        res.render('landingHome', { allProduct , newArrivals , user });
     } catch (error) {
         console.log(error.message);
     }
@@ -272,11 +273,10 @@ const verifyLogin=async(req,res)=>{
         else{
             if(userData.is_blocked === false){
                 req.session.user_id=userData._id;
-                const user  = req.session.user_id
+                const user  = req.session.user_id;
                 const allProduct = await Product.find();
                 const newArrivals = await Product.find().sort({createdAt:-1}).limit(6)
-                // console.log(allProduct);
-                res.render('landingHome',{ allProduct , newArrivals , user })
+                res.render('landingHome',{ allProduct , newArrivals , user, })
             }
             else{
                 res.render('login',{message:'Your account has temporarily suspended'})
@@ -595,12 +595,12 @@ const addBillingAddress = async (req, res) => {
 const updateUserProfile = async(req,res) => {
     try {
         const userId = req.session.user_id;
-        const {displayName , phoneNumber , currPassword , newPassword , confirmNewPassword} = req.body;
+        const {displayName , phoneNumber , currPass , newPass, confirmNewPassword} = req.body;
 
         const user = await User.findById(userId);
 
          // Check if the provided current password matches the stored hashed password
-         if (currPassword && !bcrypt.compareSync(currPassword, user.password)) {
+         if (currPass && !bcrypt.compareSync(currPass, user.password)) {
             return res.status(400).json({ success: false, message: 'Current password is incorrect' });
         }
 
@@ -608,13 +608,13 @@ const updateUserProfile = async(req,res) => {
         user.mobile = phoneNumber;
 
          // If a new password is provided, hash and update the password
-         if (newPassword) {
-            if (newPassword !== confirmNewPassword) {
+         if (newPass) {
+            if (newPass !== confirmNewPassword) {
                 return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
             }
 
             // Hash the new password
-            const hashedPassword = bcrypt.hashSync(newPassword, 10);
+            const hashedPassword = bcrypt.hashSync(newPass, 10);
             user.password = hashedPassword;
         }
 
@@ -622,7 +622,7 @@ const updateUserProfile = async(req,res) => {
         await user.save();
 
         // Redirect to the user profile page or display a success message
-        res.redirect('/user');
+        res.redirect('/login');
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error' });
@@ -723,6 +723,31 @@ const editAddress = async (req, res) => {
   
 
 
+// const changePassword = async(req,res)=>{
+//     try {
+//         const user = req.session.user_id;
+
+//         const {email,currPass,newPass} = req.body;
+//         const spassword = await securePassword(newPass);
+
+//         let userData = await User.findOne({_id:user});
+//         const passwordMatch = await bcrypt.compare(currPass, userData.password);
+//         if(passwordMatch){
+//             userData.password = spassword;
+//             await userData.save();
+//             console.log('password changedddddddd');
+//             req.session.destroy();
+//             return res.redirect('/login');
+//         }else{
+//             console.log(`${currPass}: current passsssssssss doesn't match`);
+//         }
+
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+
+
 module.exports = {
     loadRegister,
     insertUser,
@@ -745,7 +770,8 @@ module.exports = {
     updateUserProfile,
     orderdetails,
     editAddress,
-    loadeditAddress
+    loadeditAddress,
+    //changePassword
 
 
 };

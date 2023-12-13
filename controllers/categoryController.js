@@ -91,7 +91,9 @@ const addCategory = async(req,res)=>{
         if(name === '' && description === ''){
             res.render('addnewCategory' , {message:"Please kjdhfksj"})
         }
-        const existingCategory = await Category.findOne({name});
+        // const existingCategory = await Category.findOne({name});
+        const existingCategory = await Category.findOne({ name: { $regex: new RegExp('^' + name + '$', 'i') } });
+
         if(existingCategory){
             const message = 'Category already exist';
             res.render('addnewCategory',{message})

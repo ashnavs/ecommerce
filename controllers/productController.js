@@ -59,7 +59,7 @@ async function loadProducts(req, res) {
 async function loadProduct(req, res) {
   try {
       const page = parseInt(req.query.page) || 1;
-      const perPage = 10; // Adjust this value based on the number of products you want to display per page
+      const perPage = 5; // Adjust this value based on the number of products you want to display per page
 
       const totalCount = await Product.countDocuments();
       const totalPages = Math.ceil(totalCount / perPage);

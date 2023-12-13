@@ -277,7 +277,74 @@
                     event.preventDefault(); // Prevent the form from submitting if there are errors
                 }
             }
-        </script>       
+        </script>        
+
+        <!-- <script>
+            const message = document.getElementById('message');
+            const hide = () => {
+                message.style.display = 'none';
+            }
+            setTimeout(hide, 3000);
+        
+            async function validateForm() {
+                var name = document.getElementById('name').value;
+                var description = document.getElementById('description').value;
+        
+                document.getElementById('nameError').innerText = '';
+                document.getElementById('descriptionError').innerText = '';
+        
+                var isValid = true;
+        
+                // Check if the name is empty or contains only whitespace
+                if (name.trim() === '') {
+                    document.getElementById('nameError').innerText = 'Please enter a category name';
+                    isValid = false;
+                }
+        
+                // Check if the description is empty or contains only whitespace
+                if (description.trim() === '') {
+                    document.getElementById('descriptionError').innerText = 'Please enter a category description';
+                    isValid = false;
+                }
+        
+                // Check for duplicate category name (case-insensitive)
+                const isDuplicate = await checkDuplicateCategory(name);
+        
+                if (isDuplicate) {
+                    document.getElementById('nameError').innerText = 'Category name already exists';
+                    isValid = false;
+                }
+        
+                if (!isValid) {
+                    event.preventDefault(); // Prevent the form from submitting if there are errors
+                }
+            }
+        
+            // Function to check for duplicate category names (case-insensitive)
+            async function checkDuplicateCategory(newCategory) {
+                try {
+                    const response = await fetch('/check-duplicate-category', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ category: newCategory }),
+                    });
+        
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data.isDuplicate;
+                    } else {
+                        console.error('Error checking duplicate category:', response.statusText);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error('Error checking duplicate category:', error.message);
+                    return false;
+                }
+            }
+        </script> -->
+        
        
         <!-- latest js -->
         <script src="/assetsb/js/jquery-3.6.0.min.js"></script>

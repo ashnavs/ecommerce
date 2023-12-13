@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const {  configureFlash } = require('./middleware/flash');
 const flash = require('flash');
 
+
 dotenv.config()
 app.use(bodyParser.json());
  //for userRoute

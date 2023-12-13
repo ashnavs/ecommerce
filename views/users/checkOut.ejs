@@ -149,9 +149,8 @@
                                                             <h2 class="card-title">
                                                                 <a class="collapsed" role="button"
                                                                     data-toggle="collapse" href="#collapse-4"
-                                                                    aria-expanded="false" aria-controls="collapse-4">
-                                                                    PayPal <small class="float-right paypal-link">What
-                                                                        is PayPal?</small>
+                                                                    aria-expanded="false" aria-controls="collapse-4" onclick="selectPeyment('Razorpay')">
+                                                                    Razorpay <small class="float-right paypal-link"></small>
                                                                 </a>
                                                             </h2>
                                                         </div><!-- End .card-header -->
@@ -514,8 +513,8 @@
             </div><!-- End .modal -->
 
             <!-- Add this style in your HTML or in your CSS file -->
-<!-- 
-<script>
+
+<!-- <script>
     $(document).ready(function () {
     $('#confirmOrderButton').on('click', function () {
         // Collect necessary data from the page
@@ -566,6 +565,14 @@
 
 async function orderConfirm(){
 
+    if (!addressId || !PaymentMethod) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please select both address and payment method before confirming the order.',
+            });
+            return;
+        }
         
     const confirmed = await Swal.fire({
         title : 'Confirm Order',
@@ -592,9 +599,50 @@ async function orderConfirm(){
                 
 
                 if (response.ok) {
-                    await Swal.fire('Success' , 'Order Placed succesfully ',  'success')
+                    if(response.status === 200){
+                        alert(response.status);
+                        await Swal.fire('Success', 'Order placed Successfully' , 'Success');
+                        window.location.href = '/success-page'
+                    }
+                    else if(response.status === 201){
+                        try {
+                            const responseData = await response.json();
+                            const { orderId, amount, currency} = responseData;
 
-                    window.location.href = '/success-page'
+                            const options =  {
+                                key: 'rzp_test_PwlGsaqF0giaNH',
+                                amount : amount,
+                                currency : currency,
+                                order_id : orderId,
+                                description: 'Payment for your order',
+                                handler:async function(response){
+                                    await fetch('/updatedPayment',{
+                                        method:'post',
+                                        headers:{
+                                            'Content-Type' : 'application/json',
+                                        },
+                                        body:JSON.stringify({
+                                            paymentDetails:response,
+                                            address:addressId,
+                                            PaymentMethod:PaymentMethod
+                                        })
+                                    })
+
+                                    window.location.href = '/success-page';
+                                },
+                                theme:{
+                                    color:'#F37254'
+
+                                }
+                            };
+
+                            const rzp = new Razorpay(options);
+                            rzp.open();
+                        } catch (error) {
+                            console.log(error.message);
+                        }
+                    }
+               
                 }else{
                     await Swal.fire('error', 'Failed to place the order', 'error')
                 }
@@ -614,6 +662,7 @@ async function orderConfirm(){
 
 
             <!-- Plugins JS File -->
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script src="/assets/js/jquery.min.js"></script>
             <script src="/assets/js/bootstrap.bundle.min.js"></script>
