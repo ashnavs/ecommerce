@@ -14,6 +14,7 @@
     <meta name="author" content="pixelstrap">
     <link rel="icon" href="/assets/images/demos/demo-4/admin.png" type="image/x-icon">
     <link rel="shortcut icon" href="/assetsb/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./node_modules/cropperjs/dist/cropper.min.css">
     <title>Fastkart - Dashboard</title>
 
     <!-- Google font-->
@@ -54,6 +55,68 @@
 
     <!-- App css -->
     <link rel="stylesheet" type="text/css" href="/assetsb/css/style.css">
+
+    <!--image head-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+    .g-height-50 {
+        height: 50px;
+    }
+
+    .g-width-50 {
+        width: 50px !important;
+    }
+
+    @media (min-width: 0){
+        .g-pa-30 {
+            padding: 2.14286rem !important;
+        }
+    }
+
+    .g-bg-secondary {
+        background-color: #fafafa !important;
+    }
+
+    .u-shadow-v18 {
+        box-shadow: 0 5px 10px -6px rgba(0, 0, 0, 0.15);
+    }
+
+    .g-color-gray-dark-v4 {
+        color: #777 !important;
+    }
+
+    .g-font-size-12 {
+        font-size: 0.85714rem !important;
+    }
+
+    .media-comment {
+        margin-top:20px
+    }
+    .singleImageCanvasContainer{
+        overflow: hidden;
+        height: 200px;
+        width: 30%;
+        display: inline-block;
+        position: relative;
+        padding-right: 0px;
+        margin-right: 15px;
+        border: 2px solid #dfdfdf;
+        margin-bottom: 10px;
+        padding: 4px;
+        border-radius: .25rem;
+    }
+
+    .singleImageCanvasContainer .singleImageCanvasCloseBtn{
+        position: absolute;
+        right: 0;
+    }
+    .singleImageCanvasContainer .singleImageCanvas{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
 </head>
 
 <body>

@@ -54,4 +54,9 @@ admin_route.get('/orders',orderController.loadOrderList);
 admin_route.get('/order-details',orderController.loadOrderDetails);
 admin_route.post('/ChangeOrderStatus',orderController.orderStatus);
 
+//report
+admin_route.get('/report',adminController.loadReport)
+
+admin_route.get('/crop',adminController.loadCrop)
+
 module.exports = admin_route;

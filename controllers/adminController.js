@@ -176,9 +176,23 @@ const blockUser = async (req, res) => {
 //     }
 // };
 
+const loadReport = async(req,res) =>{
+    try {
+        res.render('report')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
+const loadCrop = async(req,res)=>{
+    try {
+        res.render('crop')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
@@ -189,7 +203,7 @@ module.exports = {
     verifyLogin,
     loaduserDetails,
     blockUser,
-    
-    
+    loadReport,
+    loadCrop
 
 }

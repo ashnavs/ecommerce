@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const bodyParser = require('body-parser');
 const {  configureFlash } = require('./middleware/flash');
 const flash = require('flash');
+const cropperjs = require('cropperjs')
 
 
 dotenv.config()
