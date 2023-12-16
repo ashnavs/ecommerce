@@ -20,7 +20,7 @@ const adminController = require("../controllers/adminController");
 const categoryController = require("../controllers/categoryController");
 const productController = require("../controllers/productController");
 const orderController = require('../controllers/orderController')
-
+const salesReoprt = require('../controllers/salesController')
 
 admin_route.get('/', auth.isLogout,adminController.adminLogin);
 admin_route.post('/adminlogin', adminController.adminLogin);
@@ -55,7 +55,7 @@ admin_route.get('/order-details',orderController.loadOrderDetails);
 admin_route.post('/ChangeOrderStatus',orderController.orderStatus);
 
 //report
-admin_route.get('/report',adminController.loadReport)
+admin_route.get('/report',salesReoprt.loadReport)
 
 admin_route.get('/crop',adminController.loadCrop)
 

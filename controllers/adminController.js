@@ -1,12 +1,14 @@
 const Admin = require('../models/adminModel')
 const User = require('../models/userModel')
-const orderModel = require('../models/orderModel')
-const productModel = require('../models/productModel')
+//const orderModel = require('../models/orderModel')
+//const productModel = require('../models/productModel')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const randomstring = require('randomstring')
 // const { loadLogin } = require('./userController')
 const mongoosePaginate = require('mongoose-paginate-v2');
+const Order = require('../models/orderModel') 
+const Product = require('../models/productModel')
 
 
 
@@ -176,13 +178,6 @@ const blockUser = async (req, res) => {
 //     }
 // };
 
-const loadReport = async(req,res) =>{
-    try {
-        res.render('report')
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
 
@@ -194,7 +189,101 @@ const loadCrop = async(req,res)=>{
     }
 }
 
+const getSalesReport=async(req,res)=>{
+    try{
+        const admin=req.session.adminData
 
+        const page=parseInt(req.query.page) || 1;
+        const perPage=10;
+
+
+        let query={status:"payment successfull"};
+        
+        if (req.query.paymentMethod) {
+            if (req.query.paymentMethod === "Online Payment") {
+              query.paymentMethod = "Online Payment";
+            } else if (req.query.paymentMethod === "Cash On Delivery") {
+              query.paymentMethod = "Cash on delivery";
+            }
+      
+          }
+
+        if (req.query.status) {
+            if (req.query.status === "Daily") {
+              query.orderDate = dateUtils.getDailyDateRange();
+            } else if (req.query.status === "Weekly") {
+              query.orderDate = dateUtils.getWeeklyDateRange();
+            } else if (req.query.status === "Yearly") {
+              query.orderDate = dateUtils.getYearlyDateRange();
+            }
+          }
+        if(req.query.status){
+            if(req.query.status=== "Daily"){
+                query.orderDate=dateUtils.getDailyDateRange();
+
+            }
+            
+                else if(req.query.status==="Weekly"){
+                    query.orderDate=dateUtils.getWeeklyDateRange();
+
+                }
+            
+            else if(req.query.status === "Yearly")
+            {
+                query.orderDate= dateUtils.getYearlyDateRange();
+            }
+        }
+        if(req.query.startDate && req.query.endDate){
+            query.orderDate={
+                $gte:new Date(req.query.startDate),
+                $lte:new Date(req.query.endDate),
+            };
+        }
+      
+        const totalOrdersCount = await Order.countDocuments(query);
+        const totalPages=Math.ceil(totalOrdersCount/perPage);
+        const skip=(page-1) * perPage;
+
+        const orders = await Order.find(query)
+      .populate("user")
+      .populate({
+        path: "address",
+        model: "Address",
+      })
+      .populate({
+        path: "items.product",
+        model: "Product",
+      })
+      .sort({ orderDate: -1 })
+      .skip(skip)
+      .limit(perPage);
+
+
+  
+
+
+        const totalRevenue=orders.reduce((acc,order)=>acc + order.totalAmount,0);
+
+        const returnedOrders = orders.filter(order => order.status === "Return confirmed");
+
+
+console.log("Count of orders with 'Return Confirmed' status:", );
+
+
+        const totalSales=orders.length;
+
+
+        const totalProductSold=orders.reduce((acc,order)=>acc + order.items.length,0);
+
+        res.render("report",{
+            orders,admin,totalRevenue,returnedOrders,totalSales,totalProductSold,req,totalPages,currentPage:page});
+      
+
+
+    }catch(error){
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
@@ -203,7 +292,5 @@ module.exports = {
     verifyLogin,
     loaduserDetails,
     blockUser,
-    loadReport,
-    loadCrop
-
+    loadCrop,
 }
