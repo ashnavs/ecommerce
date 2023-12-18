@@ -13,8 +13,8 @@
                                 <div class="custome-1-bg b-r-4 card-body">
                                     <div class="media align-items-center static-top-widget">
                                         <div class="media-body p-0">
-                                            <span class="m-0">Total Revenue</span>
-                                            <h4 class="mb-0 counter">$6659
+                                            <span class="m-0">Total Revenue </span>
+                                            <h4 class="mb-0 counter"><%= totalRevenue%>
                                                 <span class="badge badge-light-primary grow">
                                                     <i data-feather="trending-up"></i>8.5%</span>
                                             </h4>
@@ -33,7 +33,7 @@
                                     <div class="media static-top-widget">
                                         <div class="media-body p-0">
                                             <span class="m-0">Total Orders</span>
-                                            <h4 class="mb-0 counter">9856
+                                            <h4 class="mb-0 counter"><%=totalProductsSold%>
                                                 <span class="badge badge-light-danger grow">
                                                     <i data-feather="trending-down"></i>8.5%</span>
                                             </h4>
@@ -52,7 +52,7 @@
                                     <div class="media static-top-widget">
                                         <div class="media-body p-0">
                                             <span class="m-0">Total Products</span>
-                                            <h4 class="mb-0 counter">893
+                                            <h4 class="mb-0 counter"><%= totalUniqueProducts%>
                                                 <a href="add-new-product.html" class="badge badge-light-secondary grow">
                                                     ADD NEW</a>
                                             </h4>
@@ -72,7 +72,7 @@
                                     <div class="media static-top-widget">
                                         <div class="media-body p-0">
                                             <span class="m-0">Total Customers</span>
-                                            <h4 class="mb-0 counter">4.6k
+                                            <h4 class="mb-0 counter"><%= totalUsers%>
                                                 <span class="badge badge-light-success grow">
                                                     <i data-feather="trending-down"></i>8.5%</span>
                                             </h4>
@@ -272,14 +272,14 @@
 
 
                         <!-- Best Selling Product Start -->
-                        <!-- <div class="col-xl-6 col-md-12">
+                        <div class="col-xl-6 col-md-12">
                             <div class="card o-hidden card-hover">
                                 <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                     <div class="card-header-title">
                                         <h4>Best Selling Product</h4>
                                     </div>
 
-                                    <div class="best-selling-box d-sm-flex d-none">
+                                    <!-- <div class="best-selling-box d-sm-flex d-none">
                                         <span>Short By:</span>
                                         <div class="dropdown">
                                             <button class="btn p-0 dropdown-toggle" type="button"
@@ -291,7 +291,7 @@
                                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="card-body p-0">
@@ -300,154 +300,71 @@
                                             <table class="best-selling-table w-image
                                             w-image
                                             w-image table border-0">
-                                                <tbody>
+                                            <tbody>
+                                                <% topSellingProducts.forEach(product => { %>
                                                     <tr>
                                                         <td>
                                                             <div class="best-product-box">
                                                                 <div class="product-image">
-                                                                    <img src="/assetsb/images/product/1.png"
-                                                                        class="img-fluid" alt="Product">
+                                                                    <img src="/productImage/<%= product.image %>" class="img-fluid">
                                                                 </div>
                                                                 <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
+                                                                    <h5><%= product.name %></h5>
+                                                                    <h6><%= product.date %></h6>
                                                                 </div>
                                                             </div>
                                                         </td>
-
+                                                        
+                                    
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Price</h6>
-                                                                <h5>$29.00</h5>
+                                                                <h5>₹<%= product.discountPrice %></h5>
                                                             </div>
                                                         </td>
-
+                                    
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Orders</h6>
-                                                                <h5>62</h5>
+                                                                <h5><%= product.quantitySold %></h5>
                                                             </div>
                                                         </td>
-
+                                    
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Stock</h6>
-                                                                <h5>510</h5>
+                                                                <h5><%= product.stock %></h5>
                                                             </div>
                                                         </td>
-
+                                    
                                                         <td>
                                                             <div class="product-detail-box">
                                                                 <h6>Amount</h6>
-                                                                <h5>$1,798</h5>
+                                                                <h5>₹<%= product.amount %></h5>
                                                             </div>
                                                         </td>
                                                     </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-image">
-                                                                    <img src="/assetsb/images/product/2.png"
-                                                                        class="img-fluid" alt="Product">
-                                                                </div>
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$29.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Orders</h6>
-                                                                <h5>62</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Stock</h6>
-                                                                <h5>510</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Amount</h6>
-                                                                <h5>$1,798</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-image">
-                                                                    <img src="/assetsb/images/product/3.png"
-                                                                        class="img-fluid" alt="Product">
-                                                                </div>
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$29.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Orders</h6>
-                                                                <h5>62</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Stock</h6>
-                                                                <h5>510</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Amount</h6>
-                                                                <h5>$1,798</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                <% }); %>
+                                            </tbody>
+                                        </table>
+                                           
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div> 
                         <!-- Best Selling Product End -->
 
 
                         <!-- Recent orders start-->
-                        <!-- <div class="col-xl-6">
+                        <div class="col-xl-6">
                             <div class="card o-hidden card-hover">
                                 <div class="card-header card-header-top card-header--2 px-0 pt-0">
                                     <div class="card-header-title">
                                         <h4>Recent Orders</h4>
                                     </div>
 
-                                    <div class="best-selling-box d-sm-flex d-none">
+                                    <!-- <div class="best-selling-box d-sm-flex d-none">
                                         <span>Short By:</span>
                                         <div class="dropdown">
                                             <button class="btn p-0 dropdown-toggle" type="button"
@@ -459,7 +376,7 @@
                                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                                             </ul>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="card-body p-0">
@@ -467,175 +384,58 @@
                                         <div class="table-responsive">
                                             <table class="best-selling-table table border-0">
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>#64548</h6>
+                                                    <% recentOrders.forEach(order => { %>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="best-product-box">
+                                                                    <div class="product-name">
+                                                                        <h5><%= order.products[0].product.title %></h5>
+                                                                        <h6>#<%= order._id %></h6>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Date Placed</h6>
-                                                                <h5>5/1/22</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$250.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Order Status</h6>
-                                                                <h5>Completed</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Payment</h6>
-                                                                <h5 class="text-danger">Unpaid</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
+                                                            </td>
+                                                
+                                                            <td>
+                                                                <div class="product-detail-box">
+                                                                    <h6>Date Placed</h6>
+                                                                    <h5><%= order.createdAt.toLocaleDateString() %></h5>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Date Placed</h6>
-                                                                <h5>5/1/22</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$250.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Order Status</h6>
-                                                                <h5>Completed</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Payment</h6>
-                                                                <h5 class="theme-color">Paid</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
+                                                            </td>
+                                                
+                                                            <td>
+                                                                <div class="product-detail-box">
+                                                                    <h6>Price</h6>
+                                                                    <h5>₹<%= order.grandTotal %></h5>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Date Placed</h6>
-                                                                <h5>5/1/22</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$250.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Order Status</h6>
-                                                                <h5>Completed</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Payment</h6>
-                                                                <h5 class="theme-color">Paid</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="best-product-box">
-                                                                <div class="product-name">
-                                                                    <h5>Aata Buscuit</h5>
-                                                                    <h6>26-08-2022</h6>
+                                                            </td>
+                                                
+                                                            <td>
+                                                                <div class="product-detail-box">
+                                                                    <h6>Order Status</h6>
+                                                                    <h5><%= order.status %></h5>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Date Placed</h6>
-                                                                <h5>5/1/22</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Price</h6>
-                                                                <h5>$250.00</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Order Status</h6>
-                                                                <h5>Completed</h5>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="product-detail-box">
-                                                                <h6>Payment</h6>
-                                                                <h5 class="theme-color">Paid</h5>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                
+                                                            <td>
+                                                                <div class="product-detail-box">
+                                                                    <h6>Payment</h6>
+                                                                    <h5 class="text-danger"><%= order.payment_status ? "Paid" : "Unpaid" %></h5>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    <% }); %>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div> 
                         <!-- Recent orders end-->
 
                         <!-- Earning chart star-->
-                        <div class="col-xl-6">
+                        
+                        <!-- <div class="col-xl-6">
                             <div class="card o-hidden card-hover">
                                 <div class="card-header border-0 mb-0">
                                     <div class="card-header-title">
@@ -646,7 +446,7 @@
                                     <div id="bar-chart-earning"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Earning chart end-->
 
 
@@ -665,30 +465,16 @@
                                             <table class="user-table transactions-table table border-0">
                                                 <tbody>
                                                     <tr>
-                                                        <td>
-                                                            <div class="transactions-icon">
-                                                                <i class="ri-shield-line"></i>
-                                                            </div>
-                                                            <div class="transactions-name">
-                                                                <h6>Wallets</h6>
-                                                                <p>Starbucks</p>
-                                                            </div>
-                                                        </td>
-
-                                                        <td class="lost">-$74</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td class="td-color-1">
                                                             <div class="transactions-icon">
                                                                 <i class="ri-check-line"></i>
                                                             </div>
                                                             <div class="transactions-name">
-                                                                <h6>Bank Transfer</h6>
-                                                                <p>Add Money</p>
+                                                                <h6>Razorpay</h6>
+                                                                <p>Total Amount Received</p>
                                                             </div>
                                                         </td>
-
-                                                        <td class="success">+$125</td>
+                                                        <td class="success">+₹<%= razorpayTotal.length ? razorpayTotal[0].total : 0 %></td>
                                                     </tr>
                                                     <tr>
                                                         <td class="td-color-2">
@@ -696,38 +482,11 @@
                                                                 <i class="ri-exchange-dollar-line"></i>
                                                             </div>
                                                             <div class="transactions-name">
-                                                                <h6>Paypal</h6>
-                                                                <p>Add Money</p>
+                                                                <h6>COD</h6>
+                                                                <p>Total Amount Received</p>
                                                             </div>
                                                         </td>
-
-                                                        <td class="lost">-$50</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="td-color-3">
-                                                            <div class="transactions-icon">
-                                                                <i class="ri-bank-card-line"></i>
-                                                            </div>
-                                                            <div class="transactions-name">
-                                                                <h6>Mastercard</h6>
-                                                                <p>Ordered Food</p>
-                                                            </div>
-                                                        </td>
-
-                                                        <td class="lost">-$40</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="td-color-4 pb-0">
-                                                            <div class="transactions-icon">
-                                                                <i class="ri-bar-chart-grouped-line"></i>
-                                                            </div>
-                                                            <div class="transactions-name">
-                                                                <h6>Transfer</h6>
-                                                                <p>Refund</p>
-                                                            </div>
-                                                        </td>
-
-                                                        <td class="success pb-0">+$90</td>
+                                                        <td class="lost">+₹<%= codTotal.length ? codTotal[0].total : 0 %></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -739,7 +498,7 @@
                         <!-- Transactions end-->
 
                         <!-- visitors chart start-->
-                        <div class="col-xxl-4 col-md-6">
+                        <!-- <div class="col-xxl-4 col-md-6">
                             <div class="h-100">
                                 <div class="card o-hidden card-hover">
                                     <div class="card-header border-0">
@@ -756,12 +515,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- visitors chart end-->
 
 
                         <!-- To Do List start-->
-                        <div class="col-xxl-4 col-md-6">
+                        <!-- <div class="col-xxl-4 col-md-6">
                             <div class="card o-hidden card-hover">
                                 <div class="card-header border-0">
                                     <div class="card-header-title">
@@ -827,7 +586,7 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- To Do List end-->
 
 

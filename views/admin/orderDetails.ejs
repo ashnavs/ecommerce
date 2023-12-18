@@ -130,10 +130,10 @@
 
                                                                 
 
-                                                      <div class="dropdown" id="statusDropdown">
-                                                        <button  class="btn btn-secondary dropdown-toggle" id="statusDropdownBtn" type="button" data-bs-toggle="dropdown"  aria-expanded="false" style="background-color: #0da487 !important;" >
-                                                          Select Status
-                                                        </button>
+                                                                <div class="dropdown" id="statusDropdown">
+                                                                    <button class="btn btn-secondary dropdown-toggle" id="statusDropdownBtn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: #0da487 !important;">
+                                                                      Select Status
+                                                                    </button>
                                                         <ul class="dropdown-menu" aria-labelledby="statusDropdown" id="statusId">
                                                             <li>
                                                                 <a class="dropdown-item" href="#" data-status="Order confirmed">Order confirmed</a>
@@ -339,6 +339,25 @@
 
             <!-- Theme js -->
             <script src="/assetsb/js/script.js"></script>
+
+            <!--cancel oder-->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                  var statusDropdownBtn = document.getElementById('statusDropdownBtn');
+                  var statusDetails = document.getElementById('statusDetails');
+                  var statusDropdownItems = document.querySelectorAll('#statusId .dropdown-item');
+              
+                  statusDropdownItems.forEach(function (item) {
+                    item.addEventListener('click', function () {
+                      var selectedStatus = item.getAttribute('data-status');
+                      statusDetails.textContent = selectedStatus; // Update displayed status
+              
+                      // Disable the button if the selected status is "Cancel Order"
+                      statusDropdownBtn.disabled = selectedStatus === 'Cancel Order';
+                    });
+                  });
+                });
+              </script>
         </body>
 
 

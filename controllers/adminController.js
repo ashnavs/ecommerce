@@ -57,52 +57,187 @@ const verifyLogin = async (req, res) => {
 
 const loadDashboard = async (req, res) => {
     try {
-        res.render('adminDashboard')
+        const orders = await Order.find().populate('products.product');
+        const totalRevenue = orders.reduce((sum, order) => sum + order.grandTotal, 0);
+        const totalSales = orders.length;
+        const totalProductsSold = orders.reduce((sum, order) => sum + order.products.length, 0);
+
+        const uniqueProducts = new Set();
+        orders.forEach(order => {
+            order.products.forEach(product => {
+                if (product.product && product.product._id) {
+                    uniqueProducts.add(product.product._id.toString());
+                }
+            });
+        });
+        const totalUniqueProducts = uniqueProducts.size;
+        const totalUsers = await User.countDocuments();
+
+        const productSalesMap = new Map();
+        orders.forEach(order => {
+            order.products.forEach(product => {
+                const productId = product.product && product.product._id ? product.product._id.toString() : null;
+                const quantity = product.quantity;
+                if (productId) {
+                    if (productSalesMap.has(productId)) {
+                        productSalesMap.set(productId, productSalesMap.get(productId) + quantity);
+                    } else {
+                        productSalesMap.set(productId, quantity);
+                    }
+                }
+            });
+        });
+
+        const topSellingProducts = await Promise.all(
+            [...productSalesMap.entries()]
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(async ([productId, quantitySold]) => {
+                    const product = await Product.findById(productId).exec();
+                    if (product) {
+                        return {
+                            name: product.name,
+                            date: new Date(product.createdAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                            }),
+                            discountPrice: product.discountPrice,
+                            quantitySold: quantitySold,
+                            stock: product.quantity, // Assuming product quantity is the stock
+                            amount: product.discountPrice * quantitySold,
+                            image: product.productImage[0],
+                        };
+                    } else {
+                        return null; // Handle the case where product is not found
+                    }
+                })
+        );
+
+        const recentOrders = await Order.find()
+            .sort({ createdAt: -1 })  // Sorting by createdAt in descending order
+            .limit(5)  // Limiting to the last 5 orders
+            .populate('products.product');
+
+        const razorpayTotal = await Order.aggregate([
+            { $match: { paymentMethod: 'RazorPay', status: 'Delivered' } },
+            { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+        ]);
+
+        const codTotal = await Order.aggregate([
+            { $match: { paymentMethod: 'Cash On Delivery', status: 'Delivered' } },
+            { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+        ]);
+        res.render('adminDashboard', {
+            totalRevenue,
+            totalSales,
+            totalProductsSold,
+            totalUniqueProducts,
+            totalUsers,
+            topSellingProducts,
+            recentOrders,
+            razorpayTotal,
+            codTotal
+        });
+        
     } catch (error) {
         console.log(error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 
-// const loaduserDetails = async (req, res) => {
-
+// const loadDashboard = async (req, res) => {
 //     try {
+//         const orders = await Order.find().populate('products.product');
+//         const totalRevenue = orders.reduce((sum, order) => sum + order.grandTotal, 0);
+//         const totalSales = orders.length;
+//         const totalProductsSold = orders.reduce((sum, order) => sum + order.products.length, 0);
 
-//         const datas = await User.find({}).sort({ name: 1 });
-//         console.log(datas);
-//         res.render('userDetails', {datas})
+//         const uniqueProducts = new Set();
+//         orders.forEach(order => {
+//             order.products.forEach(product => {
+//                 uniqueProducts.add(product.product._id.toString());
+//             });
+//         });
+//         const totalUniqueProducts = uniqueProducts.size;
 
+//         const productSalesMap = new Map();
+//         orders.forEach(order => {
+//             order.products.forEach(product => {
+//                 const productId = product.product._id.toString();
+//                 const quantity = product.quantity;
+//                 if (productSalesMap.has(productId)) {
+//                     productSalesMap.set(productId, productSalesMap.get(productId) + quantity);
+//                 } else {
+//                     productSalesMap.set(productId, quantity);
+//                 }
+//             });
+//         });
+
+//     const topSellingProducts = await Promise.all(
+//         [...productSalesMap.entries()]
+//             .sort((a, b) => b[1] - a[1])
+//             .slice(0, 3)
+//             .map(async ([productId, quantitySold]) => {
+//                 const product = await Product.findById(productId).exec();
+//                 return {
+//                     title: product.title,
+//                     date: new Date(product.createdAt).toLocaleDateString('en-US', {
+//                         year: 'numeric',
+//                         month: 'short',
+//                         day: 'numeric',
+//                     }),
+//                     sales_price: product.sales_price,
+//                     quantitySold: quantitySold,
+//                     stock: product.quantity, // Assuming product quantity is the stock
+//                     amount: product.sales_price * quantitySold,
+//                 };
+//             })
+//         );
+
+
+//         const razorpayTotalResult = await Order.aggregate([
+//             { $match: { paymentMethod: 'Razorpay', status: 'Delivered' } },
+//             { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+//         ]);
+        
+//         const codTotalResult = await Order.aggregate([
+//             { $match: { paymentMethod: 'Cash On Delivery', status: 'Delivered' } },
+//             { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+//         ]);
+        
+//         // Handle the case where the aggregation result is null or empty
+//         const razorpayTotalAmount = razorpayTotalResult.length > 0 ? razorpayTotalResult[0].total : 0;
+//         const codTotalAmount = codTotalResult.length > 0 ? codTotalResult[0].total : 0;
+
+
+//         const recentOrders = await Order.find()
+//             .sort({ createdAt: -1 })  // Sorting by createdAt in descending order
+//             .limit(5)  // Limiting to the last 5 orders
+//             .populate('products.product');
+
+//         const totalUsers = await User.countDocuments();
+
+//         res.render('adminDashboard', {
+//             totalRevenue,
+//             totalSales,
+//             totalProductsSold,
+//             totalUniqueProducts,
+//             topSellingProducts,
+//             totalUsers,
+//             recentOrders,
+//             razorpayTotal: razorpayTotalAmount,
+//             codTotal: codTotalAmount
+//         });
 //     } catch (error) {
 //         console.log(error.message);
-//     }
-
-
-// }
-
-// const loaduserDetails = async (req, res) => {
-//     try {
-//         const page = parseInt(req.query.page) || 1;
-//         const perPage = 7; 
-        
-        
-
-
-//         const totalCount = await User.countDocuments();
-        
-//         const totalPages = Math.ceil(totalCount / perPage);
-
-//         const users = await User.find()
-//             .sort({ name: 1 })
-//             .skip((page - 1) * perPage)
-//             .limit(perPage)
-//             .sort({name: 1});
-       
-//         res.render('userDetails', { users, currentPage: page, totalPages });
-//     } catch (error) {
-//         console.error(error.message);
 //         res.status(500).send('Internal Server Error');
 //     }
 // };
+
+
+
 
 const loaduserDetails = async (req, res) => {
     try {

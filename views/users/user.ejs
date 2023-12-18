@@ -300,9 +300,9 @@
                                                         value="<%=userDetail.mobile%>" name="phoneNumber">
 
                                                         
-                                                    <label>Email</label>
-                                                    <input type="email" class="form-control"
-                                                        value="<%=userDetail.email%>" name="Email Address">
+                                                        <label>Email</label>
+                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" >
+                                                        
 
 
 
@@ -321,7 +321,117 @@
                                                         <i class="icon-long-arrow-right"></i>
                                                     </button>
                                                 </form>
-                                            </div><!-- .End .tab-pane -->
+                                                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                                    <form action="/editUserDetails" method="post" onsubmit="return validateForm()">
+                                                
+                                                        <label>Display Name *</label>
+                                                        <input type="text" class="form-control" value="<%=userDetail.name%>" name="displayName" id="displayName">
+                                                        <small class="error-message" id="displayNameError"></small>
+                                                
+                                                        <label>Phone Number</label>
+                                                        <input type="number" class="form-control" value="<%=userDetail.mobile%>" name="phoneNumber" id="phoneNumber">
+                                                        <small class="error-message" id="phoneNumberError"></small>
+                                                
+                                                        <label>Email</label>
+                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" id="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                                        <small class="error-message" id="emailError"></small>
+                                                
+                                                        <label>Current password (leave blank to leave unchanged)</label>
+                                                        <input type="password" class="form-control" name="currPass" id="currPass">
+                                                
+                                                        <label>New password (leave blank to leave unchanged)</label>
+                                                        <input type="password" class="form-control" name="newPass" id="newPass">
+                                                
+                                                        <label>Confirm new password</label>
+                                                        <input type="password" class="form-control mb-2" name="confirmNewPassword" id="confirmNewPassword">
+                                                        <small class="error-message" id="confirmNewPasswordError"></small>
+                                                
+                                                        <button type="submit" class="btn btn-outline-primary-2" onclick="return validateForm()">
+                                                            <span>SAVE CHANGES</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+                                                        
+                                                    </form>
+                                                
+                                                    <script>
+                                                        function validateForm() {
+                                                            // Reset error messages
+                                                            resetErrorMessages();
+                                                
+                                                            // Validate each field
+                                                            if (!validateDisplayName()) return false;
+                                                            if (!validatePhoneNumber()) return false;
+                                                            if (!validateEmail()) return false;
+                                                            if (!validateNewPassword()) return false;
+                                                            if (!validateConfirmNewPassword()) return false;
+                                                
+                                                            return true; // Form is valid
+                                                        }
+                                                
+                                                        function resetErrorMessages() {
+                                                            var errorMessages = document.querySelectorAll('.error-message');
+                                                            errorMessages.forEach(function (errorMessage) {
+                                                                errorMessage.textContent = '';
+                                                            });
+                                                        }
+                                                
+                                                        function validateDisplayName() {
+                                                            var displayName = document.getElementById('displayName').value;
+                                                            var displayNameError = document.getElementById('displayNameError');
+                                                
+                                                            if (!displayName.trim()) {
+                                                                displayNameError.textContent = 'Display Name is required';
+                                                                return false;
+                                                            }
+                                                
+                                                            return true;
+                                                        }
+                                                
+                                                        function validatePhoneNumber() {
+                                                            var phoneNumber = document.getElementById('phoneNumber').value;
+                                                            var phoneNumberError = document.getElementById('phoneNumberError');
+                                                
+                                                            // Add your validation logic for phone number here
+                                                            // Example: Check if the phone number is a valid format
+                                                
+                                                            return true;
+                                                        }
+                                                
+                                                        function validateEmail() {
+                                                            var email = document.getElementById('email').value;
+                                                            var emailError = document.getElementById('emailError');
+                                                
+                                                            // Add your validation logic for email here
+                                                            // Example: Check if the email is a valid format using the pattern attribute
+                                                
+                                                            return true;
+                                                        }
+                                                
+                                                        function validateNewPassword() {
+                                                            var newPassword = document.getElementById('newPass').value;
+                                                            var newPasswordError = document.getElementById('newPassError');
+                                                
+                                                            // Add your validation logic for new password here
+                                                            // Example: Check if the new password meets the required criteria
+                                                
+                                                            return true;
+                                                        }
+                                                
+                                                        function validateConfirmNewPassword() {
+                                                            var confirmNewPassword = document.getElementById('confirmNewPassword').value;
+                                                            var newPassword = document.getElementById('newPass').value;
+                                                            var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+                                                
+                                                            if (newPassword.trim() && newPassword !== confirmNewPassword) {
+                                                                confirmNewPasswordError.textContent = 'Passwords do not match';
+                                                                return false;
+                                                            }
+                                                
+                                                            return true;
+                                                        }
+                                                    </script>
+                                                </div>
+                                                <!-- .End .tab-pane -->
 
                                         </div>
                                     </div><!-- End .col-lg-9 -->

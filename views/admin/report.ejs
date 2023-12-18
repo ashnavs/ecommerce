@@ -124,11 +124,17 @@
                             align-items: center;
                         ">
 
-                                <div style="display: flex;">
-                                    <a href="/admin/report?status=Daily" class="btn btn-sm rounded ">Daily</a>
-                                    <a href="" class="btn btn-sm rounded ">Weekly</a>
-                                    <a href="" class="btn btn-sm rounded ">Yearly</a>
-                                  </div>
+                        <!-- Add the selected status as a class to highlight the active filter -->
+                        <div style="display: flex;">
+                            <a href="/admin/report?report=Daily" class="btn btn-sm rounded ">Daily</a>
+                            <a href="/admin/report?report=Monthly" class="btn btn-sm rounded">Weekly</a>
+                            <a href="/admin/report?report=Yearly" class="btn btn-sm rounded ">Yearly</a>
+                        </div>
+                        
+                        
+                        
+
+
 
                                   <div class="row d-flex">
                                     <div class="col-md-12 text-right" style="
@@ -157,10 +163,10 @@
                                   <input type="submit" class="btn btn-md rounded font-sm ms-2" value="Filter">
                                 </div>
                                 </div>
-                                <p>Total Revenue:</p>
+                                <p>Total Revenue: <%=totalRevenue %></p>
                                 
-                                <p>Total Sales:</p>
-                                <p>Total Product Sold:</p>
+                                <p>Total Sales: <%= totalSales%></p>
+                                <p>Total Product Sold: <%= totalProductsSold%></p>
                                 <div>
                 
                                 </div>
@@ -182,6 +188,7 @@
                                                         <th>Product Name</th>
                                                         <th>Category</th>
                                                         <th>Status</th>
+                                                      
                                                         <th>Quantity</th>
                                                         <th>Total</th>
                                                         <th>Payment Method</th>

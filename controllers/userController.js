@@ -723,29 +723,6 @@ const editAddress = async (req, res) => {
   
 
 
-// const changePassword = async(req,res)=>{
-//     try {
-//         const user = req.session.user_id;
-
-//         const {email,currPass,newPass} = req.body;
-//         const spassword = await securePassword(newPass);
-
-//         let userData = await User.findOne({_id:user});
-//         const passwordMatch = await bcrypt.compare(currPass, userData.password);
-//         if(passwordMatch){
-//             userData.password = spassword;
-//             await userData.save();
-//             console.log('password changedddddddd');
-//             req.session.destroy();
-//             return res.redirect('/login');
-//         }else{
-//             console.log(`${currPass}: current passsssssssss doesn't match`);
-//         }
-
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 
 module.exports = {
@@ -771,7 +748,7 @@ module.exports = {
     orderdetails,
     editAddress,
     loadeditAddress,
-    //changePassword
+    
 
 
 };
