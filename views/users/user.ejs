@@ -283,44 +283,7 @@
 
                                             </div><!-- .End .tab-pane -->
 
-                                            <div class="tab-pane fade" id="tab-account" role="tabpanel"
-                                                aria-labelledby="tab-account-link">
-                                                <form action="/editUserDetails" method="post">
-
-
-                                                    <label>Display Name *</label>
-
-                                                    <input type="text" class="form-control" value="<%=userDetail.name%>"
-                                                        name="displayName">
-                                                    <small class="form-text">This will be how your name will be
-                                                        displayed in the account section and in reviews</small>
-
-                                                    <label>Phone Number</label>
-                                                    <input type="number" class="form-control"
-                                                        value="<%=userDetail.mobile%>" name="phoneNumber">
-
-                                                        
-                                                        <label>Email</label>
-                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" >
-                                                        
-
-
-
-                                                    <label>Current password (leave blank to leave unchanged)</label>
-                                                    <input type="password" class="form-control" name="currPass">
-
-                                                    <label>New password (leave blank to leave unchanged)</label>
-                                                    <input type="password" class="form-control" name="newPass">
-
-                                                    <label>Confirm new password</label>
-                                                    <input type="password" class="form-control mb-2"
-                                                        name="confirmNewPassword">
-
-                                                    <button type="submit" class="btn btn-outline-primary-2">
-                                                        <span>SAVE CHANGES</span>
-                                                        <i class="icon-long-arrow-right"></i>
-                                                    </button>
-                                                </form>
+                                           
                                                 <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
                                                     <form action="/editUserDetails" method="post" onsubmit="return validateForm()">
                                                 
@@ -747,7 +710,7 @@
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
 
-        <script>
+        <!-- <script>
             function validateForm() {
                 // Reset error messages
                 document.getElementById('nameError').innerText = '';
@@ -825,10 +788,10 @@
                 return true;
             }
         
-        </script>
+        </script> -->
         
 
-        <script>
+        <!-- <script>
             function editAddress(name, email, mobile, houseno, street, landmark, pincode, city, country) {
               // Set form values with the selected address
               document.getElementById('billingForm').name.value = name;
@@ -844,7 +807,7 @@
               // Show the billing address form
               document.getElementById('billingAddressForm').style.display = 'block';
             }
-          </script>
+          </script> -->
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/bootstrap.bundle.min.js"></script>

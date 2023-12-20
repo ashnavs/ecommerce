@@ -216,6 +216,7 @@ async function addnewProduct(req, res) {
 
 
 
+
 // Assuming that Product is a mongoose model defined somewhere in your code
 async function listProduct(req, res) {
   try {
@@ -240,184 +241,10 @@ async function listProduct(req, res) {
   }
 }
 
-// const updateProduct = async (req, res) => {
-//   try {
-//       const productId = req.query.id;
-//       const {
-//           name,
-//           description,
-//           model,
-//           screenSize,
-//           price,
-//           discountPrice,
-//           quantity,
-//           brand,
-//           ram,
-//           storage,
-//           processor,
-//           category,
-//           graphicsCard,
-//           osArchitecture,
-//           os
-//       } = req.body;
-
-//       // Handle image update if a new image is provided
-//       if (req.files && req.files.length > 0) {
-//           // Assuming the productImages field in your Product model is an array
-//           const imagePaths = req.files.map((file) => file.filename);
-          
-//           // Update the product details along with productImages
-//           const updatedProduct = await Product.findByIdAndUpdate(
-//               { _id: productId },
-//               {
-//                   name,
-//                   description,
-//                   model,
-//                   screenSize,
-//                   price,
-//                   discountPrice,
-//                   quantity,
-//                   brand,
-//                   ram,
-//                   storage,
-//                   processor,
-//                   category,
-//                   graphicsCard,
-//                   osArchitecture,
-//                   os,
-//                   productImage: imagePaths
-//               },
-//               { new: true }
-//           );
-
-//           if (updatedProduct) {
-//               console.log('Product Updated:', updatedProduct);
-//           } else {
-//               console.log('Product not found or update failed.');
-//           }
-//       } else {
-//           // If no new image is provided, update other fields without changing productImages
-//           const updatedProduct = await Product.findByIdAndUpdate(
-//               { _id: productId },
-//               {
-//                   name,
-//                   description,
-//                   model,
-//                   screenSize,
-//                   price,
-//                   discountPrice,
-//                   quantity,
-//                   brand,
-//                   ram,
-//                   storage,
-//                   processor,
-//                   category,
-//                   graphicsCard,
-//                   osArchitecture,
-//                   os
-//               },
-//               { new: true }
-//           );
-
-//           if (updatedProduct) {
-//               console.log('Product Updated:', updatedProduct);
-//           } else {
-//               console.log('Product not found or update failed.');
-//           }
-//       }
-
-//       res.redirect('/admin/products');
-//   } catch (error) {
-//       console.log(error.message);
-//       res.status(500).send('Internal Server Error');
-//   }
-// };
-
 const updateProduct = async (req, res) => {
   try {
-    const productId = req.query.id;
-    const {
-      name,
-      description,
-      model,
-      screenSize,
-      price,
-      discountPrice,
-      quantity,
-      brand,
-      ram,
-      storage,
-      processor,
-      category,
-      graphicsCard,
-      osArchitecture,
-      os
-    } = req.body;
-
-    // Handle image update if a new image is provided
-    if (req.files && req.files.length > 0) {
-      // Assuming the productImages field in your Product model is an array
-      const imagePaths = req.files.map((file) => file.filename);
-
-      // Create a temporary directory for resized images
-      const tempDir = path.join(__dirname, "temp");
-      await fs.mkdir(tempDir, { recursive: true });
-
-      // Resize and crop the uploaded images to 277x277
-      await Promise.all(imagePaths.map(async (filename) => {
-        const inputImagePath = `./public/productImage/${filename}`;
-        const outputImagePath = path.join(tempDir, filename);
-
-        await sharp(inputImagePath)
-          .resize({ width: 277, height: 277, fit: 'contain' })
-          .toFile(outputImagePath);
-      }));
-
-      // Move the resized images back to the original directory
-      await Promise.all(imagePaths.map(async (filename) => {
-        const tempImagePath = path.join(tempDir, filename);
-        const finalImagePath = `./public/productImage/${filename}`;
-
-        await fs.rename(tempImagePath, finalImagePath);
-      }));
-
-      // Remove the temporary directory
-      await fs.rmdir(tempDir, { recursive: true });
-
-      // Update the product details along with productImages
-      const updatedProduct = await Product.findByIdAndUpdate(
-        { _id: productId },
-        {
-          name,
-          description,
-          model,
-          screenSize,
-          price,
-          discountPrice,
-          quantity,
-          brand,
-          ram,
-          storage,
-          processor,
-          category,
-          graphicsCard,
-          osArchitecture,
-          os,
-          productImage: imagePaths
-        },
-        { new: true }
-      );
-
-      if (updatedProduct) {
-        // console.log('Product Updated:', updatedProduct);
-      } else {
-        console.log('Product not found or update failed.');
-      }
-    } else {
-      // If no new image is provided, update other fields without changing productImages
-      const updatedProduct = await Product.findByIdAndUpdate(
-        { _id: productId },
-        {
+      const productId = req.query.id;
+      const {
           name,
           description,
           model,
@@ -433,23 +260,81 @@ const updateProduct = async (req, res) => {
           graphicsCard,
           osArchitecture,
           os
-        },
-        { new: true }
-      );
+      } = req.body;
 
-      if (updatedProduct) {
-        // console.log('Product Updated:', updatedProduct);
+      // Handle image update if a new image is provided
+      if (req.files && req.files.length > 0) {
+          // Assuming the productImages field in your Product model is an array
+          const imagePaths = req.files.map((file) => file.filename);
+          
+          // Update the product details along with productImages
+          const updatedProduct = await Product.findByIdAndUpdate(
+              { _id: productId },
+              {
+                  name,
+                  description,
+                  model,
+                  screenSize,
+                  price,
+                  discountPrice,
+                  quantity,
+                  brand,
+                  ram,
+                  storage,
+                  processor,
+                  category,
+                  graphicsCard,
+                  osArchitecture,
+                  os,
+                  productImage: imagePaths
+              },
+              { new: true }
+          );
+
+          if (updatedProduct) {
+              console.log('Product Updated:', updatedProduct);
+          } else {
+              console.log('Product not found or update failed.');
+          }
       } else {
-        console.log('Product not found or update failed.');
-      }
-    }
+          // If no new image is provided, update other fields without changing productImages
+          const updatedProduct = await Product.findByIdAndUpdate(
+              { _id: productId },
+              {
+                  name,
+                  description,
+                  model,
+                  screenSize,
+                  price,
+                  discountPrice,
+                  quantity,
+                  brand,
+                  ram,
+                  storage,
+                  processor,
+                  category,
+                  graphicsCard,
+                  osArchitecture,
+                  os
+              },
+              { new: true }
+          );
 
-    res.redirect('/admin/products');
+          if (updatedProduct) {
+              console.log('Product Updated:', updatedProduct);
+          } else {
+              console.log('Product not found or update failed.');
+          }
+      }
+
+      res.redirect('/admin/products');
   } catch (error) {
-    console.log(error.message);
-    res.status(500).send('Internal Server Error');
+      console.log(error.message);
+      res.status(500).send('Internal Server Error');
   }
 };
+
+
 
 module.exports = {
     loadProduct,

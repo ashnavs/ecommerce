@@ -22,11 +22,10 @@ const adminLogin = async (req, res) => {
 }
 const verifyLogin = async (req, res) => {
     try {
-
-        const email = req.body.email;
-        const password = req.body.password
+        const {email,password} = req.body;
+      
         const adminData = await Admin.findOne({ email: email })
-        console.log(adminData);
+      
 
 
         if (adminData) {
@@ -37,14 +36,14 @@ const verifyLogin = async (req, res) => {
 
             }
             else {
-                console.log("invalid password");
+               
                 res.redirect('/adminlogin')
             }
 
         }
         else {
             res.redirect('/adminlogin');
-            console.log("Admin not found");
+         
         }
 
 

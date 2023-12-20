@@ -1,0 +1,355 @@
+<%- include('../partials/styleh') %>
+
+
+    <body>
+        <div class="page-wrapper">
+            <%- include('../partials/header') %>
+
+                <main class="main">
+                    <div class="page-header text-center"
+                        style="background-image: url('/assets/images/page-header-bg.jpg')">
+                        <div class="container ">
+                            <h1 class="page-title">My Account<span>Shop</span></h1>
+                        </div><!-- End .container -->
+                    </div><!-- End .page-header -->
+
+
+                    <div class="page-content">
+                        <div class="dashboard mt-3">
+                            <div class="container">
+                                <div class="row">
+                                    <aside class="col-md-4 col-lg-3">
+                                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                                    aria-selected="true">Dashboard</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-orders-link" data-toggle="tab"
+                                                    href="#tab-orders" role="tab" aria-controls="tab-orders"
+                                                    aria-selected="false">Orders</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-downloads-link" data-toggle="tab"
+                                                    href="#tab-downloads" role="tab" aria-controls="tab-downloads"
+                                                    aria-selected="false">Downloads</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-address-link" data-toggle="tab"
+                                                    href="#tab-address" role="tab" aria-controls="tab-address"
+                                                    aria-selected="false">Adresses</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-account-link" data-toggle="tab"
+                                                    href="#tab-account" role="tab" aria-controls="tab-account"
+                                                    aria-selected="false">Account Details</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="#">Sign Out</a>
+                                            </li>
+                                        </ul>
+                                    </aside><!-- End .col-lg-3 -->
+
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="tab-content">
+
+                                            <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                                aria-labelledby="tab-dashboard-link">
+                                                <p>Hello <span class="font-weight-normal text-dark">
+                                                        <%=userDetail.name%>
+                                                    </span>
+                                                    <br>
+                                                    From your account dashboard you can view your <a href="#tab-orders"
+                                                        class="tab-trigger-link link-underline">recent orders</a>,
+                                                    manage your <a href="#tab-address" class="tab-trigger-link">shipping
+                                                        and billing addresses</a>, and <a href="#tab-account"
+                                                        class="tab-trigger-link">edit your password and account
+                                                        details</a>.
+                                                </p>
+                                                <ul>
+                                                    <li>
+                                                        <%=userDetail.name%>
+                                                    </li>
+                                                    <li>
+                                                        <%=userDetail.email%>
+                                                    </li>
+                                                    <li>
+                                                        <%=userDetail.mobile%>
+                                                    </li>
+
+                                                </ul>
+                                            </div><!-- .End .tab-pane -->
+
+                                            <div class="tab-pane fade" id="tab-orders" role="tabpanel"
+                                                aria-labelledby="tab-orders-link">
+                                                <div class="container mt-5">
+                                                    <div class="d-flex  row " style="margin-right: 30px;">
+                                                        <div class="col-md-10">
+                                                            <div class="rounded">
+                                                                <div class="table-responsive table-borderless">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Order Id</th>
+                                                                                <th>Total</th>
+                                                                                <th>Date</th>
+                                                                                <th>status</th>
+                                                                                <th>Action</th>
+
+                                                                                <th></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-body">
+                                                                            <% orderDetails.forEach(order=>{ %>
+                                                                                <tr class="cell-1">
+                                                                                    <td>
+                                                                                        <%=order._id %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= order.grandTotal %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%=order.createdAt.toLocaleDateString()
+                                                                                            %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= order.status %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a
+                                                                                            href="/orderdetails?orderId=<%=order._id %>">
+
+                                                                                            <button
+                                                                                                class="btn btn-success"
+                                                                                                style="font-size: 10px; padding: 5px 10px;">Details</button>
+                                                                                        </a>
+
+                                                                                    </td>
+
+                                                                                    <td><i
+                                                                                            class="fa fa-ellipsis-h text-black-50"></i>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <% }) %>
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <p>No order has been made yet.</p> -->
+                                                <a href="productsView" class="btn btn-outline-primary-2"><span>GO
+                                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
+
+                                            </div><!-- .End .tab-pane -->
+
+                                            <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
+                                                aria-labelledby="tab-downloads-link">
+                                                <p>No downloads available yet.</p>
+                                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
+                                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
+
+
+
+
+                                            </div><!-- .End .tab-pane -->
+
+                                            <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                                aria-labelledby="tab-address-link">
+                                                <p>The following addresses will be used on the checkout page by default.
+                                                </p>
+                                                <!-- Add a billing address form (initially hidden) -->
+                                                <div id="billingAddressForm" style="display: none;">
+                                                    <form id="billingForm" action="/add-billing-address" method="post"
+                                                        onsubmit="return validateForm()">
+                                                        <!-- Your form fields go here -->
+                                                        <div class="row">
+                                                            <div class="col-lg-9">
+                                                                <h2 class="checkout-title">Billing Details</h2>
+                                                                <!-- End .checkout-title -->
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <label>Name </label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="name" id="name">
+                                                                        <small class="text-danger"
+                                                                            id="nameError"></small>
+                                                                    </div><!-- End .col-sm-6 -->
+
+
+                                                                </div><!-- End .row -->
+
+
+
+                                                                <label>Country </label>
+                                                                <input type="text" class="form-control" name="country"
+                                                                    id="country">
+                                                                <small class="text-danger" id="countryError"></small>
+
+                                                                <label>Street address </label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="House number and Street name"
+                                                                    name="street" id="street">
+                                                                <small class="text-danger" id="streetError"></small>
+
+                                                                <label>House no </label>
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Appartments, suite, unit etc ..."
+                                                                    name="houseno" id="houseno">
+                                                                <small class="text-danger" id="housenoError"></small>
+
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <label>Town / City *</label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="city" id="city">
+                                                                        <small class="text-danger"
+                                                                            id="cityError"></small>
+                                                                    </div><!-- End .col-sm-6 -->
+
+                                                                    <div class="col-sm-6">
+                                                                        <label>State</label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="state" id="state">
+                                                                        <small class="text-danger"
+                                                                            id="stateError"></small>
+                                                                    </div><!-- End .col-sm-6 -->
+                                                                </div><!-- End .row -->
+
+                                                                <div class="row">
+                                                                    <div class="col-sm-6">
+                                                                        <label>Postcode / ZIP </label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="pincode" id="pincode">
+                                                                        <small class="text-danger"
+                                                                            id="pincodeError"></small>
+                                                                    </div><!-- End .col-sm-6 -->
+
+                                                                    <div class="col-sm-6">
+                                                                        <label>Phone </label>
+                                                                        <input type="tel" class="form-control"
+                                                                            name="mobile" id="mobile">
+                                                                        <small class="text-danger"
+                                                                            id="mobileError"></small>
+                                                                    </div><!-- End .col-sm-6 -->
+                                                                </div><!-- End .row -->
+
+                                                                <label>Email address </label>
+                                                                <input type="email" class="form-control" name="email"
+                                                                    id="email">
+                                                                <small class="text-danger" id="emailError"></small>
+
+
+
+                                                                <!-- <label>Order notes (optional)</label>
+                                                                <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea> -->
+                                                            </div><!-- End .col-lg-9 -->
+
+                                                        </div><!-- End .row -->
+
+                                                        <!-- Add more form fields as needed -->
+
+                                                        <button type="submit" id="addAddressButton">Add Address</button>
+
+                                                    </form>
+                                                </div>
+
+                                                <!-- Display billing address -->
+                                                <div class="row">
+                                                    <% address.map((item)=> { %>
+                                                        <div class="col-lg-6">
+
+                                                            <div class="card card-dashboard">
+                                                                <div class="card-body">
+                                                                    <h3 class="card-title">Billing Address</h3>
+                                                                    <!-- End .card-title -->
+                                                                    <p>
+                                                                        <%= item.name %><br>
+                                                                            <%= item.email %><br>
+                                                                                <%= item.mobile %><br>
+                                                                                    <%=item.houseno %><br>
+                                                                                        <%=item.street %><br>
+
+                                                                                            <%=item.pincode%><br>
+                                                                                                <%=item.city %><br>
+                                                                                                    <%=item.country %>
+                                                                                                        <br>
+                                                                                                        <a
+                                                                                                            href="/editAddress?addressId=<%=item._id%>">Edit
+                                                                                                            <i
+                                                                                                                class="icon-edit"></i></a>
+                                                                    </p>
+                                                                </div>
+                                                                <!-- End .card-body -->
+                                                            </div>
+                                                            <!-- End .card-dashboard -->
+
+                                                        </div>
+                                                        <% }) %>
+                                                            <!-- End .col-lg-6 -->
+                                                </div>
+
+
+                                                <p>No billing address found. <a href="#" onclick="showBillingForm()">Add
+                                                        a billing address</a></p>
+
+
+                                                <script>
+                                                    function showBillingForm() {
+                                                        // Show the billing address form
+                                                        document.getElementById('billingAddressForm').style.display = 'block';
+                                                    }
+                                                </script>
+
+
+                                            </div><!-- .End .tab-pane -->
+
+                                            <div class="tab-pane fade" id="tab-account" role="tabpanel"
+                                                aria-labelledby="tab-account-link">
+                                                <form action="/editUserDetails" method="post" id="editUser">
+                                                    <label>Display Name</label>
+                                                    <input type="text" class="form-control" value="<%=userDetail.name%>"
+                                                        name="name" id="name">
+                                                    <small class="text-danger" id="nameError"></small>
+
+                                                    <label>Phone Number</label>
+                                                    <input type="number" class="form-control"
+                                                        value="<%=userDetail.mobile%>" name="phoneNumber"
+                                                        id="phoneNumber">
+                                                    <small class="text-danger" id="phoneError"></small>
+
+                                                    <label>Email</label>
+                                                    <input type="email" class="form-control"
+                                                        value="<%=userDetail.email%>" name="email"
+                                                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                                                        id="email">
+                                                    <small class="text-danger" id="emailError"></small>
+
+                                                    <label>Current password (leave blank to leave unchanged)</label>
+                                                    <input type="password" class="form-control" name="currPass"
+                                                        id="currPass">
+                                                    <small class="text-danger" id="currPassError"></small>
+
+                                                    <label>New password (leave blank to leave unchanged)</label>
+                                                    <input type="password" class="form-control" name="newPass"
+                                                        id="newPass">
+                                                    <small class="text-danger" id="newPassError"></small>
+
+                                                    <label>Confirm new password</label>
+                                                    <input type="password" class="form-control mb-2"
+                                                        name="confirmNewPassword" id="confirmNewPassword">
+                                                    <small class="text-danger" id="confirmNewPasswordError"></small>
+
+                                                    <button type="submit" class="btn btn-outline-primary-2"
+                                                        id="saveChangesButton">
+                                                        <span>SAVE CHANGES</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </button>
+
+                                                </form>
+
+                  
+

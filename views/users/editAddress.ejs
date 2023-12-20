@@ -4,78 +4,147 @@
 
 
 <div>
-    <form  action="/editAddress" method="post">
-        <!-- Your form fields go here -->
+    <form action="/editAddress" method="post" id="edit" onsubmit="return validateForm()">
         <div class="row justify-content-center mt-5">
             <div class="col-lg-9">
                 <h3>Billing Details</h3>
-                <!-- End .checkout-title -->
                 <div class="row">
                     <div class="col-sm-6">
-                        <label>Name *</label>
-                        <input type="text" class="form-control"
-                            name="name" value="<%=address.name%>">
-                    </div><!-- End .col-sm-6 -->
-
-
-                </div><!-- End .row -->
-
+                        <label>Name </label>
+                        <input type="text" class="form-control" name="name" id="name" value="<%=address.name%>">
+                        <span class="error" id="nameError"></span>
+                    </div>
+                </div>
+    
                 <label>Company Name (Optional)</label>
                 <input type="text" class="form-control">
-
+    
                 <label>Country </label>
-                <input type="text" class="form-control" name="country"
-                    value="<%=address.country%>">
-
-                <label>Street address *</label>
-                <input type="text" class="form-control"
-                    placeholder="House number and Street name"
-                    name="street" value="<%=address.street%>">
-
-                <label>House no *</label>
-                <input type="text" class="form-control"
-                    placeholder="Appartments, suite, unit etc ..."
-                    name="houseno"  value="<%=address.houseno%>">
-
+                <input type="text" class="form-control" name="country" id="country" value="<%=address.country%>">
+                <span class="error" id="countryError"></span>
+    
+                <label>Street address</label>
+                <input type="text" class="form-control" placeholder="House number and Street name" name="street" id="street" value="<%=address.street%>">
+                <span class="error" id="streetError"></span>
+    
+                <label>House no </label>
+                <input type="text" class="form-control" placeholder="Apartments, suite, unit etc ..." name="houseno" id="houseno" value="<%=address.houseno%>">
+                <span class="error" id="housenoError"></span>
+    
                 <div class="row">
                     <div class="col-sm-6">
-                        <label>Town / City *</label>
-                        <input type="text" class="form-control"
-                            name="city"  value="<%=address.city%>">
-                    </div><!-- End .col-sm-6 -->
-
-
-
+                        <label>Town / City </label>
+                        <input type="text" class="form-control" name="city" id="city" value="<%=address.city%>">
+                        <span class="error" id="cityError"></span>
+                    </div>
+                </div>
+    
                 <div class="row">
                     <div class="col-sm-6">
-                        <label>Postcode / ZIP *</label>
-                        <input type="text" class="form-control"
-                            name="pincode"  value="<%=address.pincode%>">
-                    </div><!-- End .col-sm-6 -->
-
+                        <label>Postcode / ZIP </label>
+                        <input type="text" class="form-control" name="pincode" id="pincode" value="<%=address.pincode%>">
+                        <span class="error" id="pincodeError"></span>
+                    </div>
+    
                     <div class="col-sm-6">
-                        <label>Phone *</label>
-                        <input type="tel" class="form-control"
-                            name="mobile"  value="<%=address.mobile%>">
-                    </div><!-- End .col-sm-6 -->
-                </div><!-- End .row -->
-
-                <label>Email address *</label>
-                <input type="email" class="form-control" name="email"
-                    value="<%=address.email%>">
-
-
-
-                <!-- <label>Order notes (optional)</label>
-                <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea> -->
-            </div><!-- End .col-lg-9 -->
-            <button type="submit" class="btn btn-outline-primary-2">Add Address</button>
-
-        </div><!-- End .row -->
-
-        <!-- Add more form fields as needed -->
-
-       
-
+                        <label>Phone </label>
+                        <input type="tel" class="form-control" name="mobile" id="mobile" value="<%=address.mobile%>">
+                        <span class="error" id="mobileError"></span>
+                    </div>
+                </div>
+    
+                <label>Email address </label>
+                <input type="email" class="form-control" name="email" id="email" value="<%=address.email%>">
+                <span class="error" id="emailError"></span>
+    
+                <button type="submit" class="btn btn-outline-primary-2">Add Address</button>
+            </div>
+        </div>
     </form>
+  <script>
+        function validateForm() {
+            resetErrorMessages();
+    
+            var name = document.getElementById('name').value.trim();
+            var country = document.getElementById('country').value.trim();
+            var street = document.getElementById('street').value.trim();
+            var houseno = document.getElementById('houseno').value.trim();
+            var city = document.getElementById('city').value.trim();
+            var pincode = document.getElementById('pincode').value.trim();
+            var mobile = document.getElementById('mobile').value.trim();
+            var email = document.getElementById('email').value.trim();
+    
+            var nameRegex = /^[A-Za-z\s]+$/;
+            var mobileRegex = /^[0-9]{10}$/;
+            var emailRegex = /^\S+@\S+\.\S+$/;
+    
+            var hasErrors = false;
+    
+            if (name === '' || !nameRegex.test(name)) {
+                showError('nameError', 'Please enter a valid name');
+                hasErrors = true;
+            }
+    
+            if (country === '') {
+                showError('countryError', 'Please enter the country');
+                hasErrors = true;
+            }
+    
+            if (street === '') {
+                showError('streetError', 'Please enter the street');
+                hasErrors = true;
+            }
+    
+            if (houseno === '') {
+                showError('housenoError', 'Please enter the houseno');
+                hasErrors = true;
+            }
+    
+            if (city === '') {
+                showError('cityError', 'Please enter the city');
+                hasErrors = true;
+            }
+    
+            if (pincode === '' || !/^\d+$/.test(pincode)) {
+                showError('pincodeError', 'Enter a valid numeric Pincode.');
+                hasErrors = true;
+            }
+    
+            if (!mobileRegex.test(mobile)) {
+                showError('mobileError', 'Please enter a valid 10-digit mobile number');
+                hasErrors = true;
+            }
+    
+            if (!emailRegex.test(email)) {
+                showError('emailError', 'Please enter a valid email address');
+                hasErrors = true;
+            }
+    
+            if (hasErrors) {
+                return false;
+            }
+    
+            // Continue with form submission
+            return true;
+        }
+    
+        function showError(errorId, errorMessage) {
+            var errorElement = document.getElementById(errorId);
+            errorElement.innerText = errorMessage;
+            errorElement.style.color = 'red';
+        }
+    
+        function resetErrorMessages() {
+            var errorIds = [
+                'nameError', 'countryError', 'streetError',
+                'housenoError', 'cityError', 'pincodeError',
+                'mobileError', 'emailError'
+            ];
+    
+            errorIds.forEach(function (errorId) {
+                document.getElementById(errorId).innerText = '';
+            });
+        }
+    </script>  
+     
 </div>

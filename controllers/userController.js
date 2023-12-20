@@ -653,6 +653,70 @@ async function orderdetails(req,res){
 // }
 
 
+// const editAddress = async (req, res) => {
+//     try {
+//       // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
+//       const userId = req.session.user_id;
+//       const user = req.session.user_id;
+  
+//       // Extract address data from the form submission
+//       const {
+//         name,
+//         email,
+//         mobile,
+//         houseno,
+//         street,
+//         landmark,
+//         pincode,
+//         city,
+//         country,
+//       } = req.body;
+  
+//       const addressId = req.query.id;
+
+//       console.log('Received addressId:', addressId);
+//       console.log('Received userId:', userId);
+  
+//       // Find the address in the database
+//       const existingAddress = await Address.findOne({ user: userId });
+  
+//       // Check if the address exists
+//     //   if (!existingAddress) {
+//     //     return res.status(404).json({ success: false, message: 'Address not found' });
+//     //   }
+  
+
+//     if (!existingAddress) {
+//         // Render a custom 404 page
+//         return res.render('error', { layout: 'errorLayout' ,user }); // Assuming you have a 404.ejs file in your views folder
+//         // return res.send('404')
+//     }
+
+//       // Update the existing address fields
+//       existingAddress.name = name;
+//       existingAddress.email = email;
+//       existingAddress.mobile = mobile;
+//       existingAddress.houseno = houseno;
+//       existingAddress.street = street;
+//       existingAddress.landmark = landmark;
+//       existingAddress.pincode = pincode;
+//       existingAddress.city = city;
+//       existingAddress.country = country;
+  
+//       // Save the updated address to the database
+//       await existingAddress.save();
+  
+//       // Respond with success message
+//       res.redirect('/user');
+//       // res.json({ success: true, message: 'Address updated successfully' });
+//     } catch (error) {
+//       // Handle any errors that may occur during the process
+//       res.redirect('/error')
+//       console.error(error);
+//       res.status(500).json({ success: false, message: 'Internal server error' });
+//     }
+//   };
+
 const editAddress = async (req, res) => {
     try {
       // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
@@ -708,6 +772,12 @@ const editAddress = async (req, res) => {
     }
   };
 
+
+
+
+
+
+
   const loadeditAddress = async(req,res) => {
     try {
         const user = req.session.user_id;
@@ -717,12 +787,20 @@ const editAddress = async (req, res) => {
     
         res.render('editAddress',{address , user , addressId})
     } catch (error) {
+        res.redirect('/error')
         console.log(error.message);
     }
   }
   
 
-
+const loadError = async(req,res)=>{
+    try {
+        const user = req.session.user_id;
+        res.render('error',{user})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
@@ -748,6 +826,7 @@ module.exports = {
     orderdetails,
     editAddress,
     loadeditAddress,
+    loadError
     
 
 

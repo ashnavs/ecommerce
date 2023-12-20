@@ -45,6 +45,8 @@ admin_route.post('/edit-category',categoryController.updateCategory);
 admin_route.get('/products',auth.isLogin,productController.loadProduct);
 admin_route.get('/addnewProduct',auth.isLogin,productController.loadaddnewProduct)
 admin_route.post('/addnewProduct',upload.array('productImage'),productController.addnewProduct)
+
+
 admin_route.get('/listProduct',productController.listProduct)
 admin_route.get('/editProduct',productController.editProduct)
 admin_route.post('/editProduct',upload.array('productImage'),productController.updateProduct)

@@ -1,263 +1,184 @@
-
-
-
-
-
-
-
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Crop multiple images with cropper js</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <style>
-        .g-height-50 {
-            height: 50px;
-        }
-    
-        .g-width-50 {
-            width: 50px !important;
-        }
-    
-        @media (min-width: 0){
-            .g-pa-30 {
-                padding: 2.14286rem !important;
-            }
-        }
-    
-        .g-bg-secondary {
-            background-color: #fafafa !important;
-        }
-    
-        .u-shadow-v18 {
-            box-shadow: 0 5px 10px -6px rgba(0, 0, 0, 0.15);
-        }
-    
-        .g-color-gray-dark-v4 {
-            color: #777 !important;
-        }
-    
-        .g-font-size-12 {
-            font-size: 0.85714rem !important;
-        }
-    
-        .media-comment {
-            margin-top:20px
-        }
-        .singleImageCanvasContainer{
-            overflow: hidden;
-            height: 200px;
-            width: 30%;
-            display: inline-block;
-            position: relative;
-            padding-right: 0px;
-            margin-right: 15px;
-            border: 2px solid #dfdfdf;
-            margin-bottom: 10px;
-            padding: 4px;
-            border-radius: .25rem;
-        }
-    
-        .singleImageCanvasContainer .singleImageCanvasCloseBtn{
-            position: absolute;
-            right: 0;
-        }
-        .singleImageCanvasContainer .singleImageCanvas{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        body.modal-open {
-    overflow: hidden;
-}
-
-.modal-open .modal {
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-</style>
 <%- include('../partials/adminHeader') %>
 
     <%- include('../partials/adminSidebar') %>
 
-<body>
-    
-
-
-        <div class="page-body">
-            <!-- New Product Add Start -->
-            <form action="" method="post" enctype="multipart/form-data" id="productForm" onclick="">
-
-                <div class="container-fluid">
-                    <div class="row theme-form theme-form-2 mega-form">
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-sm-8 m-auto">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Product Information</h5>
-                                            </div>
+        <body>
 
 
 
+            <div class="page-body">
+                <!-- New Product Add Start -->
+                <form action="" method="post" enctype="multipart/form-data" id="productForm" onclick="">
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Product Name</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="name"
-                                                        placeholder="Product Name" id="name">
-                                                    <small class="text-danger" id="nameError"></small>
+                    <div class="container-fluid">
+                        <div class="row theme-form theme-form-2 mega-form">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-sm-8 m-auto">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header-2">
+                                                    <h5>Product Information</h5>
                                                 </div>
-                                            </div>
 
 
 
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label form-label-title">Category</label>
-
-                                                <div class="col-sm-9">
-                                                    <select class="" name="category">
-                                                        <option disabled>Category Menu</option>
-                                                        <% allCategory.forEach(category=>{%>
-                                                            <option value="<%=category._id%>">
-                                                                <%= category.name %>
-                                                            </option>
-                                                            <% }) %>
-
-                                                    </select>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Product Name</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="name"
+                                                            placeholder="Product Name" id="name">
+                                                        <small class="text-danger" id="nameError"></small>
+                                                    </div>
                                                 </div>
-                                            </div>
 
 
 
 
+                                                <div class="mb-4 row align-items-center">
+                                                    <label
+                                                        class="col-sm-3 col-form-label form-label-title">Category</label>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Brand</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="brand" name="brand"
-                                                        placeholder="Brand">
-                                                    <small class="text-danger" id="brandError"></small>
+                                                    <div class="col-sm-9">
+                                                        <select class="" name="category">
+                                                            <option disabled>Category Menu</option>
+                                                            <% allCategory.forEach(category=>{%>
+                                                                <option value="<%=category._id%>">
+                                                                    <%= category.name %>
+                                                                </option>
+                                                                <% }) %>
+
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
 
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Quantity</label>
-                                                <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="quantity"
-                                                        placeholder="Quantity" id="quantity">
-                                                    <small class="text-danger" id="quantityError"></small>
+
+
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Brand</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="brand" name="brand"
+                                                            placeholder="Brand">
+                                                        <small class="text-danger" id="brandError"></small>
+                                                    </div>
                                                 </div>
+
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Quantity</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="number" class="form-control" name="quantity"
+                                                            placeholder="Quantity" id="quantity">
+                                                        <small class="text-danger" id="quantityError"></small>
+                                                    </div>
+                                                </div>
+
+
+
+
+
                                             </div>
-
-
-
-
-
                                         </div>
-                                    </div>
 
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Product Specification</h5>
-                                            </div>
-
-
-
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Model</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="model"
-                                                        placeholder="Model" id="model">
-                                                    <small class="text-danger" id="modelError"></small>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header-2">
+                                                    <h5>Product Specification</h5>
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Ram</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="ram" placeholder="RAM"
-                                                        id="ram">
-                                                    <small class="text-danger" id="ramError"></small>
 
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Model</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="model"
+                                                            placeholder="Model" id="model">
+                                                        <small class="text-danger" id="modelError"></small>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Storage Space</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="storage"
-                                                        placeholder="Storage" id="storage">
-                                                    <small class="text-danger" id="storageError"></small>
 
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Ram</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="ram"
+                                                            placeholder="RAM" id="ram">
+                                                        <small class="text-danger" id="ramError"></small>
+
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Storage Space</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="storage"
+                                                            placeholder="Storage" id="storage">
+                                                        <small class="text-danger" id="storageError"></small>
 
-
-
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Processor</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="processor"
-                                                        placeholder="Processor" id="processor">
-                                                    <small class="text-danger" id="processorError"></small>
-
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Screen Size</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="screenSize"
-                                                        placeholder="Screen Size" id="screenSize">
-                                                    <small class="text-danger" id="screenSizeError"></small>
 
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Processor</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="processor"
+                                                            placeholder="Processor" id="processor">
+                                                        <small class="text-danger" id="processorError"></small>
+
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">Graphics Card</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" name="graphicsCard"
-                                                        id="graphicsCard" placeholder="Graphics Card">
-                                                    <small class="text-danger" id="graphicsCardError"></small>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Screen Size</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="screenSize"
+                                                            placeholder="Screen Size" id="screenSize">
+                                                        <small class="text-danger" id="screenSizeError"></small>
 
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">OS Architecture</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" name="osArchitecture"
-                                                        placeholder="OS Architecture" class="form-control"
-                                                        id="osArchitecture">
-                                                    <small class="text-danger" id="osArchitectureError"></small>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">Graphics Card</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" name="graphicsCard"
+                                                            id="graphicsCard" placeholder="Graphics Card">
+                                                        <small class="text-danger" id="graphicsCardError"></small>
 
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="form-label-title col-sm-3 mb-0">OS</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" name="os" placeholder="OS" class="form-control"
-                                                        id="os">
-                                                    <small class="text-danger" id="osError"></small>
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">OS
+                                                        Architecture</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" name="osArchitecture"
+                                                            placeholder="OS Architecture" class="form-control"
+                                                            id="osArchitecture">
+                                                        <small class="text-danger" id="osArchitectureError"></small>
 
+                                                    </div>
                                                 </div>
+
+                                                <div class="mb-4 row align-items-center">
+                                                    <label class="form-label-title col-sm-3 mb-0">OS</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" name="os" placeholder="OS"
+                                                            class="form-control" id="os">
+                                                        <small class="text-danger" id="osError"></small>
+
+                                                    </div>
+                                                </div>
+
+
+
+
                                             </div>
-
-
-
-
                                         </div>
-                                    </div>
 
 
 
@@ -266,605 +187,324 @@
 
 
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Description</h5>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header-2">
+                                                    <h5>Description</h5>
+                                                </div>
+                                                <div class="row theme-form theme-form-2 mega-form">
+                                                    <div class="col-12">
+                                                        <div class="row">
+                                                            <label class="form-label-title col-sm-3 mb-0 ">Product
+                                                                Description</label>
+                                                            <div class="col-sm-9">
+
+                                                                <div> <input type="text" name="description"
+                                                                        placeholder="Product Description"
+                                                                        class="form-control" id="description">
+                                                                    <small class="text-danger"
+                                                                        id="descriptionError"></small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                            <div class="row theme-form theme-form-2 mega-form">
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <label class="form-label-title col-sm-3 mb-0 ">Product
-                                                            Description</label>
-                                                        <div class="col-sm-9">
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header-2">
+                                                    <h5>Product Images</h5>
+                                                </div>
 
-                                                            <div> <input type="text" name="description"
-                                                                    placeholder="Product Description"
-                                                                    class="form-control" id="description">
+                                                <div class="mb-4 row align-items-center">
+                                                    <label
+                                                        class="col-sm-3 col-form-label form-label-title">Images</label>
+
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control form-choose" type="file"
+                                                            id="formFile" name="productImage" multiple>
+                                                    </div>
+                                                    <span>(upto - 4 images)</span>
+                                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="card-header-2">
+                                                            <h5>Product Price</h5>
+                                                        </div>
+
+
+                                                        <div class="mb-4 row align-items-center">
+                                                            <label class="col-sm-3 form-label-title">price</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="number" name="price" placeholder="Price"
+                                                                    class="form-control" id="price">
+                                                                <small class="text-danger" id="priceError"></small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-4 row align-items-center">
+                                                            <label class="col-sm-3 form-label-title">Discount
+                                                                Price</label>
+                                                            <div class="col-sm-9">
+                                                                <input type="number" name="discountPrice"
+                                                                    placeholder="Discount Price" class="form-control"
+                                                                    id="discountPrice">
                                                                 <small class="text-danger"
-                                                                    id="descriptionError"></small>
+                                                                    id="discountPriceError"></small>
+
                                                             </div>
                                                         </div>
+
+
                                                     </div>
                                                 </div>
-                                            </div>
 
+                                                <div class="mb-4 row align-items-center">
+                                                    <div class="col-sm-9 offset-sm-3">
+                                                        <small class="text-danger" id="generalError"></small>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-4 col-3 ">
+                                                    <button type="submit" class="btn btn-primary w-70  h-100 "
+                                                        onclick="addProduct()">Add
+                                                        Product</button>
+                                                </div>
+
+                                                <br>
+
+
+
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="card-header-2">
-                                                <h5>Product Images</h5>
-                                            </div>
 
-                                            <div class="mb-4 row align-items-center">
-                                                <label class="col-sm-3 col-form-label form-label-title">Images</label>
-
-                                                <!-- <div class="col-sm-9">
-                                                    <input class="form-control form-choose" type="file" id="formFile"
-                                                        name="productImage" multiple>
-                                                </div>
-                                                <span>(upto - 4 images)</span>
-                                            </div> -->
-
-                                            
-
-
-                                                                                    
-                                         
-                                          
-                                            
-                                            
-                                            <!-- code by w3codegenerator.com -->
-                                            <div class="container m-5">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <input type="file" name="file" id="file" accept="image/*" multiple />
-                                                    </div>
-                                            
-                                                   
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="modal" id="cropperModal">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title">Upload Images</h4>
-                                                           <button type="button" class="close" data-dismiss="modal">&amp;times;</button>
-                                                        </div>
-                                                        <!-- <form action="/upload-images" method="POST" enctype="multipart/form-data"> -->
-                                                        
-                                                        <input type="hidden" id="post_img_data" name="image_data_url">
-                                                        <div class="modal-body p-4">
-                                                            <div class="img-preview"></div>
-                                                            <div id="galleryImages"></div>
-                                                            <div id="cropper">
-                                                                <canvas id="cropperImg" width="0" height="0"></canvas>
-                                                                <button type="button" class="cropImageBtn btn btn-danger" style="display:none;" id="cropImageBtn">Crop</button>
-                                                            </div>
-                                                            <div id="imageValidate" class="text-danger"></div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-primary">Upload</button>
-                                                        </div>
-                                                        <!-- </form> -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-                                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.js" integrity="sha512-E4KfIuQAc9ZX6zW1IUJROqxrBqJXPuEcDKP6XesMdu2OV4LW7pj8+gkkyx2y646xEV7yxocPbaTtk2LQIJewXw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-                                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.css" integrity="sha512-Aix44jXZerxlqPbbSLJ03lEsUch9H/CmnNfWxShD6vJBbboR+rPdDXmKN+/QjISWT80D4wMjtM4Kx7+xkLVywQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-                                            
-                                            <script>
-                                                $(document).ready(function(){
-                                                    $("body").on("change", "#file", function(e){
-                                                        $('.singleImageCanvasContainer').remove();
-                                                        $('#post_img_data').val('');
-                                                    });
-                                                })
-                                            </script>
-                                            <script>
-                                            
-                                                //Multiple image cropper and preview on creating post
-                                                var c;
-                                                var galleryImagesContainer = document.getElementById('galleryImages');
-                                                var imageCropFileInput = document.getElementById('file');
-                                                var cropperImageInitCanvas = document.getElementById('cropperImg');
-                                                var cropImageButton = document.getElementById('cropImageBtn');
-                                                // Crop Function On change
-                                                function imagesPreview(input) {
-                                                    var cropper;
-
-                                                    var img = [];
-                                                    if (input.files.length) {
-                                                        var i = 0;
-                                                        var index = 0;
-                                                        for (let singleFile of input.files) {
-                                                            var reader = new FileReader();
-                                                            reader.onload = function(event) {
-                                                                var blobUrl = event.target.result;
-                                                                img.push(new Image());
-                                                                img[i].onload = function(e) {
-                                                                   
-                                                                    var singleCanvasImageContainer = document.createElement('div');
-                                                                    singleCanvasImageContainer.id = 'singleImageCanvasContainer'+index;
-                                                                    singleCanvasImageContainer.className = 'singleImageCanvasContainer';
-                                                               
-                                                                    var singleCanvasImageCloseBtn = document.createElement('button');
-                                                                    var singleCanvasImageCloseBtnText = document.createTextNode('X');
-                                                               
-                                                                    singleCanvasImageCloseBtn.id = 'singleImageCanvasCloseBtn'+index;
-                                                                    singleCanvasImageCloseBtn.className = 'singleImageCanvasCloseBtn';
-                                                                    singleCanvasImageCloseBtn.classList.add("btn", "btn-sm");
-                                                                    singleCanvasImageCloseBtn.onclick = function() { 
-                                                                        removeSingleCanvas(this) 
-                                                                    };
-                                                                    singleCanvasImageCloseBtn.appendChild(singleCanvasImageCloseBtnText);
-                                                                    singleCanvasImageContainer.appendChild(singleCanvasImageCloseBtn);
-                                                                   
-                                                                    var canvas = document.createElement('canvas');
-                                                                    canvas.id = 'imageCanvas'+index;
-                                                                    canvas.className = 'imageCanvas singleImageCanvas';
-                                                                    canvas.width = e.currentTarget.width;
-                                                                    canvas.height = e.currentTarget.height;
-                                                                    canvas.onclick = function() { cropInit(canvas.id); };
-                                                                    singleCanvasImageContainer.appendChild(canvas)
-                                                                   
-                                                                    var ctx = canvas.getContext('2d');
-                                                                    ctx.drawImage(e.currentTarget,0,0);
-                                                                  
-                                                                    galleryImagesContainer.appendChild(singleCanvasImageContainer);
-                                                                
-                                                                    urlConversion();
-                                                                    index++;
-                                                            };
-                                                                img[i].src = blobUrl;
-                                                                i++;
-                                                            }
-                                                            reader.readAsDataURL(singleFile);
-                                                        }
-                                                    }
-                                                }
-                                            
-                                                imageCropFileInput.addEventListener("change", function(event){
-                                                    
-                                                    $('#cropperModal').modal('show');
-                                                    var mediaValidation = validatePostMedia(event.target.files);
-                                                    if(!mediaValidation){
-                                                        var $el = $('#file');
-                                                        $el.wrap('<form>').closest('form').get(0).reset();
-                                                        $el.unwrap();
-                                                        return false;
-                                                    }
-                                            
-                                                    $('#mediaPreview').empty();
-                                                    $('.singleImageCanvasContainer').remove();
-                                                    if(cropperImageInitCanvas.cropper){
-                                                        cropperImageInitCanvas.cropper.destroy();
-                                                        cropperImageInitCanvas.width = 0;
-                                                        cropperImageInitCanvas.height = 0;
-                                                        cropImageButton.style.display = 'none';
-                                                    }
-                                                    imagesPreview(event.target);
-                                                });
-                                                // Initialize Cropper
-                                                function cropInit(selector) {
-                                                    c = document.getElementById(selector);
-                                                    
-                                                    if(cropperImageInitCanvas.cropper){
-                                                        cropperImageInitCanvas.cropper.destroy();
-                                                    }
-                                                    var allCloseButtons = document.querySelectorAll('.singleImageCanvasCloseBtn');
-                                                    for (let element of allCloseButtons) {
-                                                        element.style.display = 'block';
-                                                    }
-                                                    c.previousSibling.style.display = 'none';
-                                                    // c.id = croppedImg;
-                                                    var ctx=c.getContext('2d');
-                                                    var imgData=ctx.getImageData(0, 0, c.width, c.height);
-                                                    var image = cropperImageInitCanvas;
-                                                    image.width = c.width;
-                                                    image.height = c.height;
-                                                    var ctx = image.getContext('2d');
-                                                    ctx.putImageData(imgData,0,0);
-                                            
-                                                    cropper = new Cropper(image, {
-                                                        aspectRatio: 16/9,
-                                                        viewMode: 4,
-                                                        preview: '.img-preview',
-                                                        crop: function(event) {
-                                                            cropImageButton.style.display = 'block';
-                                                        }
-                                                    });
-                                            
-                                                }
-                                                
-                                                function image_crop() {
-                                                    if(cropperImageInitCanvas.cropper){
-                                                        var cropcanvas = cropperImageInitCanvas.cropper.getCroppedCanvas({
-                                                                width: 250, height: 250
-                                                            });
-                                                        // document.getElementById('cropImages').appendChild(cropcanvas);
-                                                        var ctx=cropcanvas.getContext('2d');
-                                                        var imgData=ctx.getImageData(0, 0, cropcanvas.width, cropcanvas.height);
-                                                        // var image = document.getElementById(c);
-                                                        c.width = cropcanvas.width;
-                                                        c.height = cropcanvas.height;
-                                                        var ctx = c.getContext('2d');
-                                                        ctx.putImageData(imgData,0,0);
-                                                        cropperImageInitCanvas.cropper.destroy();
-                                                        cropperImageInitCanvas.width = 0;
-                                                        cropperImageInitCanvas.height = 0;
-                                                        cropImageButton.style.display = 'none';
-                                                        var allCloseButtons = document.querySelectorAll('.singleImageCanvasCloseBtn');
-                                                        for (let element of allCloseButtons) {
-                                                            element.style.display = 'block';
-                                                        }
-                                                        urlConversion();
-                                                    } else {
-                                                        alert('Please select any Image you want to crop');
-                                                    }
-                                                }
-                                                cropImageButton.addEventListener("click", function(){
-                                                    image_crop();
-                                                });
-                                                // Image Close/Remove
-                                                function removeSingleCanvas(selector) {
-                                                    selector.parentNode.remove();
-                                                    urlConversion();
-                                                }
-                                                
-                                                function urlConversion() {
-                                                    var allImageCanvas = document.querySelectorAll('.singleImageCanvas');
-                                                    var convertedUrl = '';
-                                                    canvasLength = allImageCanvas.length;
-                                                    for (let element of allImageCanvas) {
-                                                        convertedUrl += element.toDataURL('image/jpeg');
-                                                        convertedUrl += 'img_url';
-                                                    }
-                                                    document.getElementById('post_img_data').value = convertedUrl;
-                                                }
-                                            </script>
-                                            <script>
-                                                function validatePostMedia(files){
-                                            
-                                                    $('#imageValidate').empty();
-                                                    let err = 0;
-                                                    let ResponseTxt = '';
-                                                    if(files.length > 10){
-                                                        err += 1;
-                                                        ResponseTxt += '<p> You can select maximum 10 files. </p>';
-                                                    }
-                                                    $(files).each(function(index, file) {
-                                                        if(file.size > 1048576){
-                                                            err +=  1;
-                                                            ResponseTxt += 'File : '+file.name + ' is greater than 1MB';
-                                                        }
-                                                    });
-                                            
-                                                    if(err > 0){
-                                                        $('#imageValidate').html(ResponseTxt);
-                                                        return false;
-                                                    }
-                                                    return true;
-                                                    
-                                                }
-                                            </script>
-                                           
-                                            
-                                            
-
-
-
-
-
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="card-header-2">
-                                                        <h5>Product Price</h5>
-                                                    </div>
-
-
-                                                    <div class="mb-4 row align-items-center">
-                                                        <label class="col-sm-3 form-label-title">price</label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" name="price" placeholder="Price"
-                                                                class="form-control" id="price">
-                                                            <small class="text-danger" id="priceError"></small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-4 row align-items-center">
-                                                        <label class="col-sm-3 form-label-title">Discount Price</label>
-                                                        <div class="col-sm-9">
-                                                            <input type="number" name="discountPrice"
-                                                                placeholder="Discount Price" class="form-control"
-                                                                id="discountPrice">
-                                                            <small class="text-danger" id="discountPriceError"></small>
-
-                                                        </div>
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-
-                                            <div class="mb-4 row align-items-center">
-                                                <div class="col-sm-9 offset-sm-3">
-                                                    <small class="text-danger" id="generalError"></small>
-                                                </div>
-                                            </div>
-
-
-
-                                            <div class="col-4 col-3 ">
-                                                <button type="submit" class="btn btn-primary w-70  h-100 " onclick="addProduct()">Add
-                                                    Product</button>
-                                            </div>
-
-                                            <br>
-
-
-
-                                        </div>
-                                    </div>
                                 </div>
 
                             </div>
 
                         </div>
-
-                    </div>
-            </form>
+                </form>
 
 
-        </div>
-        <!-- New Product Add End -->
+            </div>
+            <!-- New Product Add End -->
+            <!-- <script>
+                function addProduct() {
+                    console.log('addProduct() called');
+                    event.preventDefault();
+                    if (validateForm()) {
+                        document.getElementById('productForm').submit();
+                    }
+                }
+            
+                function validateForm() {
+                    console.log('validateForm() called');
+            
+                    // Reset error messages
+                    resetErrorMessages();
+            
+                    // Get form values
+                    var name = document.getElementById('name').value.trim();
+                    var brand = document.getElementById('brand').value.trim();
+                    var quantity = document.getElementById('quantity').value.trim();
+                    var model = document.getElementById('model').value.trim();
+                    var ram = document.getElementById('ram').value.trim();
+                    var storage = document.getElementById('storage').value.trim();
+                    var processor = document.getElementById('processor').value.trim();
+                    var screenSize = document.getElementById('screenSize').value.trim();
+                    var graphicsCard = document.getElementById('graphicsCard').value.trim();
+                    var osArchitecture = document.getElementById('osArchitecture').value.trim();
+                    var os = document.getElementById('os').value.trim();
+                    var description = document.getElementById('description').value.trim();
+                    var price = document.getElementById('price').value.trim();
+                    var discountPrice = document.getElementById('discountPrice').value.trim();
+            
+                    // Check if at least one field is filled
+                    if (
+                        name === '' && brand === '' && quantity === '' && model === '' &&
+                        ram === '' && storage === '' && processor === '' && screenSize === '' &&
+                        graphicsCard === '' && osArchitecture === '' && os === '' &&
+                        description === '' && price === '' && discountPrice === ''
+                    ) {
+                        document.getElementById('generalError').innerText = 'Please fill in at least one field';
+                        return false;
+                    } else {
+                        document.getElementById('generalError').innerText = ''; // Clear general error message
+                    }
+            
+                    // Validate each field
+                    validateField(name, 'nameError', 'Please enter a product name');
+                    validateField(brand, 'brandError', 'Please enter a brand');
+                    validateField(quantity, 'quantityError', 'Please enter a valid quantity', true);
+                    validateField(model, 'modelError', 'Please enter a model');
+                    validateField(ram, 'ramError', 'Please enter RAM information');
+                    validateField(storage, 'storageError', 'Please enter storage information');
+                    validateField(processor, 'processorError', 'Please enter processor information');
+                    validateField(screenSize, 'screenSizeError', 'Please enter screenSize information');
+                    validateField(graphicsCard, 'graphicsCardError', 'Please enter graphicsCard information');
+                    validateField(osArchitecture, 'osArchitectureError', 'Please enter a valid OS Architecture', true);
+                    validateField(os, 'osError', 'Please enter os information');
+                    validateField(description, 'descriptionError', 'Please enter a product description');
+                    validateField(price, 'priceError', 'Please enter a valid price', true);
+                    validateField(discountPrice, 'discountPriceError', 'Please enter a valid discountPrice', true);
+            
+                    // Check if any errors occurred
+                    return document.querySelectorAll('.text-danger').length === 0;
+                }
+            
+                function validateField(value, errorId, errorMessage, numeric = false) {
+                    const errorElement = document.getElementById(errorId);
+            
+                    if (value === '') {
+                        displayErrorMessage(errorElement, 'This field is required');
+                    } else if (numeric && (isNaN(value) || parseFloat(value) <= 0)) {
+                        displayErrorMessage(errorElement, errorMessage);
+                    } else {
+                        errorElement.innerText = ''; // Clear the error message
+                    }
+                }
+            
+                function displayErrorMessage(errorElement, message) {
+                    errorElement.innerText = message;
+                    errorElement.style.color = 'red';
+                }
+            
+                function resetErrorMessages() {
+                    // Reset all error messages
+                    var errorIds = [
+                        'nameError', 'brandError', 'quantityError', 'modelError',
+                        'ramError', 'storageError', 'processorError', 'screenSizeError',
+                        'graphicsCardError', 'osArchitectureError', 'osError',
+                        'descriptionError', 'priceError', 'discountPriceError'
+                    ];
+            
+                    errorIds.forEach(function (errorId) {
+                        document.getElementById(errorId).innerText = '';
+                    });
+            
+                    document.getElementById('generalError').innerText = ''; // Clear general error message
+                }
+            </script> -->
+            
+            <!-- Modal End -->
 
+            <!--image preview-->
+            <script>
 
+                // Add an event listener to the file input
+                document.getElementById('formFile').addEventListener('change', function (e) {
+                    // Get the selected file
+                    const file = e.target.files[0];
 
+                    // Create a FileReader to read the file
+                    const reader = new FileReader();
 
-        <!-- Modal End -->
+                    // Set up the FileReader to load the image into the Cropper
+                    reader.onload = function (event) {
+                        const cropper = new Cropper(document.getElementById('cropperImage'), {
+                            aspectRatio: 1, // Set the aspect ratio as needed
+                            viewMode: 1,    // Set the view mode as needed
+                            // Add more options as needed
+                        });
 
-        <!--image preview-->
-<script>
+                        // Set the image source in the Cropper
+                        cropper.replace(event.target.result);
+                    };
 
-        // Add an event listener to the file input
-        document.getElementById('formFile').addEventListener('change', function (e) {
-            // Get the selected file
-            const file = e.target.files[0];
-        
-            // Create a FileReader to read the file
-            const reader = new FileReader();
-        
-            // Set up the FileReader to load the image into the Cropper
-            reader.onload = function (event) {
-                const cropper = new Cropper(document.getElementById('cropperImage'), {
-                    aspectRatio: 1, // Set the aspect ratio as needed
-                    viewMode: 1,    // Set the view mode as needed
-                    // Add more options as needed
+                    // Read the file as a data URL
+                    reader.readAsDataURL(file);
                 });
-        
-                // Set the image source in the Cropper
-                cropper.replace(event.target.result);
-            };
-        
-            // Read the file as a data URL
-            reader.readAsDataURL(file);
-        });
-        
-    </script>
 
-        <!--form validation-->
-        <script>
-               function addProduct() {
-                console.log('addProduct() called');
-                event.preventDefault(); 
-            if (validateForm()) {
-                document.getElementById('productForm').submit();
-            }
-        }
-
-            function validateForm() {
-                console.log('validateForm() called');
-                // Reset error messages
-                document.getElementById('nameError').innerText = '';
-                document.getElementById('brandError').innerText = '';
-                document.getElementById('quantityError').innerText = '';
-                document.getElementById('modelError').innerText = '';
-                document.getElementById('ramError').innerText = '';
-                document.getElementById('storageError').innerText = '';
-                document.getElementById('processorError').innerText = '';
-                document.getElementById('screenSizeError').innerText = '';
-                document.getElementById('graphicsCardError').innerText = '';
-                document.getElementById('osArchitectureError').innerText = '';
-                document.getElementById('osError').innerText = '';
-                document.getElementById('descriptionError').innerText = '';
-                document.getElementById('priceError').innerText = '';
-                document.getElementById('discountPriceError').innerText = '';
-                
+            </script>
 
 
-                // Get form values
-                var name = document.getElementById('name').value.trim();
-                var brand = document.getElementById('brand').value.trim();
-                var quantity = document.getElementById('quantity').value.trim();
-                var model = document.getElementById('model').value.trim();
-                var ram = document.getElementById('ram').value.trim();
-                var storage = document.getElementById('storage').value.trim();
-                var processor = document.getElementById('processor').value.trim();
-                var screenSize = document.getElementById('screenSize').value.trim();
-                var graphicsCard = document.getElementById('graphicsCard').value.trim();
-                var osArchitecture = document.getElementById('osArchitecture').value.trim();
-                var os = document.getElementById('os').value.trim();
-                var description = document.getElementById('description').value.trim();
-                var price = document.getElementById('price').value.trim();
-                var discountPrice = document.getElementById('discountPrice').value.trim();
+            <!--image crop-->
+            <script src="./node_modules/cropperjs/dist/cropper.min.css"></script>
 
+            <!-- latest js -->
+            <script src="/assetsb/js/jquery-3.6.0.min.js"></script>
 
-                 // Check if at least one field is filled
-                 // Check if at least one field is filled
-    if (
-        name === '' && brand === '' && quantity === '' && model === '' &&
-        ram === '' && storage === '' && processor === '' && screenSize === '' &&
-        graphicsCard === '' && osArchitecture === '' && os === '' &&
-        description === '' && price === '' && discountPrice === ''
-    ) {
-        document.getElementById('generalError').innerText = 'Please fill in at least one field';
-        return false;
-    } else {
-        document.getElementById('generalError').innerText = ''; // Clear general error message
-    }
+            <!-- Bootstrap js -->
+            <script src="/assetsb/js/bootstrap/bootstrap.bundle.min.js"></script>
 
+            <!-- feather icon js -->
+            <script src="/assetsb/js/icons/feather-icon/feather.min.js"></script>
+            <script src="/assetsb/js/icons/feather-icon/feather-icon.js"></script>
 
+            <!-- scrollbar simplebar js -->
+            <script src="/assetsb/js/scrollbar/simplebar.js"></script>
+            <script src="/assetsb/js/scrollbar/custom.js"></script>
 
-                // Validate name
-                if (name === '') {
-                    document.getElementById('nameError').innerText = 'Please enter a product name';
-                    return false;
-                }
+            <!-- Sidebar js -->
+            <script src="/assetsb/js/config.js"></script>
 
-                // Validate brand
-                if (brand === '') {
-                    document.getElementById('brandError').innerText = 'Please enter a brand';
-                    return false;
-                }
+            <!-- bootstrap tag-input js -->
+            <script src="/assetsb/js/bootstrap-tagsinput.min.js"></script>
+            <script src="/assetsb/js/sidebar-menu.js"></script>
 
-                // Validate quantity
-                if (quantity === '' || isNaN(quantity) || parseInt(quantity) <= 0) {
-                document.getElementById('quantityError').innerText = 'Please enter a valid quantity';
-                return false;
-                }
+            <!-- customizer js -->
+            <script src="/assetsb/js/customizer.js"></script>
 
-                // Validate model
-                if (model === '') {
-                    document.getElementById('modelError').innerText = 'Please enter a model';
-                    return false;
-                }
+            <!--Dropzon js -->
+            <script src="/assetsb/js/dropzone/dropzone.js"></script>
+            <script src="/assetsb/js/dropzone/dropzone-script.js"></script>
 
-                // Validate RAM
-                if (ram === '') {
-                    document.getElementById('ramError').innerText = 'Please enter RAM information';
-                    return false;
-                }
+            <!-- Plugins js -->
+            <script src="/assetsb/js/notify/bootstrap-notify.min.js"></script>
+            <script src="/assetsb/js/notify/index.js"></script>
 
-                // Validate Storage
-                if (storage === '') {
-                    document.getElementById('storageError').innerText = 'Please enter storage information';
-                    return false;
-                }
+            <!-- ck editor js -->
+            <script src="/assetsb/js/ckeditor.js"></script>
+            <script src="/assetsb/js/ckeditor-custom.js"></script>
 
-                //Validate Processor
-                if(processor === '') {
-                    document.getElementById('processorError').innerText = 'Please enter processor information';
-                }
+            <!-- select2 js -->
+            <script src="/assetsb/js/select2.min.js"></script>
+            <script src="/assetsb/js/select2-custom.js"></script>
 
-                 //Validate Screen Size
-                 if(screenSize === '') {
-                    document.getElementById('screenSizeError').innerText = 'Please enter screenSize information';
-                }
+            <!-- sidebar effect -->
+            <script src="/assetsb/js/sidebareffect.js"></script>
 
-                 //Validate Graphics Card
-                 if(graphicsCard === '') {
-                    document.getElementById('graphicsCardError').innerText = 'Please enter graphicsCard information';
-                }
+            <!-- Theme js -->
+            <script src="/assetsb/js/script.js"></script>
 
-                //Validate OS Architecture
-                if (osArchitecture === '' || isNaN(osArchitecture) || osArchitecture <= 0) {
-                document.getElementById('osArchitectureError').innerText = 'Please enter a valid OS Architecture';
-                return false;
-                }
-
-                //Validate OS
-                if(os === '') {
-                    document.getElementById('osError').innerText = 'Please enter os information';
-                }
-
-                //Validate Description
-                if (description === '') {
-                document.getElementById('descriptionError').innerText = 'Please enter a product description';
-                return false;
-                }
-
-                //Validate Price
-                if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
-                document.getElementById('priceError').innerText = 'Please enter a valid price';
-                return false;
-                }
-                //Validate Discount Price
-                if (discountPrice === '' || isNaN(discountPrice) || parseFloat(discountPrice) <= 0) {
-                document.getElementById('discountPriceError').innerText = 'Please enter a valid discountPrice';
-                return false;
-                }
-
-
-                
-
-                // Form is valid, continue with submission
-                return true;
-            }
-        </script>
-
-
-        <!--image crop-->
-        <script src="./node_modules/cropperjs/dist/cropper.min.css"></script>
-
-        <!-- latest js -->
-        <script src="/assetsb/js/jquery-3.6.0.min.js"></script>
-
-        <!-- Bootstrap js -->
-        <script src="/assetsb/js/bootstrap/bootstrap.bundle.min.js"></script>
-
-        <!-- feather icon js -->
-        <script src="/assetsb/js/icons/feather-icon/feather.min.js"></script>
-        <script src="/assetsb/js/icons/feather-icon/feather-icon.js"></script>
-
-        <!-- scrollbar simplebar js -->
-        <script src="/assetsb/js/scrollbar/simplebar.js"></script>
-        <script src="/assetsb/js/scrollbar/custom.js"></script>
-
-        <!-- Sidebar js -->
-        <script src="/assetsb/js/config.js"></script>
-
-        <!-- bootstrap tag-input js -->
-        <script src="/assetsb/js/bootstrap-tagsinput.min.js"></script>
-        <script src="/assetsb/js/sidebar-menu.js"></script>
-
-        <!-- customizer js -->
-        <script src="/assetsb/js/customizer.js"></script>
-
-        <!--Dropzon js -->
-        <script src="/assetsb/js/dropzone/dropzone.js"></script>
-        <script src="/assetsb/js/dropzone/dropzone-script.js"></script>
-
-        <!-- Plugins js -->
-        <script src="/assetsb/js/notify/bootstrap-notify.min.js"></script>
-        <script src="/assetsb/js/notify/index.js"></script>
-
-        <!-- ck editor js -->
-        <script src="/assetsb/js/ckeditor.js"></script>
-        <script src="/assetsb/js/ckeditor-custom.js"></script>
-
-        <!-- select2 js -->
-        <script src="/assetsb/js/select2.min.js"></script>
-        <script src="/assetsb/js/select2-custom.js"></script>
-
-        <!-- sidebar effect -->
-        <script src="/assetsb/js/sidebareffect.js"></script>
-
-        <!-- Theme js -->
-        <script src="/assetsb/js/script.js"></script>
-
-        <!--crop modal-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.js" integrity="sha512-E4KfIuQAc9ZX6zW1IUJROqxrBqJXPuEcDKP6XesMdu2OV4LW7pj8+gkkyx2y646xEV7yxocPbaTtk2LQIJewXw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.css" integrity="sha512-Aix44jXZerxlqPbbSLJ03lEsUch9H/CmnNfWxShD6vJBbboR+rPdDXmKN+/QjISWT80D4wMjtM4Kx7+xkLVywQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <!--crop modal-->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.js"
+                integrity="sha512-E4KfIuQAc9ZX6zW1IUJROqxrBqJXPuEcDKP6XesMdu2OV4LW7pj8+gkkyx2y646xEV7yxocPbaTtk2LQIJewXw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.5/cropper.min.css"
+                integrity="sha512-Aix44jXZerxlqPbbSLJ03lEsUch9H/CmnNfWxShD6vJBbboR+rPdDXmKN+/QjISWT80D4wMjtM4Kx7+xkLVywQ=="
+                crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 

@@ -70,94 +70,25 @@
             document.getElementById('emailError').innerText = '';
             document.getElementById('mnoError').innerText = '';
             document.getElementById('passError').innerText = '';
-
+    
             // Get form values
             var name = document.getElementById('signin-name').value.trim();
             var email = document.getElementById('signin-email').value.trim();
             var mno = document.getElementById('signin-mno').value.trim();
             var password = document.getElementById('signin-password').value.trim();
-
+    
             // Regular expressions
-            var namePattern = /^[A-Za-z '-]+$/;
+            var nameRegex = /^[A-Za-z '-]+$/;
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            var mnoRegex = /^[0-9]{10}$/;
+            var mnoRegex = /^[0-9]{10}$/;  // Corrected variable name
             var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-
+    
             // Validate name
             if (name === '') {
-                document.getElementById('nameError').innerText = 'Please enter your username';
-                return false;
+                document.getElementById('nameError').innerText = 'Please enter your name';
+            } else if (!nameRegex.test(name)) {
+                document.getElementById('nameError').innerText = 'Please enter a valid username';
             }
-
-            if (!namePattern.test(name)) {
-                document.getElementById('nameError').innerText = 'Invalid name format';
-                return false;
-            }
-
-            // Validate email
-            if (!emailRegex.test(email)) {
-                document.getElementById('emailError').innerText = 'Please enter a valid email address';
-                return false;
-            }
-
-            // Validate mobile number
-            if (!mnoRegex.test(mno)) {
-                document.getElementById('mnoError').innerText = 'Please enter a valid 10-digit mobile number';
-                return false;
-            }
-
-            if (!passRegex.test(password)) {
-                document.getElementById('passError').innerText = 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, and one digit';
-                return false;
-            }
-
-            if (document.getElementById('nameError').innerText || document.getElementById('emailError').innerText || document.getElementById('mnoError').innerText || document.getElementById('passError').innerText) {
-                document.getElementById('generalError').innerText = 'Please fix the errors in the form';
-                return false; // Prevent form submission
-            }
-
-            // Form is valid, continue with submission
-
-            return true;
-        }
-    </script>   -->
-
-  
-    <!-- Bootstrap Notify CSS -->
-    <link rel="stylesheet" href="/path/to/bootstrap-notify.min.css">
-
-    <!-- Latest jQuery -->
-    <script src="/path/to/jquery-3.6.0.min.js"></script>
-
-    <!-- Bootstrap Notify JS -->
-    <script src="/path/to/bootstrap-notify.min.js"></script>
-
-    <!-- Your index.js script comes after including Bootstrap Notify -->
-    <script src="/path/to/index.js"></script>
-    
-    
-    <script>
-        function validateForm() {
-            // Reset error messages
-            document.getElementById('nameError').innerText = '';
-            document.getElementById('emailError').innerText = '';
-            document.getElementById('mnoError').innerText = '';
-            document.getElementById('passError').innerText = '';
-    
-            // Get form values
-            var name = document.getElementById('signin-name').value.trim();
-            var email = document.getElementById('signin-email').value.trim();
-            var mno = document.getElementById('signin-mno').value.trim();
-            var password = document.getElementById('signin-password').value.trim();
-    
-            // Regular expressions
-            var namePattern = /^[A-Za-z '-]+$/;
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            var mnoRegex = /^[0-9]{10}$/;
-            var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    
-            // Validate name
-          
     
             // Validate email
             if (email === '') {
@@ -188,7 +119,25 @@
                 document.getElementById('passError').innerText === ''
             );
         }
-    </script>
+    </script> -->
+    
+    
+
+  
+    <!-- Bootstrap Notify CSS -->
+    <link rel="stylesheet" href="/path/to/bootstrap-notify.min.css">
+
+    <!-- Latest jQuery -->
+    <script src="/path/to/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Notify JS -->
+    <script src="/path/to/bootstrap-notify.min.js"></script>
+
+    <!-- Your index.js script comes after including Bootstrap Notify -->
+    <script src="/path/to/index.js"></script>
+    
+    
+  
     
     
     

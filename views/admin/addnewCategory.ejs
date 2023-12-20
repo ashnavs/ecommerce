@@ -246,38 +246,7 @@
        
        
        
-        <script>
-         const message = document.getElementById('message');
-            const hide = () => {
-            message.style.display = 'none';
-        }
-        setTimeout(hide, 3000)
-            function validateForm() {
-                var name = document.getElementById('name').value;
-                var description = document.getElementById('description').value;
         
-                document.getElementById('nameError').innerText = '';
-                document.getElementById('descriptionError').innerText = '';
-        
-                var isValid = true;
-        
-                // Check if the name is empty or contains only whitespace
-                if (name.trim() === '') {
-                    document.getElementById('nameError').innerText = 'Please enter a category name';
-                    isValid = false;
-                }
-        
-                // Check if the description is empty or contains only whitespace
-                if (description.trim() === '') {
-                    document.getElementById('descriptionError').innerText = 'Please enter a category description';
-                    isValid = false;
-                }
-        
-                if (!isValid) {
-                    event.preventDefault(); // Prevent the form from submitting if there are errors
-                }
-            }
-        </script>        
 
         <!-- <script>
             const message = document.getElementById('message');
