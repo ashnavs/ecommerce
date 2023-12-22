@@ -169,18 +169,18 @@
 
                                                         
 
-                                              <div class="dropdown" id="statusDropdown">
+                                              <!-- <div class="dropdown" id="statusDropdown">
                                                 <button  class="btn btn-secondary dropdown-toggle" id="statusDropdownBtn" type="button" data-bs-toggle="dropdown"  aria-expanded="false" style="background-color: #0da487 !important;" >
                                                   Select Status
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="statusDropdown" id="statusId">
-                                                    <!-- <li>
+                                                    <li>
                                                         <a class="dropdown-item" href="#" data-status="Order confirmed">Order confirmed</a>
-                                                    </li> -->
+                                                    </li>
                                                     <li>
                                                         <a class="dropdown-item" href="#" data-status="Cancel Order">Cancel order</a>
                                                     </li>
-                                                    <!-- <li>
+                                                    <li>
                                                         <a class="dropdown-item" href="#" data-status="Pending">Pending</a>
                                                     </li>
                                                     <li>
@@ -191,12 +191,12 @@
                                                     </li>
                                                     <li>
                                                         <a class="dropdown-item" href="#" data-status="Return confirmed">Return confirmed</a>
-                                                    </li> -->
+                                                    </li>
                                                     <li>
                                                         <a class="dropdown-item" href="#" data-status="Delivered">Delivered</a>
                                                     </li>                              
                                                 </ul>
-                                              </div>
+                                              </div> -->
 
                                               <ul class="order-details">
                                                 <br>
@@ -223,12 +223,51 @@
                                                             <p><%=orderDetails.paymentMethod%></p>
                                                         </div>
 
-                                                        <div class="delivery-sec">
-                                                            <!-- <h3>expected date of delivery: <span>october 22,
-                                                                    2018</span>
-                                                            </h3> -->
-                                                            <a href="order-tracking.html">track order</a>
-                                                        </div>
+                                                        <% if (orderDetails.status==='Delivered' || 'Returned' ) { %>
+                                                            <!-- Content to display if order status is 'Canceled' -->
+    
+                                                            <% if(orderDetails.returnRequest==='accepted' ){ %>
+                                                                <h4 class="mb-0 text-warning">Return Request Accepted!</h4>
+                                                                <p class="mt-0 ">Your return request has been successfully
+                                                                    accepted! and the refund will be credited to your wallet
+                                                                    shortly. Thank you for your patience!</p>
+                                                                <% }else if(orderDetails.returnRequest==='rejected' ){ %>
+                                                                    ,<h4 class="mb-0 text-danger">Return Request rejected!
+                                                                    </h4>
+                                                                    <p class="mt-0 ">"Unfortunately, your return request has
+                                                                        been rejected. We apologize for any inconvenience
+                                                                        caused. If you have any concerns or need further
+                                                                        assistance, please don't hesitate to contact our
+                                                                        support team."</p>
+                                                                    <% }else{ %>
+                                                                        <button 
+                                                                            onclick="returnOrder('<%= orderDetails._id %>')"
+                                                                            id=returnButton class="btn btn-outline-secondary p-1 return-button"
+                                                                            data-order-id="<%= orderDetails._id %>"
+                                                                            
+                                                                            data-product-id="">Return order</button>
+                                                                        <% } %>
+    
+    
+    
+    
+                                                                            <% }else{ %>
+                                                                                <% if(orderDetails.status==='Cancelled' ||
+                                                                                    orderDetails.status==='Return Confirmed'
+                                                                                    ){ %>
+    
+                                                                                    <p
+                                                                                        style="text-align: center; color: red;">
+                                                                                        Canceled order Succefully</p>
+                                                                                    <% }else{ %>
+                                                                                        <button  onclick="disableButton()"
+                                                                                            id=cancelButton
+                                                                                            class=" btn btn-outline-danger p-1 cancel-button"
+                                                                                            data-order-id="<%= orderDetails._id %>"
+                                                                                            data-product-id="">cancel
+                                                                                            order</button>
+                                                                                        <% } %>
+                                                                                            <% } %>
                                                     </div>
                                                 </div>
                                             </div>
@@ -278,7 +317,126 @@
     <!-- Modal end -->
    
 
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        
+
+        
+
     <script>
+
+        function disableButton() {
+            var button = document.getElementById('cancelButton');
+            button.disabled = true;
+        }
+
+        let orderId = "";
+
+
+        function returnOrder(orderId) {
+            Swal.fire({
+                title: "Enter your reason for return",
+                input: "text",
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                showCancelButton: true,
+                confirmButtonText: "Return",
+                showLoaderOnConfirm: true,
+                preConfirm: async (reason) => {
+                    try {
+                        const response = await fetch(`/admin/returnRequest`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ orderId, reason })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+
+
+                        Swal.fire({
+                            title: 'Return request submitted!',
+                            icon: 'success'
+                        });
+                        const returnButton = document.getElementById('returnButton');
+                        if (returnButton) {
+                            returnButton.innerHTML = 'Requested';
+                            returnButton.disabled = true;
+                        }
+
+
+
+                    } catch (error) {
+
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to submit return request!',
+                            icon: 'error'
+                        });
+                        console.error('There was an error:', error);
+                    }
+                }
+            });
+        }
+
+
+
+
+        document.querySelectorAll('.cancel-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                const productId = this.getAttribute('data-product-id');
+                const status = document.querySelector('#statusDetails');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Confirm cancellation for this product",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, cancel it!"
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        fetch(`/cancelOrder`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ orderId })
+
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.success) {
+                                    if (data.message === 'Order cancelled successfully') {
+                                        status.innerHTML = "canceled"
+                                    } else {
+                                        window.location.reload();
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    }
+                });
+            });
+        });
+        
+
+
+    </script>
+
+    
+
+    <!-- <script>
 
 
         const statusDropdwon = document.getElementById('statusDropdown');
@@ -345,7 +503,7 @@
             console.log('Updating front-end with new status:', status);
         }
         
-        </script>
+        </script> -->
 
     <!-- latest js -->
     <script src="/assetsb/js/jquery-3.6.0.min.js"></script>

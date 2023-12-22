@@ -396,11 +396,11 @@ document.addEventListener('DOMContentLoaded', function () {
 //add product
 
 document.addEventListener('DOMContentLoaded', function () {
-    const message = document.getElementById('message');
-    const hide = () => {
-        message.style.display = 'none';
-    }
-    setTimeout(hide, 3000);
+    // const message = document.getElementById('message');
+    // const hide = () => {
+    //     message.style.display = 'none';
+    // }
+    // setTimeout(hide, 3000);
 
     const form = document.getElementById('productForm');
 

@@ -9,6 +9,7 @@ const { v4: uuidv4 } = require('uuid');
 const Address = require('../models/addressModel');
 const Order = require('../models/orderModel')
 const Cart = require('../models/cartModel')
+const transactionModel = require('../models/transactionModel')
 
 //to bcrypt the password
 const securePassword = async (password) => {
@@ -535,10 +536,14 @@ const resetPass = async (req, res) => {
 const loaduserProfile = async(req,res)=>{
     try {
         const user = req.session.user_id;
-        const userDetail = await User.findById(user);
+        console.log(user+"///////////////dcvsfdsfdsfdsfdscvbvcc");
+        const userDetail = await User.findById(req.session.user_id);
         const address = await Address.find({user:user})
         const orderDetails = await Order.find({user:user}).sort({createdAt:-1})
-        res.render('user' ,{user , userDetail , address , orderDetails})
+        console.log(orderDetails);
+        const transactions = await transactionModel.find({ user: user }).sort({ date: -1 });
+        console.log("transactionsssssssssssssssssssssss"+transactions);
+        res.render('user' ,{ user , userDetail , address , orderDetails , transactions})
     } catch (error) {
         console.log(error.message);
     }
@@ -592,23 +597,63 @@ const addBillingAddress = async (req, res) => {
 };
 
 
-const updateUserProfile = async(req,res) => {
+// const updateUserProfile = async(req,res) => {
+//     try {
+//         const userId = req.session.user_id;
+//         const {displayName , phoneNumber , currPass , newPass, confirmNewPassword} = req.body;
+
+//         const user = await User.findById(userId);
+
+//          // Check if the provided current password matches the stored hashed password
+//          if (currPass && !bcrypt.compareSync(currPass, user.password)) {
+//             return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+//         }
+
+//         user.name = displayName;
+//         user.mobile = phoneNumber;
+
+//          // If a new password is provided, hash and update the password
+//          if (newPass) {
+//             if (newPass !== confirmNewPassword) {
+//                 return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
+//             }
+
+//             // Hash the new password
+//             const hashedPassword = bcrypt.hashSync(newPass, 10);
+//             user.password = hashedPassword;
+//         }
+
+//         // Save the updated user details to the database
+//         await user.save();
+
+//         // Redirect to the user profile page or display a success message
+//         res.redirect('/login');
+//     } catch (error) {
+//         console.error(error);
+//         // res.status(500).json({ success: false, message: 'Internal server error' });
+//           // Extract validation error messages
+//           const validationErrors = Object.values(error.errors).map(err => err.message);
+//           return res.status(400).json({ success: false, validationErrors });
+//     }
+// };
+
+const updateUserProfile = async (req, res) => {
     try {
         const userId = req.session.user_id;
-        const {displayName , phoneNumber , currPass , newPass, confirmNewPassword} = req.body;
+        const { displayName, phoneNumber, currPass, newPass, confirmNewPassword } = req.body;
 
         const user = await User.findById(userId);
 
-         // Check if the provided current password matches the stored hashed password
-         if (currPass && !bcrypt.compareSync(currPass, user.password)) {
-            return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+        // Check if the provided current password matches the stored hashed password
+        if (currPass && !bcrypt.compareSync(currPass, user.password)) {
+              return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
         }
 
         user.name = displayName;
         user.mobile = phoneNumber;
 
-         // If a new password is provided, hash and update the password
-         if (newPass) {
+        // If a new password is provided, hash and update the password
+        if (newPass) {
             if (newPass !== confirmNewPassword) {
                 return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
             }
@@ -620,14 +665,17 @@ const updateUserProfile = async(req,res) => {
 
         // Save the updated user details to the database
         await user.save();
-
-        // Redirect to the user profile page or display a success message
         res.redirect('/login');
+        // Redirect to the user profile page or display a success message
+        //res.json({ success: true, message: 'Profile updated successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
+
+
 
 async function orderdetails(req,res){
     try {

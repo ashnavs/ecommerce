@@ -33,7 +33,7 @@
                                             <li class="nav-item">
                                                 <a class="nav-link" id="tab-downloads-link" data-toggle="tab"
                                                     href="#tab-downloads" role="tab" aria-controls="tab-downloads"
-                                                    aria-selected="false">Downloads</a>
+                                                    aria-selected="false">Wallet</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="tab-address-link" data-toggle="tab"
@@ -96,29 +96,43 @@
                                                                                 <th>Date</th>
                                                                                 <th>status</th>
                                                                                 <th>Action</th>
-                                                                                
+
                                                                                 <th></th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody class="table-body">
                                                                             <% orderDetails.forEach(order=>{ %>
-                                                                            <tr class="cell-1">
-                                                                                <td><%=order._id  %></td>
-                                                                                <td><%= order.grandTotal %></td>
-                                                                                <td><%=order.createdAt.toLocaleDateString() %></td>
-                                                                                <td><%= order.status %></td>
-                                                                                <td>
-                                                                                    <a href="/orderdetails?orderId=<%=order._id %>">
-                                                
-                                                                                        <button class="btn btn-success" style="font-size: 10px; padding: 5px 10px;">Details</button>
-                                                                                    </a>
-                                                                                   
-                                                                                </td>
-                                                                                
-                                                                                <td><i class="fa fa-ellipsis-h text-black-50"></i></td>
-                                                                            </tr>
-                                                                            <% }) %>
-                                                                            
+                                                                                <tr class="cell-1">
+                                                                                    <td>
+                                                                                        <%=order._id %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= order.grandTotal %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%=order.createdAt.toLocaleDateString()
+                                                                                            %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <%= order.status %>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <a
+                                                                                            href="/orderdetails?orderId=<%=order._id %>">
+
+                                                                                            <button
+                                                                                                class="btn btn-success"
+                                                                                                style="font-size: 10px; padding: 5px 10px;">Details</button>
+                                                                                        </a>
+
+                                                                                    </td>
+
+                                                                                    <td><i
+                                                                                            class="fa fa-ellipsis-h text-black-50"></i>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <% }) %>
+
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
@@ -129,19 +143,65 @@
                                                 <!-- <p>No order has been made yet.</p> -->
                                                 <a href="productsView" class="btn btn-outline-primary-2"><span>GO
                                                         SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                                        
+
                                             </div><!-- .End .tab-pane -->
 
-                                            <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
-                                                aria-labelledby="tab-downloads-link">
-                                                <p>No downloads available yet.</p>
-                                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
 
-                                                       
-                                                       
-                                                        
-                                            </div><!-- .End .tab-pane -->
+                                        <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
+                                            aria-labelledby="tab-downloads-link">
+    
+                                            <div>
+    
+    
+    
+                                                <div class="card mb-4">
+                                                    <div class="card-header">
+                                                        Total Wallet Amount
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">₹<span id="totalAmount">
+                                                                <%=userDetail.walletAmount%>.00
+                                                            </span></h5>
+                                                    </div>
+                                                </div>
+    
+                                                <div class="card-header">
+                                                    All Transactions
+                                                </div>
+    
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Order Id</th>
+                                                            <th>Date</th>
+                                                            <th>type</th>
+                                                            <th>Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% transactions.forEach(transaction=> { %>
+                                                            <tr>
+    
+                                                                <td>
+                                                                    <%= transaction._id %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= transaction.date.toLocaleDateString() %>
+                                                                </td>
+                                                                <td class="text-warning">
+                                                                    <%= transaction.type %>
+                                                                </td>
+                                                                <td>₹<%= transaction.amount %>.00</td>
+    
+                                                            </tr>
+                                                            <% }) %>
+                                                    </tbody>
+                                                </table>
+    
+                                            </div>
+    
+    
+                                        </div><!-- .End .tab-pane -->
 
                                             <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                                 aria-labelledby="tab-address-link">
@@ -149,7 +209,8 @@
                                                 </p>
                                                 <!-- Add a billing address form (initially hidden) -->
                                                 <div id="billingAddressForm" style="display: none;">
-                                                    <form id="billingForm" action="/add-billing-address" method="post" onsubmit="return validateForm()">
+                                                    <form id="billingForm" action="/add-billing-address" method="post"
+                                                        onsubmit="return validateForm()">
                                                         <!-- Your form fields go here -->
                                                         <div class="row">
                                                             <div class="col-lg-9">
@@ -160,44 +221,47 @@
                                                                         <label>Name </label>
                                                                         <input type="text" class="form-control"
                                                                             name="name" id="name">
-                                                                            <small class="text-danger" id="nameError"></small>
+                                                                        <small class="text-danger"
+                                                                            id="nameError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
 
                                                                 </div><!-- End .row -->
 
-                                                            
+
 
                                                                 <label>Country </label>
                                                                 <input type="text" class="form-control" name="country"
-                                                                 id="country">
-                                                                 <small class="text-danger" id="countryError"></small>
+                                                                    id="country">
+                                                                <small class="text-danger" id="countryError"></small>
 
                                                                 <label>Street address </label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="House number and Street name"
                                                                     name="street" id="street">
-                                                                    <small class="text-danger" id="streetError"></small>
+                                                                <small class="text-danger" id="streetError"></small>
 
                                                                 <label>House no </label>
                                                                 <input type="text" class="form-control"
                                                                     placeholder="Appartments, suite, unit etc ..."
                                                                     name="houseno" id="houseno">
-                                                                    <small class="text-danger" id="housenoError"></small>
+                                                                <small class="text-danger" id="housenoError"></small>
 
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
                                                                         <label>Town / City *</label>
                                                                         <input type="text" class="form-control"
                                                                             name="city" id="city">
-                                                                            <small class="text-danger" id="cityError"></small>
+                                                                        <small class="text-danger"
+                                                                            id="cityError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
                                                                     <div class="col-sm-6">
                                                                         <label>State</label>
                                                                         <input type="text" class="form-control"
                                                                             name="state" id="state">
-                                                                            <small class="text-danger" id="stateError"></small>
+                                                                        <small class="text-danger"
+                                                                            id="stateError"></small>
                                                                     </div><!-- End .col-sm-6 -->
                                                                 </div><!-- End .row -->
 
@@ -206,21 +270,23 @@
                                                                         <label>Postcode / ZIP </label>
                                                                         <input type="text" class="form-control"
                                                                             name="pincode" id="pincode">
-                                                                            <small class="text-danger" id="pincodeError"></small>
+                                                                        <small class="text-danger"
+                                                                            id="pincodeError"></small>
                                                                     </div><!-- End .col-sm-6 -->
 
                                                                     <div class="col-sm-6">
                                                                         <label>Phone </label>
                                                                         <input type="tel" class="form-control"
                                                                             name="mobile" id="mobile">
-                                                                            <small class="text-danger" id="mobileError"></small>
+                                                                        <small class="text-danger"
+                                                                            id="mobileError"></small>
                                                                     </div><!-- End .col-sm-6 -->
                                                                 </div><!-- End .row -->
 
                                                                 <label>Email address </label>
                                                                 <input type="email" class="form-control" name="email"
                                                                     id="email">
-                                                                    <small class="text-danger" id="emailError"></small>
+                                                                <small class="text-danger" id="emailError"></small>
 
 
 
@@ -248,15 +314,19 @@
                                                                     <!-- End .card-title -->
                                                                     <p>
                                                                         <%= item.name %><br>
-                                                                        <%= item.email %><br>
-                                                                        <%= item.mobile %><br>
-                                                                        <%=item.houseno %><br>
-                                                                        <%=item.street %><br>
-                                                                        
-                                                                        <%=item.pincode%><br>
-                                                                        <%=item.city %><br>
-                                                                        <%=item.country %><br>
-                                                                        <a href="/editAddress?addressId=<%=item._id%>" >Edit <i class="icon-edit"></i></a>
+                                                                            <%= item.email %><br>
+                                                                                <%= item.mobile %><br>
+                                                                                    <%=item.houseno %><br>
+                                                                                        <%=item.street %><br>
+
+                                                                                            <%=item.pincode%><br>
+                                                                                                <%=item.city %><br>
+                                                                                                    <%=item.country %>
+                                                                                                        <br>
+                                                                                                        <a
+                                                                                                            href="/editAddress?addressId=<%=item._id%>">Edit
+                                                                                                            <i
+                                                                                                                class="icon-edit"></i></a>
                                                                     </p>
                                                                 </div>
                                                                 <!-- End .card-body -->
@@ -283,118 +353,231 @@
 
                                             </div><!-- .End .tab-pane -->
 
-                                           
-                                                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                                                    <form action="/editUserDetails" method="post" onsubmit="return validateForm()">
-                                                
-                                                        <label>Display Name *</label>
+
+                                            <div class="tab-pane fade" id="tab-account" role="tabpanel"
+                                                aria-labelledby="tab-account-link">
+                                                <form action="/editUserDetails" method="post" onsubmit="return validateForm(event)">
+
+                                                    <label>Display Name </label>
                                                         <input type="text" class="form-control" value="<%=userDetail.name%>" name="displayName" id="displayName">
                                                         <small class="error-message" id="displayNameError"></small>
-                                                
+
                                                         <label>Phone Number</label>
                                                         <input type="number" class="form-control" value="<%=userDetail.mobile%>" name="phoneNumber" id="phoneNumber">
-                                                        <small class="error-message" id="phoneNumberError"></small>
-                                                
+                                                        <small class="error-message text-danger" id="phoneNumberError"></small>
+                                                    
+
                                                         <label>Email</label>
-                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" id="email" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" id="email" >
                                                         <small class="error-message" id="emailError"></small>
+
+                                                    <label>Current password (leave blank to leave unchanged)</label>
+                                                    <input type="password" class="form-control" name="currPass"
+                                                        id="currPass">
+                                                    <small class="error-message" id="currPassError"></small>
+
+                                                    <label>New password (leave blank to leave unchanged)</label>
+                                                    <input type="password" class="form-control" name="newPass" id="newPass">
+                                                    <small class="error-message" id="newPassError"></small>
+                                                    <label>Confirm new password</label>
+                                                    <input type="password" class="form-control mb-2" name="confirmNewPassword" id="confirmNewPassword">
+                                                    <small class="error-message" id="confirmNewPasswordError"></small>
+
+                                                    <div id="errorSummary" class="error-message" style="color: red;"></div>
+
+                                                    <button type="submit">SAVE CHANGES</button>
+
+                                                </form>
+
+                                                <script>
+                                                    function validateForm(event) {
+                                                        event.preventDefault(); // Prevent the default form submission
+
+                                                        var displayName = document.getElementById('displayName').value.trim();
+                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
+                                                        var email = document.getElementById('email').value.trim();
+                                                        var newPassword = document.getElementById('newPass').value.trim();
+                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
                                                 
-                                                        <label>Current password (leave blank to leave unchanged)</label>
-                                                        <input type="password" class="form-control" name="currPass" id="currPass">
+                                                        var displayNameError = document.getElementById('displayNameError');
+                                                        var phoneNumberError = document.getElementById('phoneNumberError');
+                                                        var emailError = document.getElementById('emailError');
+                                                        var newPassError = document.getElementById('newPassError');
+                                                        var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+                                                        var errorSummary = document.getElementById('errorSummary');
                                                 
-                                                        <label>New password (leave blank to leave unchanged)</label>
-                                                        <input type="password" class="form-control" name="newPass" id="newPass">
+                                                        // Clear previous error messages
+                                                        displayNameError.textContent = '';
+                                                        phoneNumberError.textContent = '';
+                                                        emailError.textContent = '';
+                                                        newPassError.textContent = '';
+                                                        confirmNewPasswordError.textContent = '';
+                                                        errorSummary.textContent = '';
                                                 
-                                                        <label>Confirm new password</label>
-                                                        <input type="password" class="form-control mb-2" name="confirmNewPassword" id="confirmNewPassword">
-                                                        <small class="error-message" id="confirmNewPasswordError"></small>
+                                                        // Validate Display Name
+                                                        if (!displayName) {
+                                                            displayNameError.textContent = 'Display Name is required';
+                                                        }
                                                 
-                                                        <button type="submit" class="btn btn-outline-primary-2" onclick="return validateForm()">
-                                                            <span>SAVE CHANGES</span>
-                                                            <i class="icon-long-arrow-right"></i>
-                                                        </button>
+                                                        // Validate Phone Number
+                                                        if (!phoneNumber) {
+                                                            phoneNumberError.textContent = 'Phone Number is required';
+                                                        }
+                                                
+                                                        // Validate Email
+                                                        if (!email) {
+                                                            emailError.textContent = 'Email is required';
+                                                        } else if (!isValidEmail(email)) {
+                                                            emailError.textContent = 'Please enter a valid email address';
+                                                        }
+                                                
+                                                        // Check if new password and confirm new password match
+                                                        if (newPassword && newPassword !== confirmNewPassword) {
+                                                            newPassError.textContent = 'Passwords do not match';
+                                                            confirmNewPasswordError.textContent = 'Passwords do not match';
+                                                        }
+                                                
+                                                        // Check if there are any validation errors
+                                                        if (displayNameError.textContent || phoneNumberError.textContent || emailError.textContent || newPassError.textContent || confirmNewPasswordError.textContent) {
+                                                            // If there are validation errors, prevent the form submission
+                                                            return false;
+                                                        }
+                                                
+                                                       
+                                                
+                                                        return true;
                                                         
-                                                    </form>
+                                                    }
                                                 
-                                                    <script>
-                                                        function validateForm() {
-                                                            // Reset error messages
-                                                            resetErrorMessages();
+                                                </script> 
+
+                                                <!-- <script>
+                                                    function validateForm(event) {
+                                                        event.preventDefault(); // Prevent the default form submission
                                                 
-                                                            // Validate each field
-                                                            if (!validateDisplayName()) return false;
-                                                            if (!validatePhoneNumber()) return false;
-                                                            if (!validateEmail()) return false;
-                                                            if (!validateNewPassword()) return false;
-                                                            if (!validateConfirmNewPassword()) return false;
+                                                        var displayName = document.getElementById('displayName').value.trim();
+                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
+                                                        var email = document.getElementById('email').value.trim();
+                                                        var newPassword = document.getElementById('newPass').value.trim();
+                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
                                                 
-                                                            return true; // Form is valid
+                                                        var displayNameError = document.getElementById('displayNameError');
+                                                        var phoneNumberError = document.getElementById('phoneNumberError');
+                                                        var emailError = document.getElementById('emailError');
+                                                        var newPassError = document.getElementById('newPassError');
+                                                        var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+                                                        var errorSummary = document.getElementById('errorSummary');
+                                                
+                                                        // Clear previous error messages
+                                                        displayNameError.textContent = '';
+                                                        phoneNumberError.textContent = '';
+                                                        emailError.textContent = '';
+                                                        newPassError.textContent = '';
+                                                        confirmNewPasswordError.textContent = '';
+                                                        errorSummary.textContent = '';
+                                                
+                                                        // Validate Display Name
+                                                        if (!displayName) {
+                                                            displayNameError.textContent = 'Display Name is required';
                                                         }
                                                 
-                                                        function resetErrorMessages() {
-                                                            var errorMessages = document.querySelectorAll('.error-message');
-                                                            errorMessages.forEach(function (errorMessage) {
-                                                                errorMessage.textContent = '';
-                                                            });
+                                                        // Validate Phone Number
+                                                        if (!phoneNumber) {
+                                                            phoneNumberError.textContent = 'Phone Number is required';
                                                         }
                                                 
-                                                        function validateDisplayName() {
-                                                            var displayName = document.getElementById('displayName').value;
-                                                            var displayNameError = document.getElementById('displayNameError');
-                                                
-                                                            if (!displayName.trim()) {
-                                                                displayNameError.textContent = 'Display Name is required';
-                                                                return false;
-                                                            }
-                                                
-                                                            return true;
+                                                        // Validate Email
+                                                        if (!email) {
+                                                            emailError.textContent = 'Email is required';
+                                                        } else if (!isValidEmail(email)) {
+                                                            emailError.textContent = 'Please enter a valid email address';
                                                         }
                                                 
-                                                        function validatePhoneNumber() {
-                                                            var phoneNumber = document.getElementById('phoneNumber').value;
-                                                            var phoneNumberError = document.getElementById('phoneNumberError');
-                                                
-                                                            // Add your validation logic for phone number here
-                                                            // Example: Check if the phone number is a valid format
-                                                
-                                                            return true;
+                                                        // Check if new password and confirm new password match
+                                                        if (newPassword && newPassword !== confirmNewPassword) {
+                                                            newPassError.textContent = 'Passwords do not match';
+                                                            confirmNewPasswordError.textContent = 'Passwords do not match';
                                                         }
                                                 
-                                                        function validateEmail() {
-                                                            var email = document.getElementById('email').value;
-                                                            var emailError = document.getElementById('emailError');
-                                                
-                                                            // Add your validation logic for email here
-                                                            // Example: Check if the email is a valid format using the pattern attribute
-                                                
-                                                            return true;
+                                                        // Check if there are any validation errors
+                                                        if (displayNameError.textContent || phoneNumberError.textContent || emailError.textContent || newPassError.textContent || confirmNewPasswordError.textContent) {
+                                                            // If there are validation errors, prevent the form submission
+                                                            return false;
                                                         }
                                                 
-                                                        function validateNewPassword() {
-                                                            var newPassword = document.getElementById('newPass').value;
-                                                            var newPasswordError = document.getElementById('newPassError');
+                                                        // If there are no validation errors, allow the form submission
+                                                        // Note: This will allow the form to submit even if the server response is an error,
+                                                        // so you may need to handle server errors separately on the client if needed.
+                                                        return true;
+                                                    }
+
+                                                    function isValidEmail(email) {
+                                                            // Add your email validation logic here
+                                                            // This is a basic example; you may want to use a regular expression or a more sophisticated validation library
+                                                            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                                                        }
+                                                    </script> -->
                                                 
-                                                            // Add your validation logic for new password here
-                                                            // Example: Check if the new password meets the required criteria
                                                 
-                                                            return true;
+                                                <!-- <script>
+                                                    // Display validation errors from the server
+                                                    var urlParams = new URLSearchParams(window.location.search);
+                                                    var validationErrors = urlParams.get('validationErrors');
+                                                    if (validationErrors) {
+                                                        var errorSummary = document.getElementById('errorSummary');
+                                                        errorSummary.textContent = 'Validation errors occurred:';
+                                                        
+                                                        // Split the validation errors and display them in the error summary
+                                                        var errors = JSON.parse(decodeURIComponent(validationErrors));
+                                                        errors.forEach(function (error) {
+                                                            var errorItem = document.createElement('div');
+                                                            errorItem.textContent = error;
+                                                            errorSummary.appendChild(errorItem);
+                                                        });
+                                                    }
+                                                </script> -->
+
+                                                <!-- <script>
+                                                    function validateForm() {
+                                                        var displayName = document.getElementById('displayName').value.trim();
+                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
+                                                        var email = document.getElementById('email').value.trim();
+                                                        var newPassword = document.getElementById('newPass').value.trim();
+                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
+                                                
+                                                        displayError('displayNameError', displayName === '', 'Display Name is required');
+                                                        displayError('phoneNumberError', phoneNumber === '', 'Phone Number is required');
+                                                        displayError('emailError', email === '', 'Email is required');
+                                                
+                                                        // Check if new password and confirm new password match
+                                                        if (newPassword && newPassword !== confirmNewPassword) {
+                                                            displayError('newPassError', true, 'Passwords do not match');
+                                                            displayError('confirmNewPasswordError', true, 'Passwords do not match');
+                                                            return false;
+                                                        } else {
+                                                            displayError('newPassError', false, '');
+                                                            displayError('confirmNewPasswordError', false, '');
                                                         }
                                                 
-                                                        function validateConfirmNewPassword() {
-                                                            var confirmNewPassword = document.getElementById('confirmNewPassword').value;
-                                                            var newPassword = document.getElementById('newPass').value;
-                                                            var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
+                                                        return true; // Allow form submission
+                                                    }
                                                 
-                                                            if (newPassword.trim() && newPassword !== confirmNewPassword) {
-                                                                confirmNewPasswordError.textContent = 'Passwords do not match';
-                                                                return false;
-                                                            }
+                                                    function displayError(elementId, condition, message) {
+                                                        var errorElement = document.getElementById(elementId);
+                                                        errorElement.textContent = message;
                                                 
-                                                            return true;
+                                                        // Display or hide the error message based on the condition
+                                                        if (condition) {
+                                                            errorElement.style.display = 'block';
+                                                        } else {
+                                                            errorElement.style.display = 'none';
                                                         }
-                                                    </script>
-                                                </div>
-                                                <!-- .End .tab-pane -->
+                                                    }
+                                                </script> -->
+
+                                                
+                                            </div>
+                                            <!-- .End .tab-pane -->
 
                                         </div>
                                     </div><!-- End .col-lg-9 -->
@@ -710,104 +893,11 @@
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
 
-        <!-- <script>
-            function validateForm() {
-                // Reset error messages
-                document.getElementById('nameError').innerText = '';
-                document.getElementById('countryError').innerText = '';
-                document.getElementById('streetError').innerText = '';
-                document.getElementById('housenoError').innerText = '';
-                document.getElementById('cityError').innerText = '';
-                document.getElementById('stateError').innerText = '';
-                document.getElementById('pincodeError').innerText = '';
-                document.getElementById('mobileError').innerText = '';
-                document.getElementById('emailError').innerText = '';
-        
-                var name = document.getElementById('name').value.trim();
-                var country = document.getElementById('country').value.trim();
-                var street = document.getElementById('street').value.trim();
-                var houseno = document.getElementById('houseno').value.trim();
-                var city = document.getElementById('city').value.trim();
-                var state = document.getElementById('state').value.trim();
-                var pincode = document.getElementById('pincode').value.trim();
-                var mobile = document.getElementById('mobile').value.trim();
-                var emailValue = document.getElementById('email').value.trim(); // Fix variable name
-        
-                var nameRegex = /^[A-Za-z\s]+$/;
-                var mobileRegex = /^[0-9]{10}$/;
-                var emailRegex = /^\S+@\S+\.\S+$/; // Add email regex
-        
-                if (name === '' || !nameRegex.test(name)) {
-                    document.getElementById('nameError').innerText = 'Please enter a valid name';
-                    return false;
-                }
-        
-                if (country === '') {
-                    document.getElementById('countryError').innerText = 'Please enter the country';
-                    return false;
-                }
-        
-                if (street === '') {
-                    document.getElementById('streetError').innerText = 'Please enter the street';
-                    return false;
-                }
-        
-                if (houseno === '') {
-                    document.getElementById('housenoError').innerText = 'Please enter the houseno';
-                    return false;
-                }
-        
-                if (city === '') {
-                    document.getElementById('cityError').innerText = 'Please enter the city';
-                    return false;
-                }
-        
-                if (state === '') {
-                    document.getElementById('stateError').innerText = 'Please enter the state';
-                    return false;
-                }
-        
-                if (pincode === '' || !/^\d+$/.test(pincode)) {
-                    document.getElementById('pincodeError').innerText = 'Enter a valid numeric Pincode.';
-                    return false;
-                }
-        
-                if (!mobileRegex.test(mobile)) {
-                    document.getElementById('mobileError').innerText = 'Please enter a valid 10-digit mobile number';
-                    return false;
-                }
-        
-                if (!emailRegex.test(emailValue)) {
-                    document.getElementById('emailError').innerText = 'Please enter a valid email address';
-                    return false;
-                }
-        
-                // If all client-side validations pass, submit the form
-                // ...
-        
-                return true;
-            }
-        
-        </script> -->
-        
 
-        <!-- <script>
-            function editAddress(name, email, mobile, houseno, street, landmark, pincode, city, country) {
-              // Set form values with the selected address
-              document.getElementById('billingForm').name.value = name;
-              document.getElementById('billingForm').email.value = email;
-              document.getElementById('billingForm').mobile.value = mobile;
-              document.getElementById('billingForm').houseno.value = houseno;
-              document.getElementById('billingForm').street.value = street;
-              document.getElementById('billingForm').landmark.value = landmark;
-              document.getElementById('billingForm').pincode.value = pincode;
-              document.getElementById('billingForm').city.value = city;
-              document.getElementById('billingForm').country.value = country;
-          
-              // Show the billing address form
-              document.getElementById('billingAddressForm').style.display = 'block';
-            }
-          </script> -->
+
+
+
+
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/bootstrap.bundle.min.js"></script>

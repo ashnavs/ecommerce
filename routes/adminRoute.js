@@ -61,4 +61,15 @@ admin_route.get('/report',salesController.loadReport)
 
 admin_route.get('/crop',adminController.loadCrop)
 
+//return and cancel
+admin_route.post('/returnRequest',orderController.returnRequest);
+admin_route.get('/returnOrder',orderController.returnOrderList)
+admin_route.get('/returnOrderDetails',orderController.returnOrderDetails);
+admin_route.post('/returnResponse',orderController.returnResponse);
+
+//coupon
+admin_route.get('/addCoupon',adminController.loadAddCoupon)
+admin_route.post('/addCoupon',adminController.addCoupon)
+admin_route.get('/couponList',adminController.loadListCoupon)
+
 module.exports = admin_route;

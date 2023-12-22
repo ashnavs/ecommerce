@@ -421,7 +421,164 @@ const orderStatus = async (req,res)=>{
   }
 }
 
+// const cancelOrder = async(req,res)=>{
+//   try {
+//     const orderId = req.body.orderId;
+//     let updatedOrder = await Order.findByIdAndUpdate(orderId, { $set: { status:'Cancelled'}}).populate('products.product');
+//     const userData = await User.findById(req.session.user_id);
+    
+//     if(updatedOrder.paymentMethod === 'RazorPay'){
+//       const walletUpdating = updatedOrder.grandTotal + userData.walletAmount;
+//       userData.walletAmount = walletUpdating;
+//       await userData.save();
+//       console.log(userData+"userdataaaaaaaaaaaaaaaaaaaa");
 
+
+//       const transfer = {
+//         user:user_id,
+//         amount:paymentDetails.amount,
+//         paymentMethod:paymentMethod,
+//         type:"credited",
+//         orderId:orderId
+//       }
+
+//       await transactionModel.insertMany(transfer)
+//     }
+
+//     for(const item of updatedOrder.products){
+//       const product = item.product;
+
+//       const updatedQuantity = product.quantity + item.quantity;
+//       const updatedOrders = product.orders - item.quantity;
+//       await Product.findByIdAndUpdate(product._id, {quantity:updatedQuantity, orders:updatedOrders});
+//     }
+
+//     if(updatedOrder){
+//       res.status(200).json({ success: false, message: 'Order not found or could not be cancelled' });
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
+
+const cancelOrder = async (req, res) => {
+  try {
+    const orderId = req.body.orderId;
+    let updatedOrder = await Order.findByIdAndUpdate(orderId, { $set: { status: 'Cancelled' } }).populate('products.product');
+    const userData = await User.findById(req.session.user_id);
+
+    if (updatedOrder.paymentMethod === 'RazorPay') {
+      const walletUpdating = updatedOrder.grandTotal + userData.walletAmount;
+      userData.walletAmount = walletUpdating;
+      await userData.save();
+      console.log(userData + "userdataaaaaaaaaaaaaaaaaaaa");
+
+      const transfer = {
+        user: req.session.user_id, // assuming user_id is stored in the session
+        amount: updatedOrder.grandTotal,
+        paymentMethod: 'RazorPay',
+        type: "credited",
+        orderId: orderId
+      }
+
+      await transactionModel.insertMany(transfer);
+    }
+
+    for (const item of updatedOrder.products) {
+      const product = item.product;
+
+      const updatedQuantity = product.quantity + item.quantity;
+      const updatedOrders = product.orders - item.quantity;
+      await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+    }
+
+    // Corrected the condition to check if the order was updated successfully
+    if (!updatedOrder) {
+      res.status(200).json({ success: false, message: 'Order not found or could not be cancelled' });
+    } else {
+      res.status(200).json({ success: true, message: 'Order successfully cancelled' });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+}
+
+
+const returnRequest = async(req,res)=>{
+  try {
+    const { orderId,reason} = req.body;
+    const order = await Order.findByIdAndUpdate(orderId , { $set: { returnRequest:'requested' , reason:reason}});
+
+    res.status(200).json({success:true, message: 'Return request submitted successfully'});
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ success: false, message: 'Failed to process the return request.' });
+  }
+}
+
+const returnOrderList = async(req,res)=>{
+  try {
+    const returnedOrders = await Order.find({returnRequest:'requested'});
+    res.render('returnOrder',{returnedOrders})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+const returnOrderDetails = async(req,res)=>{
+  try {
+    const orderId = req.query.orderId;
+    const order = await Order.findById(orderId).populate('address').populate('products.product')
+    res.render('returnOrderDetails' , {order})
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+async function returnResponse(req, res) {
+  try {
+
+
+    const { status, orderId } = req.body;
+    const updatedStatus = await Order.findByIdAndUpdate(orderId, { $set: { returnRequest: status } }).populate('products.product')
+    const userData = await User.findOne({ _id: updatedStatus.user })
+    console.log(userData);
+
+    if (status === "accepted") {
+
+      await Order.findByIdAndUpdate(orderId,{status:'Returned'})
+      const walletUpdating = updatedStatus.grandTotal + userData.walletAmount;
+      console.log("11111" + walletUpdating);
+      userData.walletAmount = walletUpdating;
+      await userData.save();
+      console.log("222222" + userData);
+
+      const transaction = {
+        user: updatedStatus.user,
+        amount: updatedStatus.grandTotal,
+        paymentMethod: updatedStatus.paymentMethod,
+        type: 'Credited'
+      }
+      await transactionModel.insertMany(transaction);
+      for (const item of updatedStatus.products) {
+        const product = item.product;
+
+        const updatedQuantity = product.quantity + item.quantity;
+        const updatedOrders = product.orders - item.quantity;
+        await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+      }
+
+    }
+
+    res.status(200).json({ success: true, message: "Operation completed successfully" });
+
+    console.log(updatedStatus);
+
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 
@@ -433,5 +590,10 @@ module.exports = {
     loadOrderList,
     loadOrderDetails,
     orderStatus,
-    updatedPayment
+    updatedPayment,
+    cancelOrder,
+    returnRequest,
+    returnOrderList,
+    returnOrderDetails,
+    returnResponse
 }

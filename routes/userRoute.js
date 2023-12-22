@@ -87,6 +87,7 @@ user_route.get('/success-page',orderController.loadSuccess)
 
 user_route.get('/orderdetails',userController.orderdetails);
 user_route.post('/updatedPayment',orderController.updatedPayment);
+user_route.post('/cancelOrder',orderController.cancelOrder);
 
 //404page
 user_route.get('/error',userController.loadError)

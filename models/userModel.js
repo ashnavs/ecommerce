@@ -35,6 +35,10 @@ const userSchema=new mongoose.Schema({
     },
     resetToken: String,
     resetTokenExpiration: Date,
+    walletAmount :{
+        type:Number,
+        default:0
+    }
 })
 
 userSchema.plugin(mongoosePaginate);

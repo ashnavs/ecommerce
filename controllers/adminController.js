@@ -9,6 +9,7 @@ const randomstring = require('randomstring')
 const mongoosePaginate = require('mongoose-paginate-v2');
 const Order = require('../models/orderModel') 
 const Product = require('../models/productModel')
+const Coupon = require('../models/couponModel');
 
 
 
@@ -420,6 +421,70 @@ console.log("Count of orders with 'Return Confirmed' status:", );
 }
 
 
+const loadAddCoupon = async(req,res)=>{
+    try {
+       
+        res.render('addCoupon')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// const addCoupon = async(req,res)=>{
+//     try {
+//         const {  name, code, discountAmount, expireDate, minimumCartTotal} = req.body;
+
+//         const coupon = {
+//             name:name,
+//             CouponCode:code,
+//             expiry:expireDate,
+//             discount:discountAmount,
+//             minimumCartTotal:minimumCartTotal
+//         }
+
+//         const couponDetails = await Coupon.insertMany( coupon);
+
+//         console.log(couponDetails);
+//         res.redirect('/admin/addCoupon')
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }
+const addCoupon = async (req, res) => {
+    try {
+      const { name, code, discountAmount, expireDate, minimumCartTotal } = req.body;
+  
+      const coupon = {
+        name: name,
+        CouponCode: code,
+        expiry: expireDate,
+        discount: discountAmount,
+        minimumCartTotal: minimumCartTotal
+      };
+  
+      const couponDetails = await Coupon.insertMany(coupon);
+  
+      console.log(couponDetails);
+      res.redirect('/admin/addCoupon');
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+
+  
+const loadListCoupon = async(req,res)=>{
+    try {
+        const coupons = await Coupon.find();
+        res.render('couponList',{coupons})
+        console.log(coupons);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 module.exports = {
     adminLogin,
     loadDashboard,
@@ -427,4 +492,7 @@ module.exports = {
     loaduserDetails,
     blockUser,
     loadCrop,
+    loadAddCoupon,
+    addCoupon,
+    loadListCoupon
 }
