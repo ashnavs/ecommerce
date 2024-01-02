@@ -464,7 +464,7 @@ const addCoupon = async (req, res) => {
   
       const couponDetails = await Coupon.insertMany(coupon);
   
-      console.log(couponDetails);
+     
       res.redirect('/admin/addCoupon');
     } catch (error) {
       console.error(error.message);
@@ -477,13 +477,73 @@ const loadListCoupon = async(req,res)=>{
     try {
         const coupons = await Coupon.find();
         res.render('couponList',{coupons})
-        console.log(coupons);
+       
     } catch (error) {
         console.log(error.message);
     }
 }
 
+const couponListUnlist = async(req,res)=>{
+    try {
+        const couponId = req.query.id;
+        const coupon = await Coupon.findById(couponId);
 
+        if(!coupon){
+            
+            return res.redirect('/admin/couponList')
+        }
+
+        coupon.status = !coupon.status;
+
+        await coupon.save();
+
+        res.redirect('/admin/couponList')
+    } catch (error) {
+        console.log(error.message);
+        res.redirect('/admin/couponList')
+    }
+}
+
+
+const loadeditCoupon = async(req,res)=>{
+    try {
+        const couponId = req.query.id;
+        const coupon = await Coupon.findById(couponId)
+
+        res.render('editCoupon',{coupon})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const editCoupon = async(req,res)=>{
+    try {
+        const couponId = req.query.id;
+        const{
+            name,
+            CouponCode,
+            expiry,
+            discount,
+            minimumCartTotal
+        } = req.body;
+
+        const updatedCoupon = await Coupon.findByIdAndUpdate(
+            {_id:couponId},
+            {
+                name,
+                CouponCode,
+                expiry,
+                discount,
+                minimumCartTotal
+            },
+            {new:true}
+        );
+
+        res.redirect('/admin/couponList');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     adminLogin,
@@ -494,5 +554,8 @@ module.exports = {
     loadCrop,
     loadAddCoupon,
     addCoupon,
-    loadListCoupon
+    loadListCoupon,
+    couponListUnlist,
+    loadeditCoupon,
+    editCoupon
 }

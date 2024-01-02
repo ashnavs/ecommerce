@@ -100,7 +100,7 @@
                         <!-- Sales / Purchase chart end -->
 
                         <!-- Sales / Purchase Return star-->
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <div class="card o-hidden">
                                 <div class="card-header border-0 pb-1">
                                     <div class="card-header-title">
@@ -111,7 +111,7 @@
                                     <div id="sales-purchase-return-cart"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- Sales / Purchase Return end-->
 
                         <!-- Booking history start-->
@@ -139,18 +139,18 @@
                                   <div class="row d-flex">
                                     <div class="col-md-12 text-right" style="
                                     display: flex;">
-                                            <!-- <button id="pdfButton" class="btn btn-secondary print ms-2" style="color: white;"><i class="icon material-icons md-print" ></i> Download PDF</button> -->
+                                            <button id="downloadPdf" class="btn btn-secondary print ms-2" style="color: white;"><i class="icon material-icons md-print" ></i> Download PDF</button>
                                             <!-- <a href="/admin/excelsalesreport" class="btn btn-secondary print ms-2" style="width: fit-content; color: white;"><i class="icon material-icons md-print" ></i>Download Excel</a> -->
                 
                                  </div>
                                 </div>
                 
-                                <!-- <form action="" method="get" >
+                                <form action="" method="get" >
                                     <label for="paymentMethod" class="form-label" >Select Status:</label>
-                                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3" style="display: flex;"> -->
+                                <div class="col-md-3 col-12 me-auto mb-md-0 mb-3" style="display: flex;"> 
                 
                                     
-                                    <!-- <select name="paymentMethod" class="form-select" style="height: 36px;width: 168px;" id="paymentMethod">
+                                <select name="paymentMethod" class="form-select" style="height: 36px;width: 168px;" id="paymentMethod">
                                         
                                         <option value="" selected>All</option>
                                         <option value="Online Payment">RazorPay</option>
@@ -158,9 +158,9 @@
                                        
                 
                 
-                                    </select> -->
+                                    </select>
                                   
-                                  <!-- <input type="submit" class="btn btn-md rounded font-sm ms-2" value="Filter"> -->
+                                  <input type="submit" class="btn btn-md rounded font-sm ms-2" value="Filter">
                                 </div>
                                 </div>
                                 <p>Total Revenue: <%=totalRevenue %></p>
@@ -170,6 +170,8 @@
                                 <div>
                 
                                 </div>
+                                <!-- <a href="/admin/download-pdf" class="btn btn-primary">Download PDF</a> -->
+
                                 <div class="card-header border-0 pb-1">
                                     <div class="card-header-title">
                                         <h3>Transfer History</h3>
@@ -260,6 +262,8 @@
         </div>
     </div>
     <!-- Modal End -->
+    
+
 
     <!-- latest js -->
     <script src="/assetsb/js/jquery-3.6.0.min.js"></script>
@@ -304,6 +308,21 @@
 
     <!-- Theme js -->
     <script src="/assetsb/js/script.js"></script>
+
+    <!--PDF-->
+    <script>
+        document.getElementById('downloadPdf').addEventListener('click', function () {
+            const selectedValue = document.getElementById('paymentMethod').value;
+            const url = `/admin/report?report=<%= reportOrder %>&paymentMethod=${selectedValue}&downloadPdf=true`;
+            window.location.href = url;
+        });
+    
+        document.getElementById('downloadExcel').addEventListener('click', function () {
+            const selectedValue = document.getElementById('paymentMethod').value;
+            const url = `/admin/download-excel?paymentMethod=${selectedValue}`;
+            window.location.href = url;
+        });
+    </script>
     
 </body>
 

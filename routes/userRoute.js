@@ -4,6 +4,7 @@ const path = require('path');
 const otpGenerator = require('otp-generator');
 const session = require('express-session')
 const auth = require('../middleware/auth')
+const bodyParser = require('body-parser');
 
 
 
@@ -91,6 +92,10 @@ user_route.post('/cancelOrder',orderController.cancelOrder);
 
 //404page
 user_route.get('/error',userController.loadError)
+
+//coupon
+user_route.post('/applyCoupon',orderController.applyCoupon)
+user_route.post('/removeCoupon',orderController.removeCoupon)
   
 
 module.exports = user_route;

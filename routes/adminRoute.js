@@ -71,5 +71,15 @@ admin_route.post('/returnResponse',orderController.returnResponse);
 admin_route.get('/addCoupon',adminController.loadAddCoupon)
 admin_route.post('/addCoupon',adminController.addCoupon)
 admin_route.get('/couponList',adminController.loadListCoupon)
+admin_route.get('/couponListUnlist',adminController.couponListUnlist)
+admin_route.get('/editCoupon',adminController.loadeditCoupon)
+admin_route.post('/editCoupon',adminController.editCoupon)
+
+
+
+
+//report
+admin_route.get('/download-pdf',salesController.downloadPdf)
+
 
 module.exports = admin_route;

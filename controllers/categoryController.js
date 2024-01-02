@@ -52,8 +52,9 @@ const loadCategory = async (req, res) => {
         delete req.session.successMessage;
         const editSuccess = req.session.successMessge
         delete req.session.successMessage;
+        const ITEMS_PER_PAGE = 5;
 
-        const page = parseInt(req.query.page) || 1;
+        const page = parseInt(req.query.page , 10) || 1;
 
         const categoriesCount = await Category.countDocuments();
         const totalPages = Math.ceil(categoriesCount / ITEMS_PER_PAGE);

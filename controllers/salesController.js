@@ -1,6 +1,12 @@
 const Order = require('../models/orderModel')
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
+const PDFDocument = require('pdfkit');
+const blobStream = require('blob-stream');
+const fs=require("fs");
+const { log } = require('console');
+const generatePdf = require('../helper/pdfGenerator');
+
 
 
 const loadReport = async (req, res) => {
@@ -56,7 +62,16 @@ const loadReport = async (req, res) => {
         const totalSales = orders.length;
         const totalProductsSold = orders.reduce((sum, order) => sum + order.products.length, 0);
 
-        res.render('report', { orders, reportOrder, totalRevenue, totalSales, totalProductsSold });
+        //res.render('report', { orders, reportOrder, totalRevenue, totalSales, totalProductsSold });
+
+        if(req.query.downloadPdf){
+            generatePdf.generateSalesReport(orders,res);
+
+        }
+        else{
+            res.render('report', { orders, reportOrder, totalRevenue, totalSales, totalProductsSold });
+
+        }
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
@@ -64,9 +79,39 @@ const loadReport = async (req, res) => {
 };
 
 
+const downloadPdf = async (req,res) => {
+    try {
+        const doc = new PDFDocument();
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=sales_report.pdf');
+        doc.pipe(res);
+
+        doc.text('Sales Report', { align: 'center', underline: true });  
+        doc.end();
+  
+        generatePdf(orders, res);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+}
+
+        
+    
+
+
+
+
+    
+  
+
+
+
+
 
 
 
 module.exports={
-   loadReport
+   loadReport,
+   downloadPdf
 }

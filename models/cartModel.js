@@ -10,8 +10,8 @@ const cartSchema = new mongoose.Schema({
     },
   ],
 
-  total: { type: Number, default: 0 }   // Total including any taxes or additional charges
-
+  total: { type: Number, default: 0 } ,  // Total including any taxes or additional charges
+  appliedCoupon:Number
 });
 
 const Cart = mongoose.model('Cart', cartSchema);

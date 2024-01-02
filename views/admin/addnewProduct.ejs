@@ -8,7 +8,8 @@
 
             <div class="page-body">
                 <!-- New Product Add Start -->
-                <form action="" method="post" enctype="multipart/form-data" id="productForm" onclick="">
+                <form action="/admin/addnewProduct" method="post" enctype="multipart/form-data" id="productForm">
+                    
 
                     <div class="container-fluid">
                         <div class="row theme-form theme-form-2 mega-form">
@@ -290,7 +291,7 @@
 
                                                 <div class="col-4 col-3 ">
                                                     <button type="submit" class="btn btn-primary w-70  h-100 "
-                                                        onclick="addProduct()">Add
+                                                        onclick="">Add
                                                         Product</button>
                                                 </div>
 
@@ -311,13 +312,15 @@
 
 
             </div>
-            <!-- New Product Add End -->
-            <!-- <script>
+        
+             <!-- <script>
                 function addProduct() {
                     console.log('addProduct() called');
                     event.preventDefault();
                     if (validateForm()) {
-                        document.getElementById('productForm').submit();
+                        document.getElementById('productForm').submit(); // Submit the form
+            
+
                     }
                 }
             
@@ -408,38 +411,146 @@
             
                     document.getElementById('generalError').innerText = ''; // Clear general error message
                 }
-            </script> -->
-            
-            <!-- Modal End -->
+            </script>  -->
 
-            <!--image preview-->
+
             <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.getElementById('productForm').addEventListener('submit', function (event) {
+                        event.preventDefault();
+                        clearErrors();
 
-                // Add an event listener to the file input
-                document.getElementById('formFile').addEventListener('change', function (e) {
-                    // Get the selected file
-                    const file = e.target.files[0];
+            var name = document.getElementById('name').value.trim();
+            var category = document.getElementsByName('category')[0].value.trim();
+            var brand = document.getElementById('brand').value.trim();
+            var quantity = document.getElementById('quantity').value.trim();
+            var model = document.getElementById('model').value.trim();
+            var ram = document.getElementById('ram').value.trim();
+            var storage = document.getElementById('storage').value.trim();
+            var processor = document.getElementById('processor').value.trim();
+            var screenSize = document.getElementById('screenSize').value.trim();
+            var graphicsCard = document.getElementById('graphicsCard').value.trim();
+            var osArchitecture = document.getElementById('osArchitecture').value.trim();
+            var os = document.getElementById('os').value.trim();
+            var description = document.getElementById('description').value.trim();
+            var price = document.getElementById('price').value.trim();
+            var discountPrice = document.getElementById('discountPrice').value.trim();
+            var productImage = document.getElementById('formFile').value.trim();
 
-                    // Create a FileReader to read the file
-                    const reader = new FileReader();
+            var nameError = document.getElementById('nameError');
+            var brandError = document.getElementById('brandError');
+            var quantityError = document.getElementById('quantityError');
+            var modelError = document.getElementById('modelError');
+            var ramError = document.getElementById('ramError');
+            var storageError = document.getElementById('storageError');
+            var processorError = document.getElementById('processorError');
+            var screenSizeError = document.getElementById('screenSizeError');
+            var graphicsCardError = document.getElementById('graphicsCardError');
+            var osArchitectureError = document.getElementById('osArchitectureError');
+            var osError = document.getElementById('osError');
+            var descriptionError = document.getElementById('descriptionError');
+            var priceError = document.getElementById('priceError');
+            var discountPriceError = document.getElementById('discountPriceError');
+            var generalError = document.getElementById('generalError');
 
-                    // Set up the FileReader to load the image into the Cropper
-                    reader.onload = function (event) {
-                        const cropper = new Cropper(document.getElementById('cropperImage'), {
-                            aspectRatio: 1, // Set the aspect ratio as needed
-                            viewMode: 1,    // Set the view mode as needed
-                            // Add more options as needed
-                        });
+            if (!name) {
+                nameError.textContent = 'Product Name is required';
+            }
 
-                        // Set the image source in the Cropper
-                        cropper.replace(event.target.result);
-                    };
+            if (category === 'undefined' || category === null || category === '') {
+                // Adjust the condition as needed based on your actual option values
+                generalError.textContent = 'Please select a valid category';
+            }
 
-                    // Read the file as a data URL
-                    reader.readAsDataURL(file);
-                });
+            if (!brand) {
+                brandError.textContent = 'Brand is required';
+            }
 
-            </script>
+            if (!quantity || isNaN(quantity) || quantity <= 0) {
+                quantityError.textContent = 'Quantity must be a positive number';
+            }
+
+            if (!model) {
+                modelError.textContent = 'Model is required';
+            }
+
+            if (!ram) {
+                ramError.textContent = 'RAM is required';
+            }
+
+            if (!storage) {
+                storageError.textContent = 'Storage is required';
+            }
+
+            if (!processor) {
+                processorError.textContent = 'Processor is required';
+            }
+
+            if (!screenSize) {
+                screenSizeError.textContent = 'Screen Size is required';
+            }
+
+            if (!graphicsCard) {
+                graphicsCardError.textContent = 'Graphics Card is required';
+            }
+
+            if (!osArchitecture) {
+                osArchitectureError.textContent = 'OS Architecture is required';
+            }
+
+            if (!os) {
+                osError.textContent = 'OS is required';
+            }
+
+            if (!description) {
+                descriptionError.textContent = 'Product Description is required';
+            }
+
+            if (!price || isNaN(price) || price <= 0) {
+                priceError.textContent = 'Price must be a positive number';
+            }
+
+            if (discountPrice && (isNaN(discountPrice) || discountPrice <= 0)) {
+                discountPriceError.textContent = 'Discount Price must be a positive number';
+            }
+
+            if (
+                generalError.textContent ||
+                nameError.textContent ||
+                brandError.textContent ||
+                quantityError.textContent ||
+                modelError.textContent ||
+                ramError.textContent ||
+                storageError.textContent ||
+                processorError.textContent ||
+                screenSizeError.textContent ||
+                graphicsCardError.textContent ||
+                osArchitectureError.textContent ||
+                osError.textContent ||
+                descriptionError.textContent ||
+                priceError.textContent ||
+                discountPriceError.textContent
+                // Add conditions for other fields...
+            ) {
+                return; // If there are validation errors, prevent form submission
+            }
+
+            // If you reach here, the form is valid, you can proceed with form submission
+            console.log('Form is valid, submitting...');
+            document.getElementById('productForm').submit(); // Uncomment this line to submit the form
+        });
+
+        function clearErrors() {
+            var errorElements = document.querySelectorAll('.text-danger');
+            errorElements.forEach(function (element) {
+                element.textContent = '';
+            });
+        }
+    });
+</script>
+
+            
+           
 
 
             <!--image crop-->

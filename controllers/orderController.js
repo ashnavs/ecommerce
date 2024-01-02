@@ -11,6 +11,7 @@ const Cart = require('../models/cartModel')
 const Order = require('../models/orderModel')
 const Razorpay = require('razorpay')
 const transactionModel = require('../models/transactionModel')
+const Coupon = require('../models/couponModel')
 
 
 
@@ -20,9 +21,10 @@ const loadCheckOut = async(req,res) => {
         const user = req.session.user_id;
         const address = await Address.find({user});
         const cart = await Cart.findOne({user}).populate('products.product')
+        const coupon = await Coupon.find({minimumCartTotal: {$lte:cart.total}, status:true})
         console.log(cart);
 
-        res.render('checkOut' , { user , address , cart })
+        res.render('checkOut' , { user , address , cart , coupon})
     } catch (error) {
         console.log(error.message);
     }
@@ -581,8 +583,54 @@ async function returnResponse(req, res) {
 }
 
 
+//coupon
+const applyCoupon = async(req,res)=>{
+  try {
+    const enteredCode = req.body.CouponCode;
+    const coupon = await Coupon.findOne({CouponCode : enteredCode});
+    const user = req.session.user_id;
+    const userCart = await Cart.findOne({user:user})
 
-  
+    if(coupon){
+      const newTotal = userCart.total - coupon.discount;
+      userCart.total = newTotal;
+      userCart.appliedCoupon = coupon.CouponCode;
+
+      await userCart.save();
+    }
+    else{
+      res.render('checkOut',{message:'coupon not available for you'})
+    }
+    res.redirect('/checkOut')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+ 
+
+const removeCoupon = async (req,res)=>{
+  try {
+    const appliedCoupon = req.body.CouponCode;
+    const coupon = await Coupon.findOne({ CouponCode : appliedCoupon });
+    const user = req.session.user_id;
+    const userCart = await Cart.findOne({user:user});
+    if(coupon){
+      const newTotal = userCart.total +  coupon.discount;
+      userCart.total = newTotal;
+      userCart.appliedCoupon = '';
+
+      await userCart.save();
+    
+    }
+    else{
+      res.render('checkOut',{message:'coupon not available'})
+    }
+    res.redirect('/checkOut')
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
     loadCheckOut,
     confirmOrder,
@@ -595,5 +643,8 @@ module.exports = {
     returnRequest,
     returnOrderList,
     returnOrderDetails,
-    returnResponse
+    returnResponse,
+    applyCoupon,
+    removeCoupon
+
 }

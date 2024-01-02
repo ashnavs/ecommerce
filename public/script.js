@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //add adress 
 
-document.addEventListener('DOMContentLoaded', function () {
+/*document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('billingForm'); // Change 'yourFormId' to the actual ID of your form
 
     if (form) {
@@ -334,169 +334,169 @@ document.addEventListener('DOMContentLoaded', function () {
 //             });
 //         }
 //     });
-// });
+// });*/
 
 
 //edit category
 // formValidations.js
 
-document.addEventListener('DOMContentLoaded', function () {
-    const message = document.getElementById('message');
-    const nameField = document.getElementById('name');
-    const descriptionField = document.getElementById('description');
+// document.addEventListener('DOMContentLoaded', function () {
+//     const message = document.getElementById('message');
+//     const nameField = document.getElementById('name');
+//     const descriptionField = document.getElementById('description');
 
-    const hideMessage = () => {
-        message.style.display = 'none';
-    }
+//     const hideMessage = () => {
+//         message.style.display = 'none';
+//     }
 
-    setTimeout(hideMessage, 3000);
+//     setTimeout(hideMessage, 3000);
 
-    function validateForm() {
-        resetErrorMessages();
+//     function validateForm() {
+//         resetErrorMessages();
 
-        var name = nameField.value.trim();
-        var description = descriptionField.value.trim();
-        var isValid = true;
+//         var name = nameField.value.trim();
+//         var description = descriptionField.value.trim();
+//         var isValid = true;
 
-        // Check if the name is empty or contains only whitespace
-        if (name === '') {
-            showError('nameError', 'Please enter a category name');
-            isValid = false;
-        }
+//         // Check if the name is empty or contains only whitespace
+//         if (name === '') {
+//             showError('nameError', 'Please enter a category name');
+//             isValid = false;
+//         }
 
-        // Check if the description is empty or contains only whitespace
-        if (description === '') {
-            showError('descriptionError', 'Please enter a category description');
-            isValid = false;
-        }
+//         // Check if the description is empty or contains only whitespace
+//         if (description === '') {
+//             showError('descriptionError', 'Please enter a category description');
+//             isValid = false;
+//         }
 
-        if (!isValid) {
-            event.preventDefault(); // Prevent the form from submitting if there are errors
-        }
-    }
+//         if (!isValid) {
+//             event.preventDefault(); // Prevent the form from submitting if there are errors
+//         }
+//     }
 
-    function showError(errorId, errorMessage) {
-        var errorElement = document.getElementById(errorId);
-        errorElement.innerText = errorMessage;
-        errorElement.style.color = 'red';
-    }
+//     function showError(errorId, errorMessage) {
+//         var errorElement = document.getElementById(errorId);
+//         errorElement.innerText = errorMessage;
+//         errorElement.style.color = 'red';
+//     }
 
-    function resetErrorMessages() {
-        // Reset all error messages
-        var errorIds = ['nameError', 'descriptionError'];
+//     function resetErrorMessages() {
+//         // Reset all error messages
+//         var errorIds = ['nameError', 'descriptionError'];
 
-        errorIds.forEach(function (errorId) {
-            document.getElementById(errorId).innerText = '';
-        });
-    }
-});
+//         errorIds.forEach(function (errorId) {
+//             document.getElementById(errorId).innerText = '';
+//         });
+//     }
+// });
 
 
 
 //add product
 
-document.addEventListener('DOMContentLoaded', function () {
-    // const message = document.getElementById('message');
-    // const hide = () => {
-    //     message.style.display = 'none';
-    // }
-    // setTimeout(hide, 3000);
+// document.addEventListener('DOMContentLoaded', function () {
+//     // const message = document.getElementById('message');
+//     // const hide = () => {
+//     //     message.style.display = 'none';
+//     // }
+//     // setTimeout(hide, 3000);
 
-    const form = document.getElementById('productForm');
+//     const form = document.getElementById('productForm');
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (validateForm()) {
-            form.submit();
-        }
-    });
+//     form.addEventListener('submit', function (event) {
+//         event.preventDefault();
+//         if (validateForm()) {
+//             form.submit();
+//         }
+//     });
 
-    function validateForm() {
-        // Reset error messages
-        resetErrorMessages();
+//     function validateForm() {
+//         // Reset error messages
+//         resetErrorMessages();
 
-        // Get form values
-        var name = document.getElementById('name').value.trim();
-        var brand = document.getElementById('brand').value.trim();
-        var quantity = document.getElementById('quantity').value.trim();
-        var model = document.getElementById('model').value.trim();
-        var ram = document.getElementById('ram').value.trim();
-        var storage = document.getElementById('storage').value.trim();
-        var processor = document.getElementById('processor').value.trim();
-        var screenSize = document.getElementById('screenSize').value.trim();
-        var graphicsCard = document.getElementById('graphicsCard').value.trim();
-        var osArchitecture = document.getElementById('osArchitecture').value.trim();
-        var os = document.getElementById('os').value.trim();
-        var description = document.getElementById('description').value.trim();
-        var price = document.getElementById('price').value.trim();
-        var discountPrice = document.getElementById('discountPrice').value.trim();
+//         // Get form values
+//         var name = document.getElementById('name').value.trim();
+//         var brand = document.getElementById('brand').value.trim();
+//         var quantity = document.getElementById('quantity').value.trim();
+//         var model = document.getElementById('model').value.trim();
+//         var ram = document.getElementById('ram').value.trim();
+//         var storage = document.getElementById('storage').value.trim();
+//         var processor = document.getElementById('processor').value.trim();
+//         var screenSize = document.getElementById('screenSize').value.trim();
+//         var graphicsCard = document.getElementById('graphicsCard').value.trim();
+//         var osArchitecture = document.getElementById('osArchitecture').value.trim();
+//         var os = document.getElementById('os').value.trim();
+//         var description = document.getElementById('description').value.trim();
+//         var price = document.getElementById('price').value.trim();
+//         var discountPrice = document.getElementById('discountPrice').value.trim();
 
-        // Check if at least one field is filled
-        if (
-            name === '' && brand === '' && quantity === '' && model === '' &&
-            ram === '' && storage === '' && processor === '' && screenSize === '' &&
-            graphicsCard === '' && osArchitecture === '' && os === '' &&
-            description === '' && price === '' && discountPrice === ''
-        ) {
-            document.getElementById('generalError').innerText = 'Please fill in at least one field';
-            return false;
-        } else {
-            document.getElementById('generalError').innerText = ''; // Clear general error message
-        }
+//         // Check if at least one field is filled
+//         if (
+//             name === '' && brand === '' && quantity === '' && model === '' &&
+//             ram === '' && storage === '' && processor === '' && screenSize === '' &&
+//             graphicsCard === '' && osArchitecture === '' && os === '' &&
+//             description === '' && price === '' && discountPrice === ''
+//         ) {
+//             document.getElementById('generalError').innerText = 'Please fill in at least one field';
+//             return false;
+//         } else {
+//             document.getElementById('generalError').innerText = ''; // Clear general error message
+//         }
 
-        // Validate each field
-        validateField(name, 'nameError', 'Please enter a product name');
-        validateField(brand, 'brandError', 'Please enter a brand');
-        validateField(quantity, 'quantityError', 'Please enter a valid quantity', true);
-        validateField(model, 'modelError', 'Please enter a model');
-        validateField(ram, 'ramError', 'Please enter RAM information');
-        validateField(storage, 'storageError', 'Please enter storage information');
-        validateField(processor, 'processorError', 'Please enter processor information');
-        validateField(screenSize, 'screenSizeError', 'Please enter screenSize information');
-        validateField(graphicsCard, 'graphicsCardError', 'Please enter graphicsCard information');
-        validateField(osArchitecture, 'osArchitectureError', 'Please enter a valid OS Architecture', true);
-        validateField(os, 'osError', 'Please enter os information');
-        validateField(description, 'descriptionError', 'Please enter a product description');
-        validateField(price, 'priceError', 'Please enter a valid price', true);
-        validateField(discountPrice, 'discountPriceError', 'Please enter a valid discountPrice', true);
+//         // Validate each field
+//         validateField(name, 'nameError', 'Please enter a product name');
+//         validateField(brand, 'brandError', 'Please enter a brand');
+//         validateField(quantity, 'quantityError', 'Please enter a valid quantity', true);
+//         validateField(model, 'modelError', 'Please enter a model');
+//         validateField(ram, 'ramError', 'Please enter RAM information');
+//         validateField(storage, 'storageError', 'Please enter storage information');
+//         validateField(processor, 'processorError', 'Please enter processor information');
+//         validateField(screenSize, 'screenSizeError', 'Please enter screenSize information');
+//         validateField(graphicsCard, 'graphicsCardError', 'Please enter graphicsCard information');
+//         validateField(osArchitecture, 'osArchitectureError', 'Please enter a valid OS Architecture', true);
+//         validateField(os, 'osError', 'Please enter os information');
+//         validateField(description, 'descriptionError', 'Please enter a product description');
+//         validateField(price, 'priceError', 'Please enter a valid price', true);
+//         validateField(discountPrice, 'discountPriceError', 'Please enter a valid discountPrice', true);
 
-        // Check if any errors occurred
-        return document.querySelectorAll('.text-danger').length === 0;
-    }
+//         // Check if any errors occurred
+//         return document.querySelectorAll('.text-danger').length === 0;
+//     }
 
-    function validateField(value, errorId, errorMessage, numeric = false) {
-        const errorElement = document.getElementById(errorId);
+//     function validateField(value, errorId, errorMessage, numeric = false) {
+//         const errorElement = document.getElementById(errorId);
 
-        if (value.trim() === '') {
-            displayErrorMessage(errorElement, 'This field is required');
-        } else if (numeric && (isNaN(value) || parseFloat(value) <= 0)) {
-            displayErrorMessage(errorElement, errorMessage);
-        } else {
-            errorElement.innerText = ''; // Clear the error message
-        }
-    }
+//         if (value.trim() === '') {
+//             displayErrorMessage(errorElement, 'This field is required');
+//         } else if (numeric && (isNaN(value) || parseFloat(value) <= 0)) {
+//             displayErrorMessage(errorElement, errorMessage);
+//         } else {
+//             errorElement.innerText = ''; // Clear the error message
+//         }
+//     }
 
-    function displayErrorMessage(errorElement, message) {
-        errorElement.innerText = message;
-        errorElement.style.color = 'red';
-    }
+//     function displayErrorMessage(errorElement, message) {
+//         errorElement.innerText = message;
+//         errorElement.style.color = 'red';
+//     }
 
-    function resetErrorMessages() {
-        // Reset all error messages
-        var errorIds = [
-            'nameError', 'brandError', 'quantityError', 'modelError',
-            'ramError', 'storageError', 'processorError', 'screenSizeError',
-            'graphicsCardError', 'osArchitectureError', 'osError',
-            'descriptionError', 'priceError', 'discountPriceError'
-        ];
+//     function resetErrorMessages() {
+//         // Reset all error messages
+//         var errorIds = [
+//             'nameError', 'brandError', 'quantityError', 'modelError',
+//             'ramError', 'storageError', 'processorError', 'screenSizeError',
+//             'graphicsCardError', 'osArchitectureError', 'osError',
+//             'descriptionError', 'priceError', 'discountPriceError'
+//         ];
 
-        errorIds.forEach(function (errorId) {
-            document.getElementById(errorId).innerText = '';
-        });
+//         errorIds.forEach(function (errorId) {
+//             document.getElementById(errorId).innerText = '';
+//         });
 
-        document.getElementById('generalError').innerText = ''; // Clear general error message
-    }
-});
+//         document.getElementById('generalError').innerText = ''; // Clear general error message
+//     }
+// });
 
 
 

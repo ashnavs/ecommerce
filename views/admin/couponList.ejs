@@ -45,14 +45,31 @@
                                                         <td><%= coupon.name %></td>
                                                         <td><%= coupon.CouponCode %></td>
                                                         <td class="theme-color"><%=coupon.discount%></td>
-                                                        <td class="menu-status">
+                                                        <!-- <td class="menu-status">
                                                             <span class="danger">Restitute</span>
+                                                        </td> -->
+                                                        
+                                                            <% if(coupon.status) { %>
+                                                                <td class="status-danger">
+                                                                
+                                                            <a href="/admin/couponListUnlist?id=<%=coupon._id.toString()%>">
+                                                                <span class="text-primary">List</span>
+                                                            </td>
+                                                               
+                                                        <% } else { %>
+                                                            <td class="status-primary ">
+            
+                                                            <a href="/admin/couponListUnlist?id=<%=coupon._id.toString()%>">
+                                                                <span class="text-danger">Unlist</span>
+                                                            </a>
                                                         </td>
+                                                           <% } %>
+                                                        
                                                         <td><%=coupon.minimumCartTotal%></td>
                                                         <td>
                                                             <ul>
                                                                 <li>
-                                                                    <a href="javascript:void(0)">
+                                                                    <a href="/admin/editCoupon?id=<%=coupon._id.toString()%>">
                                                                         <i class="ri-pencil-line"></i>
                                                                     </a>
                                                                 </li>

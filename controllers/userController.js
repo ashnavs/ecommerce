@@ -154,8 +154,8 @@ const insertUser = async (req, res) => {
             password:user.password,
                     };
 
-        // Save the user to the database
-        await user.save();
+        // // Save the user to the database
+        /*await user.save();*/
 
         // Rest of your code for OTP generation and redirection
         const otp = generateOTP();
@@ -783,13 +783,13 @@ const editAddress = async (req, res) => {
         country,
       } = req.body;
   
-      const addressId = req.query.id;
+      const addressId = req.query.addressId;
 
       console.log('Received addressId:', addressId);
       console.log('Received userId:', userId);
   
       // Find the address in the database
-      const existingAddress = await Address.findOne({ user: userId });
+      const existingAddress = await Address.findOne({ _id:addressId , user:userId});
   
       // Check if the address exists
       if (!existingAddress) {

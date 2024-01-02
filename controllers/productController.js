@@ -13,20 +13,93 @@ const async = require('async');
 
 
 
+// async function loadProducts(req, res) {
+//   try {
+//     const allCategory = await Category.distinct('name');
+//     const brands = await Product.distinct('brand');
+//     const categories = await Category.find({is_list:true});
+//     const user = req.session.user_id
+
+//     // Get the current page from the query parameters, default to 1 if not provided
+//     const page = parseInt(req.query.page, 10) || 1;
+//     const productsPerPage = 4; // Number of products per page
+
+//     // Use async.parallel to fetch productdata and totalProducts concurrently
+//     const results = await async.parallel({
+//       productdata: async function () {
+//         return Product.find({list:true})
+//           .skip((page - 1) * productsPerPage)
+//           .limit(productsPerPage)
+//           .exec();
+//       },
+//       totalProducts: async function () {
+//         return Product.countDocuments().exec();
+//       },
+//     });
+
+//     const { productdata, totalProducts } = results;
+
+
+//     res.render('productsView', {
+//       productdata,
+//       categories,
+//       brands,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalProducts / productsPerPage),
+//       user,
+//       allCategory
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// }
+
+
+
 async function loadProducts(req, res) {
   try {
+    const allCategory = await Category.distinct('name');
     const brands = await Product.distinct('brand');
     const categories = await Category.find({is_list:true});
     const user = req.session.user_id
+    const selectedCategory = req.query.category;
+    const selectedBrand = req.query.brand;
+    const searchQuery = req.query.q;
 
-    // Get the current page from the query parameters, default to 1 if not provided
+    const sortBy = req.query.sortby || 'priceLowToHigh';
+
+    let sortQuery = {};
+    if (sortBy === 'priceLowToHigh') {
+      sortQuery = { discountPrice: 1 };
+    } else if (sortBy === 'priceHighToLow') {
+      sortQuery = { discountPrice: -1 };
+    }
+
     const page = parseInt(req.query.page, 10) || 1;
-    const productsPerPage = 4; // Number of products per page
+    const productsPerPage = 4; 
 
-    // Use async.parallel to fetch productdata and totalProducts concurrently
+    const filter = {};
+    if (selectedCategory) {
+      const selectedCategoryName = await Category.findOne({ name: selectedCategory });
+      filter['category'] = selectedCategoryName._id;
+    }
+    if (selectedBrand) {
+      filter['brand'] = selectedBrand;
+    }
+    if (searchQuery) {
+      // Use regex for case-insensitive search
+      filter['$or'] = [
+        { name: { $regex: new RegExp(searchQuery, 'i') } },
+        { brand: { $regex: new RegExp(searchQuery, 'i') } },
+        { category: { $in: await Category.find({ name: { $regex: new RegExp(searchQuery, 'i') } }).distinct('_id') } },
+      ];
+    }
+
     const results = await async.parallel({
       productdata: async function () {
-        return Product.find({list:true})
+        return Product.find(filter)
+          .sort(sortQuery)
           .skip((page - 1) * productsPerPage)
           .limit(productsPerPage)
           .exec();
@@ -38,14 +111,16 @@ async function loadProducts(req, res) {
 
     const { productdata, totalProducts } = results;
 
-    // Render your view with the fetched productdata, categories, brands, and pagination information
+
     res.render('productsView', {
       productdata,
       categories,
       brands,
       currentPage: page,
       totalPages: Math.ceil(totalProducts / productsPerPage),
-      user
+      user,
+      allCategory,
+      sortBy
     });
   } catch (error) {
     console.error(error.message);
@@ -53,6 +128,82 @@ async function loadProducts(req, res) {
   }
 }
 
+
+const loadProductsView = async (req, res) => {
+  try {
+    const allCategory = await Category.distinct('name');
+    const brands = await Product.distinct('brand');
+    const categories = await Category.find();
+    const user = req.session.user_id;
+    const cartQuantity = req.session.cartQuantity; 
+
+    const selectedCategory = req.query.category;
+    const selectedBrand = req.query.brand;
+    const searchQuery = req.query.q;
+    console.log(searchQuery);
+
+    const sortBy = req.query.sortby || 'priceLowToHigh';
+
+    let sortQuery = {};
+    if (sortBy === 'priceLowToHigh') {
+      sortQuery = { sales_price: 1 };
+    } else if (sortBy === 'priceHighToLow') {
+      sortQuery = { sales_price: -1 };
+    }
+
+    // Build filter based on selected category, brand, and search query
+    const filter = {};
+    if (selectedCategory) {
+      filter['category'] = selectedCategory;
+    }
+    if (selectedBrand) {
+      filter['brand'] = selectedBrand;
+    }
+    if (searchQuery) {
+      // Use regex for case-insensitive search
+      filter['$or'] = [
+        { title: { $regex: new RegExp(searchQuery, 'i') } },
+        { category: { $regex: new RegExp(searchQuery, 'i') } },
+        { brand: { $regex: new RegExp(searchQuery, 'i') } },
+      ];
+    }
+    filter['is_Listed'] = true; // Include only listed products
+
+    // Pagination parameters
+    const page = parseInt(req.query.page, 10) || 1;
+    const productsPerPage = 12;
+
+    const results = await Promise.all([
+      Product.find(filter)
+        .sort(sortQuery)
+        .skip((page - 1) * productsPerPage)
+        .limit(productsPerPage)
+        .exec(),
+      Product.countDocuments(filter).exec(),
+    ]);
+
+    const [productdata, totalProducts] = results;
+
+    // Render your view with the fetched productdata, categories, brands, and pagination information
+    res.render('productsView', {
+      productdata,
+      categories,
+      brands,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / productsPerPage),
+      allCategory,
+      user,
+      selectedCategory,
+      selectedBrand,
+      searchQuery,
+      sortBy,
+      cartQuantity
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 
 //pagination
