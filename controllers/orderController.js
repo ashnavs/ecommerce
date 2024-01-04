@@ -22,7 +22,7 @@ const loadCheckOut = async(req,res) => {
         const address = await Address.find({user});
         const cart = await Cart.findOne({user}).populate('products.product')
         const coupon = await Coupon.find({minimumCartTotal: {$lte:cart.total}, status:true})
-        console.log(cart);
+      
 
         res.render('checkOut' , { user , address , cart , coupon})
     } catch (error) {
@@ -30,91 +30,7 @@ const loadCheckOut = async(req,res) => {
     }
 };
 
-// const craeteRazorpayOrder = async(amount)=>{
-// try{
-//   const razorpay = new Razorpay({
-//     key_id: process.env.razorpay_key_id,
-//     key_secret: process.env.razorpay_key_secret
 
-//   });
-
-//   const options = {
-//     amount: amount*100,
-//     currency:'INR',
-//     receipt:'order_receipt_' + Date.now(), t,
-//     payment_capture:1
-
-//    };
-
-//    const order = await razorpay.orders.create(options);
-//    return order;
-// }
-// catch(error){
-//   console.log(error.message);
-// }
- 
-  
-// }
-
-// const confirmOrder = async (req, res) => {
-//   try {
-
-//     const userId = req.session.user_id;
-//     const addressId = req.body.addressId;
-//     const paymentMethod = req.body.PaymentMethod;
-
-//     console.log(addressId, paymentMethod);
-
-//     const cart = await Cart.findOne({ user: userId }).populate('products.product');
-
-    
-
-
-//     for (const item of cart.products) {
-//       const product = item.product;
-//       const requestedQuantity = item.quantity;
-
-//       if (requestedQuantity > product.quantity) {``
-//         const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
-//         return res.status(400).json({ message });
-//       }
-//     }
-
-//     const order = {
-//       user: req.session.user_id,
-//       address: addressId,
-//       paymentMethod: paymentMethod,
-//       products: cart.products.map((item) => {
-//         return {
-//           product: item.product,
-//           quantity: item.quantity,
-//           price: item.product.price,
-//           total: item.subTotal,
-//         };
-//       }),
-//       grandTotal: cart.total,
-//     };
-
-//     await Order.insertMany(order);
-
-//     // Update product stock after successful order
-//     for (const item of cart.products) {
-//       const product = item.product;
-//       const updatedQuantity = product.quantity - item.quantity;
-//       const updatedOrders = product.orders + item.quantity; // Increment orders field
-
-//       console.log(updatedOrders);
-//       console.log("//////////" + product.product);
-//       await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
-//     }
-
-//     await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
-//     res.status(200).json({ message: "success" });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
 
 
 const createRazorpayOrder = async (amount) => {
@@ -145,76 +61,15 @@ const createRazorpayOrder = async (amount) => {
 
 
 
-// const confirmOrder = async (req, res) => {
-//   try {
-
-//     const userId = req.session.user_id;
-//     const addressId = req.body.addressId;
-//     const paymentMethod = req.body.PaymentMethod;
-
-//     console.log(addressId, paymentMethod);
-
-//     const cart = await Cart.findOne({ user: userId }).populate('products.product');
-
-    
-
-
-//     for (const item of cart.products) {
-//       const product = item.product;
-//       const requestedQuantity = item.quantity;
-
-//       if (requestedQuantity > product.quantity) {``
-//         const message = `Stock for '${product.name}' is insufficient. Available stock: ${product.quantity}`;
-//         return res.status(400).json({ message });
-//       }
-//     }
-
-//     const order = {
-//       user: req.session.user_id,
-//       address: addressId,
-//       paymentMethod: paymentMethod,
-//       products: cart.products.map((item) => {
-//         return {
-//           product: item.product,
-//           quantity: item.quantity,
-//           price: item.product.price,
-//           total: item.subTotal,
-//         };
-//       }),
-//       grandTotal: cart.total,
-//     };
-
-//     await Order.insertMany(order);
-
-//     // Update product stock after successful order
-//     for (const item of cart.products) {
-//       const product = item.product;
-//       const updatedQuantity = product.quantity - item.quantity;
-//       const updatedOrders = product.orders + item.quantity; // Increment orders field
-
-//       console.log(updatedOrders);
-//       console.log("//////////" + product.product);
-//       await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
-//     }
-
-//     await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], total: 0 } });
-//     res.status(200).json({ message: "success" });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// };
-
-
-
 const confirmOrder = async (req, res) => {
   try {
 
     const userId = req.session.user_id;
     const addressId = req.body.addressId;
     const paymentMethod = req.body.PaymentMethod;
-
-    console.log(addressId, paymentMethod);
+    const userData = await User.findById(userId)
+    const walletAmount = userData.walletAmount;
+    
 
     const cart = await Cart.findOne({ user: userId }).populate('products.product');
 
@@ -252,9 +107,7 @@ const confirmOrder = async (req, res) => {
         const product = item.product;
         const updatedQuantity = product.quantity - item.quantity;
         const updatedOrders = product.orders + item.quantity; // Increment orders field
-  
-        console.log(updatedOrders);
-        console.log("//////////" + product.product);
+
         await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
       }
   
@@ -285,7 +138,51 @@ const confirmOrder = async (req, res) => {
       } catch (error) {
         console.log(error);
       }
-    } else {
+    
+    } 
+    else if(paymentMethod === "wallet"){
+     if(walletAmount >= cart.total){
+
+     const order = {
+      user : req.session.user_id,
+      address : addressId,
+      paymentMethod : paymentMethod,
+      products : cart.products.map((item)=>{
+        return {
+          product : item.product,
+          quantity : item.quantity,
+          price : item.product.price,
+          total : item.subTotal
+        }
+      }),
+      grandTotal:cart.total
+     }
+     await Order.insertMany(order);
+
+     const newWalletAmount = walletAmount - cart.total;
+     userData.walletAmount = newWalletAmount;
+     await userData.save();
+
+     for(const item of cart.products){
+      const product = item.product;
+
+      const updatedQuantity = product.quantity - item.quantity;
+      const updatedOrders = product.orders + item.quantity; // Increment orders field
+
+      await Product.findByIdAndUpdate(product._id, { quantity: updatedQuantity, orders: updatedOrders });
+     }
+
+     await Cart.findOneAndUpdate({ user: userId }, { $set: { products: [], Total: 0 } });
+        res.status(200).json({ message: "success" });
+
+
+    
+    }else{
+      res.status(204).json({ message: "Insufficient Balance" });
+    }
+  }
+    
+    else {
       console.log('No payment method choosed');
     }
 
@@ -303,9 +200,7 @@ const updatedPayment = async (req,res) => {
   try {
     const { paymentDetails, address} = req.body;
     let paymentMethod = 'RazorPay';
-    console.log(paymentDetails);
 
-    console.log(address);
 
         // Check if paymentMethod is provided
         if (!paymentMethod) {
@@ -347,7 +242,7 @@ const updatedPayment = async (req,res) => {
       orderId:orderId
     }
 
-    console.log(transfer.amount);
+
 
     await transactionModel.insertMany(transfer);
 
@@ -381,7 +276,7 @@ const loadSuccess = async(req,res)=>{
 const loadOrderList = async (req,res) => {
   try {
       const order = await Order.find().populate('address').sort({createdAt:-1});
-      console.log(order);
+   
       res.render('orderList',{order});
   } catch (error) {
       console.log(error.message);
@@ -401,7 +296,7 @@ const loadOrderDetails = async(req,res) => {
 const orderStatus = async (req,res)=>{
   try {
     const {orderId,status} = req.body;
-    console.log("/?/?????//////"+orderId,status);
+  
 
     if(!status || !orderId){
       return res.status(400).json({ error: 'Invalid input parameters' });
@@ -411,7 +306,7 @@ const orderStatus = async (req,res)=>{
       { $set: { status:status }},
       {new:true}
     );
-    console.log(updateOrder);
+
 
     if(!updateOrder){
       return res.status(404).json({ error: 'Order not found' });
@@ -423,45 +318,7 @@ const orderStatus = async (req,res)=>{
   }
 }
 
-// const cancelOrder = async(req,res)=>{
-//   try {
-//     const orderId = req.body.orderId;
-//     let updatedOrder = await Order.findByIdAndUpdate(orderId, { $set: { status:'Cancelled'}}).populate('products.product');
-//     const userData = await User.findById(req.session.user_id);
-    
-//     if(updatedOrder.paymentMethod === 'RazorPay'){
-//       const walletUpdating = updatedOrder.grandTotal + userData.walletAmount;
-//       userData.walletAmount = walletUpdating;
-//       await userData.save();
-//       console.log(userData+"userdataaaaaaaaaaaaaaaaaaaa");
 
-
-//       const transfer = {
-//         user:user_id,
-//         amount:paymentDetails.amount,
-//         paymentMethod:paymentMethod,
-//         type:"credited",
-//         orderId:orderId
-//       }
-
-//       await transactionModel.insertMany(transfer)
-//     }
-
-//     for(const item of updatedOrder.products){
-//       const product = item.product;
-
-//       const updatedQuantity = product.quantity + item.quantity;
-//       const updatedOrders = product.orders - item.quantity;
-//       await Product.findByIdAndUpdate(product._id, {quantity:updatedQuantity, orders:updatedOrders});
-//     }
-
-//     if(updatedOrder){
-//       res.status(200).json({ success: false, message: 'Order not found or could not be cancelled' });
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
 
 const cancelOrder = async (req, res) => {
   try {
@@ -473,7 +330,7 @@ const cancelOrder = async (req, res) => {
       const walletUpdating = updatedOrder.grandTotal + userData.walletAmount;
       userData.walletAmount = walletUpdating;
       await userData.save();
-      console.log(userData + "userdataaaaaaaaaaaaaaaaaaaa");
+   
 
       const transfer = {
         user: req.session.user_id, // assuming user_id is stored in the session
@@ -545,16 +402,16 @@ async function returnResponse(req, res) {
     const { status, orderId } = req.body;
     const updatedStatus = await Order.findByIdAndUpdate(orderId, { $set: { returnRequest: status } }).populate('products.product')
     const userData = await User.findOne({ _id: updatedStatus.user })
-    console.log(userData);
+   
 
     if (status === "accepted") {
 
       await Order.findByIdAndUpdate(orderId,{status:'Returned'})
       const walletUpdating = updatedStatus.grandTotal + userData.walletAmount;
-      console.log("11111" + walletUpdating);
+     
       userData.walletAmount = walletUpdating;
       await userData.save();
-      console.log("222222" + userData);
+    
 
       const transaction = {
         user: updatedStatus.user,
@@ -575,7 +432,7 @@ async function returnResponse(req, res) {
 
     res.status(200).json({ success: true, message: "Operation completed successfully" });
 
-    console.log(updatedStatus);
+  
 
   } catch (error) {
     console.log(error);
@@ -610,16 +467,22 @@ const applyCoupon = async(req,res)=>{
 
 const removeCoupon = async (req,res)=>{
   try {
-    const appliedCoupon = req.body.CouponCode;
+    const appliedCoupon = req.query.CouponCode;
     const coupon = await Coupon.findOne({ CouponCode : appliedCoupon });
     const user = req.session.user_id;
     const userCart = await Cart.findOne({user:user});
     if(coupon){
-      const newTotal = userCart.total +  coupon.discount;
+      const newTotal = userCart.total + coupon.discount;
       userCart.total = newTotal;
       userCart.appliedCoupon = '';
 
       await userCart.save();
+
+      await Coupon.findByIdAndUpdate(
+        coupon._id,
+        {$pull: {usedBy:user}},
+        { new:true }
+      )
     
     }
     else{

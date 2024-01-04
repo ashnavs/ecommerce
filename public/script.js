@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById(errorId).innerText = '';
         });
     }
-});
+});*/
 
 
 // document.addEventListener('DOMContentLoaded', function () {
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //             });
 //         }
 //     });
-// });*/
+// });
 
 
 //edit category

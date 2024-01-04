@@ -47,7 +47,8 @@ admin_route.get('/addnewProduct',auth.isLogin,productController.loadaddnewProduc
 admin_route.post('/addnewProduct',upload.array('productImage'),productController.addnewProduct)
 
 
-admin_route.get('/listProduct',productController.listProduct)
+// admin_route.get('/listProduct',productController.listProduct)
+admin_route.get('/listProduct', productController.listProduct);
 admin_route.get('/editProduct',productController.editProduct)
 admin_route.post('/editProduct',upload.array('productImage'),productController.updateProduct)
 
@@ -80,6 +81,12 @@ admin_route.post('/editCoupon',adminController.editCoupon)
 
 //report
 admin_route.get('/download-pdf',salesController.downloadPdf)
+
+//chart
+admin_route.get("/sales-data",adminController.getSalesData);
+admin_route.get("/sales-data/weekly",adminController.getSalesDataWeekly);
+admin_route.get("/sales-data/yearly",adminController.getSalesDataYearly);
+
 
 
 module.exports = admin_route;

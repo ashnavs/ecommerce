@@ -10,7 +10,8 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const Order = require('../models/orderModel') 
 const Product = require('../models/productModel')
 const Coupon = require('../models/couponModel');
-
+const numeral = require("numeral");
+const moment = require("moment");
 
 
 
@@ -147,97 +148,6 @@ const loadDashboard = async (req, res) => {
 };
 
 
-// const loadDashboard = async (req, res) => {
-//     try {
-//         const orders = await Order.find().populate('products.product');
-//         const totalRevenue = orders.reduce((sum, order) => sum + order.grandTotal, 0);
-//         const totalSales = orders.length;
-//         const totalProductsSold = orders.reduce((sum, order) => sum + order.products.length, 0);
-
-//         const uniqueProducts = new Set();
-//         orders.forEach(order => {
-//             order.products.forEach(product => {
-//                 uniqueProducts.add(product.product._id.toString());
-//             });
-//         });
-//         const totalUniqueProducts = uniqueProducts.size;
-
-//         const productSalesMap = new Map();
-//         orders.forEach(order => {
-//             order.products.forEach(product => {
-//                 const productId = product.product._id.toString();
-//                 const quantity = product.quantity;
-//                 if (productSalesMap.has(productId)) {
-//                     productSalesMap.set(productId, productSalesMap.get(productId) + quantity);
-//                 } else {
-//                     productSalesMap.set(productId, quantity);
-//                 }
-//             });
-//         });
-
-//     const topSellingProducts = await Promise.all(
-//         [...productSalesMap.entries()]
-//             .sort((a, b) => b[1] - a[1])
-//             .slice(0, 3)
-//             .map(async ([productId, quantitySold]) => {
-//                 const product = await Product.findById(productId).exec();
-//                 return {
-//                     title: product.title,
-//                     date: new Date(product.createdAt).toLocaleDateString('en-US', {
-//                         year: 'numeric',
-//                         month: 'short',
-//                         day: 'numeric',
-//                     }),
-//                     sales_price: product.sales_price,
-//                     quantitySold: quantitySold,
-//                     stock: product.quantity, // Assuming product quantity is the stock
-//                     amount: product.sales_price * quantitySold,
-//                 };
-//             })
-//         );
-
-
-//         const razorpayTotalResult = await Order.aggregate([
-//             { $match: { paymentMethod: 'Razorpay', status: 'Delivered' } },
-//             { $group: { _id: null, total: { $sum: '$grandTotal' } } }
-//         ]);
-        
-//         const codTotalResult = await Order.aggregate([
-//             { $match: { paymentMethod: 'Cash On Delivery', status: 'Delivered' } },
-//             { $group: { _id: null, total: { $sum: '$grandTotal' } } }
-//         ]);
-        
-//         // Handle the case where the aggregation result is null or empty
-//         const razorpayTotalAmount = razorpayTotalResult.length > 0 ? razorpayTotalResult[0].total : 0;
-//         const codTotalAmount = codTotalResult.length > 0 ? codTotalResult[0].total : 0;
-
-
-//         const recentOrders = await Order.find()
-//             .sort({ createdAt: -1 })  // Sorting by createdAt in descending order
-//             .limit(5)  // Limiting to the last 5 orders
-//             .populate('products.product');
-
-//         const totalUsers = await User.countDocuments();
-
-//         res.render('adminDashboard', {
-//             totalRevenue,
-//             totalSales,
-//             totalProductsSold,
-//             totalUniqueProducts,
-//             topSellingProducts,
-//             totalUsers,
-//             recentOrders,
-//             razorpayTotal: razorpayTotalAmount,
-//             codTotal: codTotalAmount
-//         });
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
-
-
-
 
 const loaduserDetails = async (req, res) => {
     try {
@@ -279,39 +189,46 @@ const loaduserDetails = async (req, res) => {
 
 
 
-const blockUser = async (req, res) => {
-    try {
-        const id = req.query.id;
-        const user = await User.findById(id);
-        if (!user) {
-            console.log("User not found!");
-        }
-        user.is_blocked = !user.is_blocked;
-        await user.save();
-        res.redirect('/admin/userDetails')
-    } catch (error) {
-        console.log(error.message);
-    }
-};
-
 // const blockUser = async (req, res) => {
 //     try {
 //         const id = req.query.id;
 //         const user = await User.findById(id);
-
 //         if (!user) {
 //             console.log("User not found!");
-//             return res.redirect('/admin/userDetails');
 //         }
-
 //         user.is_blocked = !user.is_blocked;
 //         await user.save();
-//         res.redirect('/admin/userDetails');
+//         res.redirect('/admin/userDetails')
 //     } catch (error) {
 //         console.log(error.message);
-//         res.status(500).send('Internal Server Error');
 //     }
 // };
+
+const blockUser = async (req, res) => {
+  try {
+      const id = req.query.id;
+      const user = await User.findById(id);
+
+      if (!user) {
+          console.log("User not found!");
+          // Handle the case where the user is not found
+          return res.redirect('/admin/userDetails');
+      }
+
+      user.is_blocked = !user.is_blocked;
+      await user.save();
+
+      // Redirect back to the user details page
+      res.redirect('/admin/userDetails');
+  } catch (error) {
+      console.log(error.message);
+      // Handle errors and redirect back to the user details page
+      res.redirect('/admin/userDetails');
+  }
+};
+
+
+
 
 
 
@@ -402,7 +319,7 @@ const getSalesReport=async(req,res)=>{
         const returnedOrders = orders.filter(order => order.status === "Return confirmed");
 
 
-console.log("Count of orders with 'Return Confirmed' status:", );
+
 
 
         const totalSales=orders.length;
@@ -430,26 +347,7 @@ const loadAddCoupon = async(req,res)=>{
     }
 }
 
-// const addCoupon = async(req,res)=>{
-//     try {
-//         const {  name, code, discountAmount, expireDate, minimumCartTotal} = req.body;
 
-//         const coupon = {
-//             name:name,
-//             CouponCode:code,
-//             expiry:expireDate,
-//             discount:discountAmount,
-//             minimumCartTotal:minimumCartTotal
-//         }
-
-//         const couponDetails = await Coupon.insertMany( coupon);
-
-//         console.log(couponDetails);
-//         res.redirect('/admin/addCoupon')
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 const addCoupon = async (req, res) => {
     try {
       const { name, code, discountAmount, expireDate, minimumCartTotal } = req.body;
@@ -545,6 +443,125 @@ const editCoupon = async(req,res)=>{
     }
 }
 
+const getSalesData = async (req, res) => {
+    try {
+      const pipeline = [
+        {
+          $project: {
+            year: { $year: "$createdAt" }, 
+            month: { $month: "$createdAt" }, 
+            totalSales: "$grandTotal", 
+          },
+        },
+        {
+          $group: {
+            _id: { year: "$year", month: "$month" },
+            sales: { $sum: "$totalSales" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $concat: [
+                { $toString: "$_id.year" },
+                "-",
+                {
+                  $cond: {
+                    if: { $lt: ["$_id.month", 10] },
+                    then: { $concat: ["0", { $toString: "$_id.month" }] },
+                    else: { $toString: "$_id.month" },
+                  },
+                },
+              ],
+            },
+            sales: "$sales",
+          },
+        },
+      ];
+  
+      const monthlySalesArray = await Order.aggregate(pipeline);
+      console.log(monthlySalesArray);
+  
+      res.json(monthlySalesArray);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
+
+const getSalesDataYearly = async (req, res) => {
+    try {
+      const yearlyPipeline = [
+        {
+          $project: {
+            year: { $year: "$createdAt" }, 
+            totalSales: "$grandTotal", 
+          },
+        },
+        {
+          $group: {
+            _id: { year: "$year" },
+            sales: { $sum: "$totalSales" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            year: { $toString: "$_id.year" },
+            sales: "$sales",
+          },
+        },
+      ];
+  
+      const yearlySalesArray = await Order.aggregate(yearlyPipeline);
+      console.log(yearlySalesArray);
+      res.json(yearlySalesArray);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  const getSalesDataWeekly = async (req, res) => {
+    try {
+      const weeklySalesPipeline = [
+        {
+          $project: {
+            week: { $week: "$createdAt" }, 
+            totalSales: "$grandTotal", 
+          },
+        },
+        {
+          $group: {
+            _id: { week: { $mod: ["$week", 7] } },
+            sales: { $sum: "$totalSales" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            week: { $toString: "$_id.week" },
+            dayOfWeek: { $add: ["$_id.week", 1] },
+            sales: "$sales",
+          },
+        },
+        {
+          $sort: { dayOfWeek: 1 },
+        },
+      ];
+  
+      const weeklySalesArray = await Order.aggregate(weeklySalesPipeline);
+      console.log(weeklySalesArray);
+  
+      res.json(weeklySalesArray);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
 module.exports = {
     adminLogin,
     loadDashboard,
@@ -557,5 +574,8 @@ module.exports = {
     loadListCoupon,
     couponListUnlist,
     loadeditCoupon,
-    editCoupon
+    editCoupon,
+    getSalesData,
+    getSalesDataYearly,
+    getSalesDataWeekly
 }

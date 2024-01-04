@@ -76,50 +76,7 @@ transporter.sendMail(mailOptions,(error,info)=>{
 }
 
 
-// Later in your code, you can call sendOtp(email, otp) to send the email with the OTP.
 
-
-//adding user from the sign up page
-//to insert user data
-
-// const insertUser = async(req,res)=>{
-
-//     try{
-    
-//         const user =  User({
-//             name: req.body.name,
-//             email: req.body.email,
-//             mobile: req.body.mno,
-//             password: req.body.password
-//         });
-
-//         req.session.userData = {
-//             _id:user._id,
-//             name:user.name,
-//             email:user.email,
-//             mobile:user.mobile,
-//             password:user.password,
-//         };
-
-//         const otp = generateOTP();
-//         console.log("IIIIIIIIIII"+otp);
-//         req.session.otp = otp;
-
-//         sendOtp(req.body.email,otp);
-
-//         res.redirect('/otpverification')
-
-//         if(user){
-//             res.render("registration",{message:"registration successful"})
-//         }
-//         else{
-//             res.render("registration",{message:"registration unsuccessful"})
-//         }
-//     }catch(error){
-//         console.log(error.message);
-// }
-
-// }
 
 const insertUser = async (req, res) => {
     try {
@@ -199,7 +156,7 @@ const verifyOtp = async (req,res)=>{
         if(enteredOTP==storedOTP){
             delete req.session.otp;
 
-            console.log(userData.password);
+        
             const spassword = await securePassword(userData.password);
             const user = User({
                 name:userData.name,
@@ -229,9 +186,7 @@ const loadLandingHome = async (req, res) => {
         const user = req.session.user_id;
         const allProduct = await Product.find().sort({ createdAt: -1}).limit(8);
         const newArrivals = await Product.find().sort({ createdAt: -1}).limit(6)
-        // const products = await Product.find().sort({createdAt: -1})
-        // console.log("////////////////"+allProduct.createdAt);
-        // console.log(allProduct); // Log the products to the console
+       
 
         res.render('landingHome', { allProduct , newArrivals , user });
     } catch (error) {
@@ -257,12 +212,11 @@ const verifyLogin=async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password
        const userData= await User.findOne({email:email})
-       console.log(userData);
+
    if(userData){
-    console.log(password);
-    console.log(userData.password);
+
            const match=await bcrypt.compare(password,userData.password)
-           console.log(match);
+        
       if(match){
 
         
@@ -317,10 +271,10 @@ async function loadproductDetail(req,res){
     try {
         const user  = req.session.user_id
         const id = req.query.id;
-        console.log(id);
+        
         const products = await Product.findById(id);
         
-        console.log(products + "oooooooooooooooooo");
+     
         res.render('productDetails',{products , user })
     } catch (error) {
         console.log(error.message);
@@ -356,11 +310,11 @@ const verifyResendOtp = async (req, res) => {
         const storedOTP = req.session.otp.otp; 
       
         const userData = req.session.userData; //Access userdata from the session
-         console.log(enteredOTP , storedOTP + "//////////");
+        
         if(enteredOTP==storedOTP){
             delete req.session.otp;
 
-            console.log(userData.password);
+          
             const spassword = await securePassword(userData.password);
             const user = User({
                 name:userData.name,
@@ -391,14 +345,13 @@ const resendOtp = async (req, res) => {
         const OTP = generateOTP() /** otp generating **/
         req.session.otp = { otp: OTP };
         const userData = req.session.userData; 
-        console.log('Generated OTP:', OTP);
+        
 
 
     // otp resending //
         try {
             sendOtp( userData.email , OTP);
-            console.log('otp is sent');
-            console.log(OTP)
+         
             return res.render('resendOtp');
         } catch (error) {
             console.error('Error sending OTP:', error);
@@ -536,13 +489,13 @@ const resetPass = async (req, res) => {
 const loaduserProfile = async(req,res)=>{
     try {
         const user = req.session.user_id;
-        console.log(user+"///////////////dcvsfdsfdsfdsfdscvbvcc");
+       
         const userDetail = await User.findById(req.session.user_id);
         const address = await Address.find({user:user})
         const orderDetails = await Order.find({user:user}).sort({createdAt:-1})
-        console.log(orderDetails);
+        
         const transactions = await transactionModel.find({ user: user }).sort({ date: -1 });
-        console.log("transactionsssssssssssssssssssssss"+transactions);
+        
         res.render('user' ,{ user , userDetail , address , orderDetails , transactions})
     } catch (error) {
         console.log(error.message);
@@ -691,79 +644,9 @@ async function orderdetails(req,res){
 }
 
 
-// const editAddress = async(req,res) => {
-//     try {
-//         const addressId = req.query.addressId;
-//         console.log(addressId);
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 
-// const editAddress = async (req, res) => {
-//     try {
-//       // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
-//       const userId = req.session.user_id;
-//       const user = req.session.user_id;
-  
-//       // Extract address data from the form submission
-//       const {
-//         name,
-//         email,
-//         mobile,
-//         houseno,
-//         street,
-//         landmark,
-//         pincode,
-//         city,
-//         country,
-//       } = req.body;
-  
-//       const addressId = req.query.id;
 
-//       console.log('Received addressId:', addressId);
-//       console.log('Received userId:', userId);
-  
-//       // Find the address in the database
-//       const existingAddress = await Address.findOne({ user: userId });
-  
-//       // Check if the address exists
-//     //   if (!existingAddress) {
-//     //     return res.status(404).json({ success: false, message: 'Address not found' });
-//     //   }
-  
-
-//     if (!existingAddress) {
-//         // Render a custom 404 page
-//         return res.render('error', { layout: 'errorLayout' ,user }); // Assuming you have a 404.ejs file in your views folder
-//         // return res.send('404')
-//     }
-
-//       // Update the existing address fields
-//       existingAddress.name = name;
-//       existingAddress.email = email;
-//       existingAddress.mobile = mobile;
-//       existingAddress.houseno = houseno;
-//       existingAddress.street = street;
-//       existingAddress.landmark = landmark;
-//       existingAddress.pincode = pincode;
-//       existingAddress.city = city;
-//       existingAddress.country = country;
-  
-//       // Save the updated address to the database
-//       await existingAddress.save();
-  
-//       // Respond with success message
-//       res.redirect('/user');
-//       // res.json({ success: true, message: 'Address updated successfully' });
-//     } catch (error) {
-//       // Handle any errors that may occur during the process
-//       res.redirect('/error')
-//       console.error(error);
-//       res.status(500).json({ success: false, message: 'Internal server error' });
-//     }
-//   };
 
 const editAddress = async (req, res) => {
     try {
@@ -785,8 +668,6 @@ const editAddress = async (req, res) => {
   
       const addressId = req.query.addressId;
 
-      console.log('Received addressId:', addressId);
-      console.log('Received userId:', userId);
   
       // Find the address in the database
       const existingAddress = await Address.findOne({ _id:addressId , user:userId});

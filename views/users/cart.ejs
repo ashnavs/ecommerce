@@ -125,18 +125,34 @@
 	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
 	                							<td>&nbsp;</td>
 	                						</tr><!-- End .summary-shipping-estimate -->
-
+                                            <% if(userCart.subTotal != 0) { %>
 	                						<tr class="summary-total">
 	                							<td>Total:</td>
 	                							<td id="cart-total"><%=userCart.total+80%></td>
 	                						</tr><!-- End .summary-total -->
+                                            <% }else{  %>
+                                                <tr class="summary-total">
+                                                    <td>Total:</td>
+                                                    <td id="cart-total"><%=userCart.total%></td>
+                                                </tr><!-- End .summary-total -->
+                                                <%}%>
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="checkOut" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
-	                			</div><!-- End .summary -->
+	                				<!-- <a href="checkOut" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                			</div>
 
-		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+		            			<a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a> -->
+                                <% if(userCart.total === 0){%>
+
+                                    <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+
+                                <%}else{%>
+
+                                    <a href="/checkOut" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                                    <a href="/" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+
+                                <%} %>
 	                		</aside><!-- End .col-lg-3 -->
 	                	</div><!-- End .row -->
 	                </div><!-- End .container -->

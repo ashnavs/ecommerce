@@ -140,7 +140,7 @@ const loadProductsView = async (req, res) => {
     const selectedCategory = req.query.category;
     const selectedBrand = req.query.brand;
     const searchQuery = req.query.q;
-    console.log(searchQuery);
+   
 
     const sortBy = req.query.sortby || 'priceLowToHigh';
 
@@ -222,7 +222,7 @@ async function loadProduct(req, res) {
     delete req.session.successmessage;
     const editproduct = req.session.successMessage;
     delete req.session.successMessage;
-      res.render('products', { products, currentPage: page, totalPages , successMessage , editproduct});
+      res.render('products', { products, currentPage: page, totalPages , successMessage , editproduct , confirmList: true});
       
   } catch (error) {
       console.error(error.message);
@@ -263,72 +263,11 @@ async function editProduct(req,res){
 
 
 
-
-
-
-// async function addnewProduct(req, res) {
-//   try {
-//     const product = new Product({
-//       name: req.body.name,
-//       description: req.body.description,
-//       model: req.body.model,
-//       screenSize: req.body.screenSize,
-//       price: req.body.price,
-//       discountPrice: req.body.discountPrice,
-//       quantity: req.body.quantity,
-//       brand: req.body.brand,
-//       ram: req.body.ram,
-//       storage: req.body.storage,
-//       processor: req.body.processor,
-//       category: req.body.category,
-//       graphicsCard: req.body.graphicsCard,
-//       osArchitecture: req.body.osArchitecture,
-//       os: req.body.os,
-//       list: true
-//     });
-
-//     if (req.files && req.files.length > 0) {
-//       product.productImage = req.files.map((file) => file.filename);
-//     }
-
-//         // Create a temporary directory for resized images
-//         const tempDir = path.join(__dirname, "temp");
-//         await fs.mkdir(tempDir, { recursive: true });
-
-//         // Resize and crop the uploaded images to 277x277
-//         await Promise.all(product.productImage.map(async (filename) => {
-//             const inputImagePath = `./public/productImage/${filename}`;
-//             const outputImagePath = path.join(tempDir, filename);
-
-//             await sharp(inputImagePath)
-//                 .resize({ width: 1000, height: 1000, fit: 'cover' })
-//                 .toFile(outputImagePath);
-//         }));
-
-//         // Move the resized images back to the original directory
-//         await Promise.all(product.productImage.map(async (filename) => {
-//             const tempImagePath = path.join(tempDir, filename);
-//             const finalImagePath = `./public/productImage/${filename}`;
-
-//             await fs.rename(tempImagePath, finalImagePath);
-//         }));
-
-//         // Remove the temporary directory
-//         await fs.rmdir(tempDir, { recursive: true });
-
-//         console.log("Success");
-//     await product.save();
-//     res.redirect('/admin/products');
-//   } catch (error) {
-//     console.error(error.message);
-//   //   res.status(500).send('Internal Server Error');
-//   const allCategory = await Category.find({is_list:true})
-//     res.render('addnewProduct', { errorMessage: 'Internal Server Error' , allCategory});
-//    }
-// }
-
 async function addnewProduct(req, res) {
   try {
+
+    
+
     const product = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -352,7 +291,7 @@ async function addnewProduct(req, res) {
       product.productImage = req.files.map((file) => file.filename);
     }
 
-    console.log("Success");
+  
     await product.save();
 
     req.session.successmessage = 'Product added successfully';
@@ -369,6 +308,28 @@ async function addnewProduct(req, res) {
 
 
 // Assuming that Product is a mongoose model defined somewhere in your code
+// async function listProduct(req, res) {
+//   try {
+//     const productId = req.query.id;
+//     const product = await Product.findById(productId);
+
+//     if (!product) {
+//       console.log("Product not found");
+//       return res.redirect('/admin/products');
+//     }
+
+//     // Toggle the 'list' property
+//     product.list = !product.list;
+
+//     // Save the changes
+//     await product.save();
+
+//     res.redirect('/admin/products');
+//   } catch (error) {
+//     console.log(error.message);
+//     res.redirect('/admin/products');
+//   }
+// }
 async function listProduct(req, res) {
   try {
     const productId = req.query.id;
@@ -391,6 +352,7 @@ async function listProduct(req, res) {
     res.redirect('/admin/products');
   }
 }
+
 
 const updateProduct = async (req, res) => {
   try {

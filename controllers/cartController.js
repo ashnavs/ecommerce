@@ -8,26 +8,22 @@ const user = require('../models/userModel')
 const addToCart = async (req, res) => {
   try {
 
-    console.log("////////////////////////////////");
-
     const productId = req.query.productId;
     const userId = req.session.user_id;
 
-    console.log("////" + productId);
-
     let userCart = await Cart.findOne({ user: userId }).populate('products.product');
-    console.log(userCart);
+  
 
     if (!userCart) {
 
       userCart = new Cart({ user: userId, products: [] })
-      console.log("new cart is created" + userCart);
+      
     }
     const existingProduct = userCart.products.find((item) => {
       return item.product._id.toString() === productId;
     });
 
-    console.log(existingProduct);
+
 
     if (existingProduct) {
       existingProduct.quantity += 1;
@@ -78,7 +74,7 @@ const loadCart = async (req, res) => {
 
     const total = subtotal;
     userCart.subTotal = subtotal;
-    console.log(total,subtotal);
+   
     userCart.total = total;
     await userCart.save();
 
@@ -98,11 +94,11 @@ const updateQuantity = async (req, res) => {
   try {
     const { productId, newQuantity } = req.body;
     const userId = req.session.user_id;
-    console.log('Received updateQuantity request', productId, newQuantity);
+   
 
     // Find the user's cart
     const userCart = await Cart.findOne({ user: userId }).populate('products.product');
-    console.log("User Cart:", userCart);
+
 
     if (!userCart) {
       return res.status(404).json({ success: false, message: 'Cart not found for the user.' });
@@ -122,7 +118,7 @@ const updateQuantity = async (req, res) => {
       // Recalculate the subtotal and total for the entire cart
       const newTotal = userCart.products.reduce((acc, item) => {
         const itemTotal = item.total || 0; // Handle the case where item.total is undefined or NaN
-        console.log("Item:", item);
+     
         return acc + itemTotal;
       }, 0);
 
@@ -138,48 +134,6 @@ const updateQuantity = async (req, res) => {
 };
 
 
-// const removeProduct = async (req,res) => {
-//   try {
-//       const productId = req.query.id;
-//       const user = req.session.user_id;
-
-//       const userCart = await Cart.findOne({user : user})
-
-//       if(userCart){
-
-//         const productIndex = userCart.products.findIndex((item)=>
-//         item.product.toString() === productId
-//         );
-
-//         if(productIndex !== -1){
-//           const removedProduct = userCart.products[productIndex];
-//           console.log(removeProduct);
-
-//           const removedsubTotal = removedProduct.subTotal;
-//           console.log(removedsubTotal);
-
-//           userCart.products.splice(productIndex , 1);
-
-//           userCart.total = userCart.total - removedsubTotal;
-
-//           await userCart.save();
-
-//           res.redirect('/cartPage');
-//         }
-        
-//       }
-//     else{
-//         console.log('Product not found in the cart');
-//         res.redirect('/cartPage');
-//       }
-
-     
-
-
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
 
 const removeProduct = async (req, res) => {
   try {
@@ -195,10 +149,10 @@ const removeProduct = async (req, res) => {
 
       if (productIndex !== -1) {
         const removedProduct = userCart.products[productIndex];
-        console.log(removedProduct);
+  
 
         const removedsubTotal = removedProduct.subTotal;
-        console.log(removedsubTotal);
+
 
         userCart.products.splice(productIndex, 1);
 
@@ -214,11 +168,11 @@ const removeProduct = async (req, res) => {
 
         res.redirect('/cartPage');
       } else {
-        console.log('Product not found in the cart');
+    
         res.redirect('/cartPage');
       }
     } else {
-      console.log('Cart not found for the user');
+    
       res.redirect('/cartPage');
     }
   } catch (error) {

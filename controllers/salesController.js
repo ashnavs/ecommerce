@@ -12,7 +12,7 @@ const generatePdf = require('../helper/pdfGenerator');
 const loadReport = async (req, res) => {
     try {
         const reportOrder = req.query.report;
-        console.log(reportOrder);
+     
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);

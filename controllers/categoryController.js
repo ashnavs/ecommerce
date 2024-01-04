@@ -6,42 +6,10 @@ const Product = require('../models/productModel')
 
 
 
-// const loadCategory = async (req, res) => {
-//     try {
-//         const categories = await Category.find();
-//         console.log(categories);
-       
-//         res.render('category',{categories})
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
 
 const ITEMS_PER_PAGE = 2;
 
-// const loadCategory = async (req, res) => {
-//     try {
-//         const page = parseInt(req.query.page) || 1;
-   
 
-//         const categoriesCount = await Category.countDocuments();
-//         const totalPages = Math.ceil(categoriesCount / ITEMS_PER_PAGE);
-
-//         const categories = await Category.find()
-//             .skip((page - 1) * ITEMS_PER_PAGE)
-//             .limit(ITEMS_PER_PAGE);
-
-//         res.render('category', {
-//             categories,
-//             currentPage: page,
-//             totalPages,
-           
-//         });
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).send('Internal Server Error');
-//     }
-// };
 
 
 const loadCategory = async (req, res) => {
@@ -122,11 +90,37 @@ const addCategory = async(req,res)=>{
 
 
 
+// const listCategory = async (req, res) => {
+//     try {
+//         const categoryId = req.query.id;
+//         const category = await Category.findById(categoryId);
+
+
+//         if (!category) {
+//             console.log("Category not found");
+//             return res.status(404).send("Category not found");
+//         }
+
+//         // Toggle the is_list property of the category
+//         category.is_list = !category.is_list;
+//         await category.save();
+
+//         // Unlist or list associated products based on the category's is_list property
+//         const productListAction = category.is_list ? { $set: { list: true } } : { $set: { list: false } };
+//         await Product.updateMany({ category: categoryId }, productListAction);
+
+       
+//         res.redirect('/admin/category');
+//     } catch (error) {
+//         console.error(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// };
+
 const listCategory = async (req, res) => {
     try {
         const categoryId = req.query.id;
         const category = await Category.findById(categoryId);
-
 
         if (!category) {
             console.log("Category not found");
@@ -141,7 +135,6 @@ const listCategory = async (req, res) => {
         const productListAction = category.is_list ? { $set: { list: true } } : { $set: { list: false } };
         await Product.updateMany({ category: categoryId }, productListAction);
 
-        console.log(`Category and associated products ${category.is_list ? 'listed' : 'unlisted'} successfully.`);
         res.redirect('/admin/category');
     } catch (error) {
         console.error(error.message);
@@ -149,39 +142,10 @@ const listCategory = async (req, res) => {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const editCategory = async (req,res)=>{
-//     try {
-//         const id = req.query.id;
-//         console.log(id);
-//         const categories = await Category.findById(id);
-//         // console.log(categories);
-
-//         req.session.successMessge = 'Category edited successfully'
-//         res.render('editCategory',{categories})
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
 const editCategory = async (req, res) => {
     try {
         const id = req.query.id;
         const categories = await Category.findById(id);
-       
-
         const errorMessage = req.session.errorMessage;
         req.session.errorMessage = '';
         // Render the editCategory page with the existing category data
@@ -192,32 +156,6 @@ const editCategory = async (req, res) => {
 };
 
 
-// const updateCategory = async (req, res) => {
-//     try {
-//         const id = req.query.id;
-        
-//         const name = req.body.name
-//         const description = req.body.description
-    
-
-        
-//             const updateCategory = await Category.findByIdAndUpdate(
-//                 { _id: id },
-//                 { name, description },
-//                 { new: true }
-//             );
-//             if (updateCategory) {
-//                 // console.log('Category Updated:', updateCategory);
-//             } else {
-//                 console.log('Category not found or update failed.');
-//             }
-        
-
-//         res.redirect('/admin/category');
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// };
 
 const updateCategory = async (req, res) => {
     try {

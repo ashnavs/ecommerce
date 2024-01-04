@@ -133,9 +133,8 @@
                                                                     <%= item.mobile %><br>
                                                                     <%=item.houseno %><br>
                                                                     <%=item.street %><br>
-                                                                    <%=item.landmark %><br>
-                                                                    <%=item.pincode%><br>
-                                                                    <%=item.city %><br>
+                                                                    <%=item.landmark %>
+                                                                    <%=item.pincode %><br>                                                                    <%=item.city %><br>
                                                                     <%=item.country %><br>
                                                                                                         <!-- <a href="#">Edit <i class="icon-edit"></i></a> -->
                                                                 </p>
@@ -228,9 +227,9 @@
                                                         <div class="card-header" id="heading-5">
                                                             <h2 class="card-title">
                                                                 <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-5"
+                                                                    data-toggle="collapse" href="#collapse-5" onclick="selectPeyment('wallet')"
                                                                     aria-expanded="false" aria-controls="collapse-5">
-                                                                    Credit Card (Stripe)
+                                                                    Wallet
                                                                     <img src="/assets/images/payments-summary.png"
                                                                         alt="payments cards">
                                                                 </a>
@@ -700,6 +699,13 @@ async function orderConfirm(){
                         } catch (error) {
                             console.log(error.message);
                         }
+                    }
+                    else if(response.status === 204){
+                        swal.fire({
+                                title: 'Insufficient Balance',
+                                text: `You don't have enough funds in your wallet.`,
+                                icon: 'error',
+                            });
                     }
                
                 }else{
