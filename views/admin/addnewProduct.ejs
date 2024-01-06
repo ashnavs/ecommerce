@@ -266,13 +266,13 @@
                                                         </div>
                                                         <div class="mb-4 row align-items-center">
                                                             <label class="col-sm-3 form-label-title">Discount
-                                                                Price</label>
+                                                                Percentage</label>
                                                             <div class="col-sm-9">
-                                                                <input type="number" name="discountPrice"
-                                                                    placeholder="Discount Price" class="form-control"
-                                                                    id="discountPrice">
+                                                                <input type="number" name="discountPercentage"
+                                                                    placeholder="Discount Percentage" class="form-control"
+                                                                    id="discountPercentage">
                                                                 <small class="text-danger"
-                                                                    id="discountPriceError"></small>
+                                                                    id="discountPercentageError"></small>
 
                                                             </div>
                                                         </div>
@@ -414,7 +414,7 @@
             </script>  -->
 
 
-            <script>
+           <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     document.getElementById('productForm').addEventListener('submit', function (event) {
                         event.preventDefault();
@@ -434,7 +434,7 @@
             var os = document.getElementById('os').value.trim();
             var description = document.getElementById('description').value.trim();
             var price = document.getElementById('price').value.trim();
-            var discountPrice = document.getElementById('discountPrice').value.trim();
+            var discountPercentage = document.getElementById('discountPercentage').value.trim();
             var productImage = document.getElementById('formFile').value.trim();
 
             var nameError = document.getElementById('nameError');
@@ -450,7 +450,7 @@
             var osError = document.getElementById('osError');
             var descriptionError = document.getElementById('descriptionError');
             var priceError = document.getElementById('priceError');
-            var discountPriceError = document.getElementById('discountPriceError');
+            var discountPercentageError = document.getElementById('discountPercentageError');
             var generalError = document.getElementById('generalError');
 
             if (!name) {
@@ -510,8 +510,8 @@
                 priceError.textContent = 'Price must be a positive number';
             }
 
-            if (discountPrice && (isNaN(discountPrice) || discountPrice <= 0)) {
-                discountPriceError.textContent = 'Discount Price must be a positive number';
+            if (discountPercentage && (isNaN(discountPercentage) || discountPercentage <= 0)) {
+                discountPercentageError.textContent = 'Discount Price must be a positive number';
             }
 
             if (
@@ -529,7 +529,7 @@
                 osError.textContent ||
                 descriptionError.textContent ||
                 priceError.textContent ||
-                discountPriceError.textContent
+                discountPercentageError.textContent
                 // Add conditions for other fields...
             ) {
                 return; // If there are validation errors, prevent form submission
@@ -547,7 +547,7 @@
             });
         }
     });
-</script>
+</script>  
 
             
            

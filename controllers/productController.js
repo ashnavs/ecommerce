@@ -129,81 +129,81 @@ async function loadProducts(req, res) {
 }
 
 
-const loadProductsView = async (req, res) => {
-  try {
-    const allCategory = await Category.distinct('name');
-    const brands = await Product.distinct('brand');
-    const categories = await Category.find();
-    const user = req.session.user_id;
-    const cartQuantity = req.session.cartQuantity; 
+// const loadProductsView = async (req, res) => {
+//   try {
+//     const allCategory = await Category.distinct('name');
+//     const brands = await Product.distinct('brand');
+//     const categories = await Category.find();
+//     const user = req.session.user_id;
+//     const cartQuantity = req.session.cartQuantity; 
 
-    const selectedCategory = req.query.category;
-    const selectedBrand = req.query.brand;
-    const searchQuery = req.query.q;
+//     const selectedCategory = req.query.category;
+//     const selectedBrand = req.query.brand;
+//     const searchQuery = req.query.q;
    
 
-    const sortBy = req.query.sortby || 'priceLowToHigh';
+//     const sortBy = req.query.sortby || 'priceLowToHigh';
 
-    let sortQuery = {};
-    if (sortBy === 'priceLowToHigh') {
-      sortQuery = { sales_price: 1 };
-    } else if (sortBy === 'priceHighToLow') {
-      sortQuery = { sales_price: -1 };
-    }
+//     let sortQuery = {};
+//     if (sortBy === 'priceLowToHigh') {
+//       sortQuery = { sales_price: 1 };
+//     } else if (sortBy === 'priceHighToLow') {
+//       sortQuery = { sales_price: -1 };
+//     }
 
-    // Build filter based on selected category, brand, and search query
-    const filter = {};
-    if (selectedCategory) {
-      filter['category'] = selectedCategory;
-    }
-    if (selectedBrand) {
-      filter['brand'] = selectedBrand;
-    }
-    if (searchQuery) {
-      // Use regex for case-insensitive search
-      filter['$or'] = [
-        { title: { $regex: new RegExp(searchQuery, 'i') } },
-        { category: { $regex: new RegExp(searchQuery, 'i') } },
-        { brand: { $regex: new RegExp(searchQuery, 'i') } },
-      ];
-    }
-    filter['is_Listed'] = true; // Include only listed products
+//     // Build filter based on selected category, brand, and search query
+//     const filter = {};
+//     if (selectedCategory) {
+//       filter['category'] = selectedCategory;
+//     }
+//     if (selectedBrand) {
+//       filter['brand'] = selectedBrand;
+//     }
+//     if (searchQuery) {
+//       // Use regex for case-insensitive search
+//       filter['$or'] = [
+//         { title: { $regex: new RegExp(searchQuery, 'i') } },
+//         { category: { $regex: new RegExp(searchQuery, 'i') } },
+//         { brand: { $regex: new RegExp(searchQuery, 'i') } },
+//       ];
+//     }
+//     filter['is_Listed'] = true; // Include only listed products
 
-    // Pagination parameters
-    const page = parseInt(req.query.page, 10) || 1;
-    const productsPerPage = 12;
+//     // Pagination parameters
+//     const page = parseInt(req.query.page, 10) || 1;
+//     const productsPerPage = 12;
 
-    const results = await Promise.all([
-      Product.find(filter)
-        .sort(sortQuery)
-        .skip((page - 1) * productsPerPage)
-        .limit(productsPerPage)
-        .exec(),
-      Product.countDocuments(filter).exec(),
-    ]);
+//     const results = await Promise.all([
+//       Product.find(filter)
+//         .sort(sortQuery)
+//         .skip((page - 1) * productsPerPage)
+//         .limit(productsPerPage)
+//         .exec(),
+//       Product.countDocuments(filter).exec(),
+//     ]);
 
-    const [productdata, totalProducts] = results;
+//     const [productdata, totalProducts] = results;
 
-    // Render your view with the fetched productdata, categories, brands, and pagination information
-    res.render('productsView', {
-      productdata,
-      categories,
-      brands,
-      currentPage: page,
-      totalPages: Math.ceil(totalProducts / productsPerPage),
-      allCategory,
-      user,
-      selectedCategory,
-      selectedBrand,
-      searchQuery,
-      sortBy,
-      cartQuantity
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Internal Server Error');
-  }
-};
+//     // Render your view with the fetched productdata, categories, brands, and pagination information
+//     res.render('productsView', {
+//       productdata,
+//       categories,
+//       brands,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalProducts / productsPerPage),
+//       allCategory,
+//       user,
+//       selectedCategory,
+//       selectedBrand,
+//       searchQuery,
+//       sortBy,
+//       cartQuantity
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// };
 
 
 //pagination
@@ -266,7 +266,25 @@ async function editProduct(req,res){
 async function addnewProduct(req, res) {
   try {
 
-    
+    const { discountPercentage, price, category } = req.body;
+    let offerPrice = 0;
+    let discountAmount = 0;
+
+    const filteredCategory = await Category.findById({ _id: category });
+    console.log(filteredCategory);
+
+    if (filteredCategory.offer > 0 ||filteredCategory.offer > discountPercentage ) {
+        offerPrice = (price * filteredCategory.offer) / 100;
+        console.log(offerPrice);
+        discountAmount = price - offerPrice;
+        console.log(discountAmount);
+    } else {
+      offerPrice = (price * discountPercentage) / 100;
+      console.log(offerPrice);
+      discountAmount = price - offerPrice;
+      console.log(discountAmount);
+    }
+   
 
     const product = new Product({
       name: req.body.name,
@@ -274,8 +292,8 @@ async function addnewProduct(req, res) {
       model: req.body.model,
       screenSize: req.body.screenSize,
       price: req.body.price,
-      discountPrice: req.body.discountPrice,
       quantity: req.body.quantity,
+      discountPrice:discountAmount,
       brand: req.body.brand,
       ram: req.body.ram,
       storage: req.body.storage,

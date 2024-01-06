@@ -27,6 +27,48 @@
     
         </style>
 
+<style>
+    /* Add Address Modal Styles */
+    #addAddressModal {
+        display: none;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    #addAddressModal .modal-dialog {
+        max-width: 600px;
+    }
+
+    #addAddressModal .modal-content {
+        padding: 20px;
+    }
+
+    #addAddressModal h5.modal-title {
+        margin-bottom: 20px;
+    }
+
+    /* Add Address Form Styles */
+    #billingForm label {
+        margin-bottom: 5px;
+    }
+
+    #billingForm input {
+        margin-bottom: 10px;
+    }
+
+    #billingForm button {
+        background-color: #10697f;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    #billingForm button:hover {
+        background-color: #10697f;
+    }
+</style>
+
+
         <body>
             <div class="page-wrapper">
 
@@ -49,6 +91,7 @@
                                         <div class="modal-dialog modal-lg">
                                           <div class="modal-content">
                                             <div class="modal-header">
+                                                
                                               <h5 class="modal-title">Available Coupons</h5>
                                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
@@ -96,6 +139,12 @@
                                         <label for="inputPassword2" class="sr-only">Password</label>
                                         <input type="text" class="form-control mb-1 p-0" id="inputPassword2" placeholder="Click here to enter your code" name="CouponCode" >
                                         <button type="submit" >Apply</button>
+                                        <% if(typeof message !== 'undefined') { %> 
+                                            <div class="alert alert-danger fade show mt-3" id="message" role="alert">
+                                                <%- message %>
+                                            </div>
+                                        
+                                   <%     }  %>
                                     </div>
 
                                             
@@ -112,11 +161,249 @@
 
                               
                                             <!-- End .col-lg-6 -->
-                                
-                               
+                                  <!-- Add Address Button -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAddressModal">
+    Add Address
+</button>
+
+<!-- Add Address Modal -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Your Address Form Goes Here -->
+                <form id="billingForm" action="/add-address" method="post" onsubmit="return validateForm()">
+                    <!-- Your existing form fields go here -->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <h2 class="checkout-title">Billing Details</h2>
+                            <!-- End .checkout-title -->
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Name </label>
+                                    <input type="text" class="form-control"
+                                        name="name" id="name">
+                                    <small class="text-danger"
+                                        id="nameError"></small>
+                                </div><!-- End .col-sm-6 -->
 
 
-                                            <div class="row" style="gap: 10px ;">
+                            </div><!-- End .row -->
+
+
+
+                            <label>Country </label>
+                            <input type="text" class="form-control" name="country"
+                                id="country">
+                            <small class="text-danger" id="countryError"></small>
+
+                            <label>Street address </label>
+                            <input type="text" class="form-control"
+                                placeholder="House number and Street name"
+                                name="street" id="street">
+                            <small class="text-danger" id="streetError"></small>
+
+                            <label>House no </label>
+                            <input type="text" class="form-control"
+                                placeholder="Appartments, suite, unit etc ..."
+                                name="houseno" id="houseno">
+                            <small class="text-danger" id="housenoError"></small>
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Town / City *</label>
+                                    <input type="text" class="form-control"
+                                        name="city" id="city">
+                                    <small class="text-danger"
+                                        id="cityError"></small>
+                                </div><!-- End .col-sm-6 -->
+
+                                <div class="col-sm-6">
+                                    <label>State</label>
+                                    <input type="text" class="form-control"
+                                        name="state" id="state">
+                                    <small class="text-danger"
+                                        id="stateError"></small>
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label>Postcode / ZIP </label>
+                                    <input type="text" class="form-control"
+                                        name="pincode" id="pincode">
+                                    <small class="text-danger"
+                                        id="pincodeError"></small>
+                                </div><!-- End .col-sm-6 -->
+
+                                <div class="col-sm-6">
+                                    <label>Phone </label>
+                                    <input type="tel" class="form-control"
+                                        name="mobile" id="mobile">
+                                    <small class="text-danger"
+                                        id="mobileError"></small>
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+
+                            <label>Email address </label>
+                            <input type="email" class="form-control" name="email"
+                                id="email">
+                            <small class="text-danger" id="emailError"></small>
+
+
+
+                            <!-- <label>Order notes (optional)</label>
+                            <textarea class="form-control" cols="30" rows="4" placeholder="Notes about your order, e.g. special notes for delivery"></textarea> -->
+                        </div><!-- End .col-lg-9 -->
+
+                    </div><!-- End .row -->
+                    <!-- Add more form fields as needed -->
+
+                    <button type="submit">Add Address</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rest of your existing code -->
+<!-- ... -->
+
+<script>
+    function validateNewAddressForm() {
+        // Add your form validation logic here
+        // Return true if the form is valid, false otherwise
+        return true;
+    }
+</script>
+
+ <!-- Bootstrap JS (Popper.js and jQuery are required) -->
+ <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js" integrity="sha384-pzjw8KaW1J+5L9Gw+6QdK3i5lz5NlelLm6sAk5P9xRDvOjK4JKpt9KtWp5y5Q1r" crossorigin="anonymous"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyjSi6An7+kuLZl/6axt1CoH6YFuf1gH6" crossorigin="anonymous"></script>
+                                             <!-- Modal Overlay -->
+                                             <aside class="col-lg-3" style="display: flex;
+                                             
+                                             position: absolute;
+                                             margin-left: 67%;
+                                             margin-top: 13px;">
+                                                <div class="summary" style="width: 95%;">
+                                                    <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+    
+                                                    <table class="table table-summary">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Product</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+    
+                                                        <tbody>
+                                                            <%cart.products.forEach((item)=> { %> 
+                                                            <tr>
+                                                                <td><a href="#"><%=item.product.name%></a></td>
+                                                                <td><%=item.subTotal%></td>
+                                                            </tr>
+                                                            <%  })%>
+    
+                                                         
+                                                            <tr>
+                                                                <td>Shipping:</td>
+                                                                <td>Free shipping</td>
+                                                            </tr>
+                                                            <tr class="summary-total">
+                                                                <td>Total:</td>
+                                                                <td><%=cart.total%></td>
+                                                            </tr><!-- End .summary-total -->
+                                                     
+                                                        </tbody>
+                                                    </table><!-- End .table table-summary -->
+    
+                                                    <div class="accordion-summary" id="accordion-payment">
+    
+    
+    
+    
+                                                        <div class="card">
+                                                            <div class="card-header" id="heading-3">
+                                                                <h2 class="card-title">
+                                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3" onclick="selectPeyment('Cash On Delivery')" >
+                                                                        Cash on delivery
+                                                                    </a>
+                                                                </h2>
+                                                            </div><!-- End .card-header -->
+                                                            <div id="collapse-3" class="collapse"
+                                                                aria-labelledby="heading-3"
+                                                                data-parent="#accordion-payment">
+                                                                <div class="card-body">Quisque volutpat mattis eros. Lorem
+                                                                    ipsum dolor sit amet, consectetuer adipiscing elit.
+                                                                    Donec odio. Quisque volutpat mattis eros.
+                                                                </div><!-- End .card-body -->
+                                                            </div><!-- End .collapse -->
+                                                        </div><!-- End .card -->
+    
+                                                        <div class="card">
+                                                            <div class="card-header" id="heading-4">
+                                                                <h2 class="card-title">
+                                                                    <a class="collapsed" role="button"
+                                                                        data-toggle="collapse" href="#collapse-4"
+                                                                        aria-expanded="false" aria-controls="collapse-4" onclick="selectPeyment('Razorpay')">
+                                                                        Razorpay <small class="float-right paypal-link"></small>
+                                                                    </a>
+                                                                </h2>
+                                                            </div><!-- End .card-header -->
+                                                            <div id="collapse-4" class="collapse"
+                                                                aria-labelledby="heading-4"
+                                                                data-parent="#accordion-payment">
+                                                                <div class="card-body">
+                                                                    Nullam malesuada erat ut turpis. Suspendisse urna nibh,
+                                                                    viverra non, semper suscipit, posuere a, pede. Donec nec
+                                                                    justo eget felis facilisis fermentum.
+                                                                </div><!-- End .card-body -->
+                                                            </div><!-- End .collapse -->
+                                                        </div><!-- End .card -->
+    
+                                                        <div class="card">
+                                                            <div class="card-header" id="heading-5">
+                                                                <h2 class="card-title">
+                                                                    <a class="collapsed" role="button"
+                                                                        data-toggle="collapse" href="#collapse-5" onclick="selectPeyment('wallet')"
+                                                                        aria-expanded="false" aria-controls="collapse-5">
+                                                                        Wallet
+                                                                        <img src="/assets/images/payments-summary.png"
+                                                                            alt="payments cards">
+                                                                    </a>
+                                                                </h2>
+                                                            </div><!-- End .card-header -->
+                                                            <div id="collapse-5" class="collapse"
+                                                                aria-labelledby="heading-5"
+                                                                data-parent="#accordion-payment">
+                                                                <div class="card-body"> Donec nec justo eget felis facilisis
+                                                                    fermentum.Lorem ipsum dolor sit amet, consectetuer
+                                                                    adipiscing elit. Donec odio. Quisque volutpat mattis
+                                                                    eros. Lorem ipsum dolor sit ame.
+                                                                </div><!-- End .card-body -->
+                                                            </div><!-- End .collapse -->
+                                                        </div><!-- End .card -->
+                                                    </div><!-- End .accordion -->
+    
+                                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" onclick="orderConfirm()" >
+                                                        <span class="btn-text">Place Order</span>
+                                                        <span class="btn-hover-text">Proceed to Checkout</span>
+                                                    </button>
+                                                 
+                                                </div><!-- End .summary -->
+                                            </aside>
+
+
+                                            <div class="row" style="gap: 10px ; margin-top: 12px; margin-bottom: 184px;">
+                                               
                                                 
                                                 <% address.map((item)=> { %>
                                                     <div class="col-lg-4">
@@ -146,114 +433,7 @@
                                                     </div>
                                                 </label>
                                                     <% }) %><!-- End .col-lg-9 -->
-                                        <aside class="col-lg-3">
-                                            <div class="summary">
-                                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-
-                                                <table class="table table-summary">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Product</th>
-                                                            <th>Total</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        <%cart.products.forEach((item)=> { %> 
-                                                        <tr>
-                                                            <td><a href="#"><%=item.product.name%></a></td>
-                                                            <td><%=item.subTotal%></td>
-                                                        </tr>
-                                                        <%  })%>
-
-                                                     
-                                                        <tr>
-                                                            <td>Shipping:</td>
-                                                            <td>Free shipping</td>
-                                                        </tr>
-                                                        <tr class="summary-total">
-                                                            <td>Total:</td>
-                                                            <td><%=cart.total%></td>
-                                                        </tr><!-- End .summary-total -->
-                                                 
-                                                    </tbody>
-                                                </table><!-- End .table table-summary -->
-
-                                                <div class="accordion-summary" id="accordion-payment">
-
-
-
-
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-3">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3" onclick="selectPeyment('Cash On Delivery')" >
-                                                                    Cash on delivery
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-3" class="collapse"
-                                                            aria-labelledby="heading-3"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">Quisque volutpat mattis eros. Lorem
-                                                                ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                Donec odio. Quisque volutpat mattis eros.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-4">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-4"
-                                                                    aria-expanded="false" aria-controls="collapse-4" onclick="selectPeyment('Razorpay')">
-                                                                    Razorpay <small class="float-right paypal-link"></small>
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-4" class="collapse"
-                                                            aria-labelledby="heading-4"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">
-                                                                Nullam malesuada erat ut turpis. Suspendisse urna nibh,
-                                                                viverra non, semper suscipit, posuere a, pede. Donec nec
-                                                                justo eget felis facilisis fermentum.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-5">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-5" onclick="selectPeyment('wallet')"
-                                                                    aria-expanded="false" aria-controls="collapse-5">
-                                                                    Wallet
-                                                                    <img src="/assets/images/payments-summary.png"
-                                                                        alt="payments cards">
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-5" class="collapse"
-                                                            aria-labelledby="heading-5"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body"> Donec nec justo eget felis facilisis
-                                                                fermentum.Lorem ipsum dolor sit amet, consectetuer
-                                                                adipiscing elit. Donec odio. Quisque volutpat mattis
-                                                                eros. Lorem ipsum dolor sit ame.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-                                                </div><!-- End .accordion -->
-
-                                            	<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" onclick="orderConfirm()" >
-                                                    <span class="btn-text">Place Order</span>
-                                                    <span class="btn-hover-text">Proceed to Checkout</span>
-                                                </button>
-                                             
-                                            </div><!-- End .summary -->
-                                        </aside><!-- End .col-lg-3 -->
+                                      <!-- End .col-lg-3 -->
                                     </div><!-- End .row -->
                                 </div>
                             </div><!-- End .container -->
@@ -570,41 +750,9 @@
                 </div><!-- End .modal-dialog -->
             </div><!-- End .modal -->
 
-            <!-- Add this style in your HTML or in your CSS file -->
+          
 
-<!-- <script>
-    $(document).ready(function () {
-    $('#confirmOrderButton').on('click', function () {
-        // Collect necessary data from the page
-        const billingAddress = {
-            // Extract billing address details here
-        };
-
-        const paymentMethod = 'Cash on Delivery';  // Extract the selected payment method
-
-        const products = [];
-        // Extract product details from the page and add to the products array
-
-        // Send an AJAX request to the server
-        $.ajax({
-            type: 'POST',
-            url: '/confirm-order',
-            data: { billingAddress, paymentMethod, products },
-            success: function (response) {
-                // Handle the success response
-                console.log('Order confirmed successfully:', response);
-                // You may redirect to a success page or perform other actions
-            },
-            error: function (error) {
-                // Handle the error response
-                console.error('Error confirming order:', error);
-                // You may display an error message to the user
-            }
-        });
-    });
-});
-
-</script> -->
+         
 
 <script>
         let addressId='';

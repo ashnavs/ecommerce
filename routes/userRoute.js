@@ -77,6 +77,7 @@ user_route.post('/resetPassword',userController.resetPass)
 //user-profile
 user_route.get('/user',auth.isUserBlockedAndLoggedIn,userController.loaduserProfile)
 user_route.post('/add-billing-address',auth.isUserBlockedAndLoggedIn, userController.addBillingAddress);
+user_route.post('/add-address',auth.isUserBlockedAndLoggedIn, userController.addAddressCheckout);
 user_route.get('/editAddress',auth.isUserBlockedAndLoggedIn,userController.loadeditAddress)
 user_route.post('/editAddress',auth.isUserBlockedAndLoggedIn,userController.editAddress)
 user_route.post('/editUserDetails',auth.isUserBlockedAndLoggedIn,userController.updateUserProfile)

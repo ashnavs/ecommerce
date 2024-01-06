@@ -13,7 +13,11 @@ const couponSchema = new mongoose.Schema({
         type:Boolean,
         default:true
     },
-    minimumCartTotal:Number
+    minimumCartTotal:Number,
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User'
+    }
 })
 
 

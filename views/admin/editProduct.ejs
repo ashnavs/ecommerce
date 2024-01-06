@@ -286,7 +286,159 @@
         <!-- New Product Add End -->
 
           
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const message = document.getElementById('message');
+    const hide = () => {
+        message.style.display = 'none';
+    }
+    setTimeout(hide, 3000);
 
+    const form = document.getElementById('editProduct');
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (validateForm()) {
+            form.submit();
+        }
+    });
+
+    function validateForm() {
+        // Reset error messages
+        resetErrorMessages();
+
+        // Get form values
+        var name = document.getElementById('name').value.trim();
+        var brand = document.getElementById('brand').value.trim();
+        var quantity = document.getElementById('quantity').value.trim();
+        var model = document.getElementById('model').value.trim();
+        var ram = document.getElementById('ram').value.trim();
+        var storage = document.getElementById('storage').value.trim();
+        var processor = document.getElementById('processor').value.trim();
+        var screenSize = document.getElementById('screenSize').value.trim();
+        var graphicsCard = document.getElementById('graphicsCard').value.trim();
+        var osArchitecture = document.getElementById('osArchitecture').value.trim();
+        var os = document.getElementById('os').value.trim();
+        var description = document.getElementById('description').value.trim();
+        var price = document.getElementById('price').value.trim();
+        var discountPrice = document.getElementById('discountPrice').value.trim();
+
+        // Check if at least one field is filled
+        if (
+            name === '' && brand === '' && quantity === '' && model === '' &&
+            ram === '' && storage === '' && processor === '' && screenSize === '' &&
+            graphicsCard === '' && osArchitecture === '' && os === '' &&
+            description === '' && price === '' && discountPrice === ''
+        ) {
+            document.getElementById('generalError').innerText = 'Please fill in at least one field';
+            return false;
+        } else {
+            document.getElementById('generalError').innerText = ''; // Clear general error message
+        }
+
+        // Validate name
+        if (name === '') {
+            document.getElementById('nameError').innerText = 'Please enter a product name';
+            return false;
+        }
+
+        // Validate brand
+        if (brand === '') {
+            document.getElementById('brandError').innerText = 'Please enter a brand';
+            return false;
+        }
+
+        // Validate quantity
+        if (quantity === '' || isNaN(quantity) || parseInt(quantity) <= 0) {
+            document.getElementById('quantityError').innerText = 'Please enter a valid quantity';
+            return false;
+        }
+
+        // Validate model
+        if (model === '') {
+            document.getElementById('modelError').innerText = 'Please enter a model';
+            return false;
+        }
+
+        // Validate RAM
+        if (ram === '') {
+            document.getElementById('ramError').innerText = 'Please enter RAM information';
+            return false;
+        }
+
+        // Validate Storage
+        if (storage === '') {
+            document.getElementById('storageError').innerText = 'Please enter storage information';
+            return false;
+        }
+
+        // Validate Processor
+        if (processor === '') {
+            document.getElementById('processorError').innerText = 'Please enter processor information';
+            return false;
+        }
+
+        // Validate Screen Size
+        if (screenSize === '') {
+            document.getElementById('screenSizeError').innerText = 'Please enter screenSize information';
+            return false;
+        }
+
+        // Validate Graphics Card
+        if (graphicsCard === '') {
+            document.getElementById('graphicsCardError').innerText = 'Please enter graphicsCard information';
+            return false;
+        }
+
+        // Validate OS Architecture
+        if (osArchitecture === '' || isNaN(osArchitecture) || osArchitecture <= 0) {
+            document.getElementById('osArchitectureError').innerText = 'Please enter a valid OS Architecture';
+            return false;
+        }
+
+        // Validate OS
+        if (os === '') {
+            document.getElementById('osError').innerText = 'Please enter os information';
+            return false;
+        }
+
+        // Validate Description
+        if (description === '') {
+            document.getElementById('descriptionError').innerText = 'Please enter a product description';
+            return false;
+        }
+
+        // Validate Price
+        if (price === '' || isNaN(price) || parseFloat(price) <= 0) {
+            document.getElementById('priceError').innerText = 'Please enter a valid price';
+            return false;
+        }
+
+        // Validate Discount Price
+        if (discountPrice === '' || isNaN(discountPrice) || parseFloat(discountPrice) <= 0) {
+            document.getElementById('discountPriceError').innerText = 'Please enter a valid discountPrice';
+            return false;
+        }
+
+        // Form is valid, continue with submission
+        return true;
+    }
+
+    function resetErrorMessages() {
+        // Reset all error messages
+        var errorIds = [
+            'nameError', 'brandError', 'quantityError', 'modelError',
+            'ramError', 'storageError', 'processorError', 'screenSizeError',
+            'graphicsCardError', 'osArchitectureError', 'osError',
+            'descriptionError', 'priceError', 'discountPriceError', 'generalError'
+        ];
+
+        errorIds.forEach(function (errorId) {
+            document.getElementById(errorId).innerText = '';
+        });
+    }
+});
+</script>
    
 
         <!-- Modal End -->

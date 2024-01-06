@@ -26,6 +26,7 @@ app.use('/admin',adminRoute)
 
 function connectDB(){
     mongoose.connect(process.env.mongoo_connect)
+    console.log('db connected');
 }
 
 const mongoose = require('mongoose');

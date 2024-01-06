@@ -302,7 +302,92 @@
 
                                                     </form>
                                                 </div>
+                                                            <script>
+                                                                function validateForm() {
+                                                                    // Reset previous error messages
+                                                                    resetErrors();
 
+                                                                    // Flag to check if there are any errors
+                                                                    let hasErrors = false;
+
+                                                                    // Validate Name
+                                                                    const nameInput = document.getElementById('name');
+                                                                    if (!nameInput.value.trim()) {
+                                                                        document.getElementById('nameError').innerText = 'Name is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate Country
+                                                                    const countryInput = document.getElementById('country');
+                                                                    if (!countryInput.value.trim()) {
+                                                                        document.getElementById('countryError').innerText = 'Country is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate Street Address
+                                                                    const streetInput = document.getElementById('street');
+                                                                    if (!streetInput.value.trim()) {
+                                                                        document.getElementById('streetError').innerText = 'Street address is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate House No
+                                                                    const houseNoInput = document.getElementById('houseno');
+                                                                    if (!houseNoInput.value.trim()) {
+                                                                        document.getElementById('housenoError').innerText = 'House number is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate City
+                                                                    const cityInput = document.getElementById('city');
+                                                                    if (!cityInput.value.trim()) {
+                                                                        document.getElementById('cityError').innerText = 'City is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate State
+                                                                    const stateInput = document.getElementById('state');
+                                                                    // You can add additional validation for state if needed
+
+                                                                    // Validate Postcode / ZIP
+                                                                    const pincodeInput = document.getElementById('pincode');
+                                                                    if (!pincodeInput.value.trim()) {
+                                                                        document.getElementById('pincodeError').innerText = 'Postcode / ZIP is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate Phone
+                                                                    const mobileInput = document.getElementById('mobile');
+                                                                    if (!mobileInput.value.trim()) {
+                                                                        document.getElementById('mobileError').innerText = 'Phone is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Validate Email
+                                                                    const emailInput = document.getElementById('email');
+                                                                    if (!emailInput.value.trim()) {
+                                                                        document.getElementById('emailError').innerText = 'Email is required';
+                                                                        hasErrors = true;
+                                                                    }
+
+                                                                    // Add more validation for other fields if needed
+
+                                                                    // Return true if the form is valid, otherwise prevent form submission
+                                                                    return !hasErrors;
+                                                                }
+
+                                                                function resetErrors() {
+                                                                    // Reset all error messages
+                                                                    const errorElements = document.querySelectorAll('.text-danger');
+                                                                    errorElements.forEach(errorElement => {
+                                                                        errorElement.innerText = '';
+                                                                    });
+                                                                }
+
+                                                            </script>
+                                                
+                                               
+                                                
                                                 <!-- Display billing address -->
                                                 <div class="row">
                                                     <% address.map((item)=> { %>
@@ -578,6 +663,10 @@
                                                         }
                                                     }
                                                 </script> -->
+
+
+
+                                                    
 
                                                 
                                             </div>

@@ -212,7 +212,9 @@ const verifyLogin=async(req,res)=>{
         const email=req.body.email;
         const password=req.body.password
        const userData= await User.findOne({email:email})
-
+       if(!userData){
+        res.render('login',{message:"User not found"})
+       }
    if(userData){
 
            const match=await bcrypt.compare(password,userData.password)
@@ -222,7 +224,7 @@ const verifyLogin=async(req,res)=>{
         
         if(userData.is_verified === false){
             
-            res.render('login',{message:"please varify your mail"})
+            res.render('login',{message:"please verify your mail"})
 
         }
         else{
@@ -246,7 +248,7 @@ const verifyLogin=async(req,res)=>{
       }
 
    }else{
-    res.render('login',{message:"login invalid"})
+     res.render('login',{message:"login invalid"})
    }
 
     }catch(error){
@@ -519,7 +521,7 @@ const addBillingAddress = async (req, res) => {
       landmark,
       pincode,
       city,
-      country,
+      country, 
     } = req.body;
 
     // Create a new address instance
@@ -548,6 +550,99 @@ const addBillingAddress = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
+
+
+const addAddressCheckout = async (req, res) => {
+    try {
+      // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
+      const userId = req.session.user_id;
+      
+  
+      // Extract address data from the form submission
+      const {
+        name,
+        email,
+        mobile,
+        houseno,
+        street,
+        landmark,
+        pincode,
+        city,
+        country, 
+      } = req.body;
+  
+      // Create a new address instance
+      const newAddress = new Address({
+        user: userId,
+        name,
+        email,
+        mobile,
+        houseno,
+        street,
+        landmark,
+        pincode,
+        city,
+        country,
+      });
+  
+      // Save the new address to the database
+      await newAddress.save();
+  
+      // Respond with success message
+      res.redirect('/checkOut');
+      // res.json({ success: true, message: 'Address added successfully' });
+    } catch (error) {
+      // Handle any errors that may occur during the process
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  };
+  
+// const addBillingAddress = async (req, res) => {
+//     try {
+//         // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
+//         const userId = req.session.user_id;
+
+//         // Extract address data from the form submission
+//         const {
+//             name,
+//             email,
+//             mobile,
+//             houseno,
+//             street,
+//             landmark,
+//             pincode,
+//             city,
+//             country,
+//         } = req.body;
+
+//         // Create a new address instance
+//         const newAddress = new Address({
+//             user: userId,
+//             name,
+//             email,
+//             mobile,
+//             houseno,
+//             street,
+//             landmark,
+//             pincode,
+//             city,
+//             country,
+//         });
+
+//         // Save the new address to the database
+//         await newAddress.save();
+
+//         // Respond with success message
+//         res.json({ success: true, message: 'Address added successfully' });
+//     } catch (error) {
+//         // Handle any errors that may occur during the process
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Internal server error' });
+//     }
+// };
+
+
 
 
 // const updateUserProfile = async(req,res) => {
@@ -755,7 +850,8 @@ module.exports = {
     orderdetails,
     editAddress,
     loadeditAddress,
-    loadError
+    loadError,
+    addAddressCheckout
     
 
 

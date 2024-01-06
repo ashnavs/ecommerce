@@ -90,50 +90,90 @@ const loadCart = async (req, res) => {
 
 
 
-const updateQuantity = async (req, res) => {
-  try {
-    const { productId, newQuantity } = req.body;
-    const userId = req.session.user_id;
+// const updateQuantity = async (req, res) => {
+//   try {
+//     const { productId, newQuantity } = req.body;
+//     const userId = req.session.user_id;
    
 
-    // Find the user's cart
-    const userCart = await Cart.findOne({ user: userId }).populate('products.product');
+//     // Find the user's cart
+//     const userCart = await Cart.findOne({ user: userId }).populate('products.product');
 
 
-    if (!userCart) {
-      return res.status(404).json({ success: false, message: 'Cart not found for the user.' });
-    }
+//     if (!userCart) {
+//       return res.status(404).json({ success: false, message: 'Cart not found for the user.' });
+//     }
 
-    // Find the product in the cart
-    const productIndex = userCart.products.findIndex(item => item.product._id.toString() === productId);
+//     // Find the product in the cart
+//     const productIndex = userCart.products.findIndex(item => item.product._id.toString() === productId);
 
-    if (productIndex !== -1) {
-      // Update the quantity
-      userCart.products[productIndex].quantity = parseInt(newQuantity, 10);
+//     if (productIndex !== -1) {
+//       // Update the quantity
+//       userCart.products[productIndex].quantity = parseInt(newQuantity, 10);
 
-      // Update the total for the specific product
-      userCart.products[productIndex].total = userCart.products[productIndex].quantity * userCart.products[productIndex].product.discountPrice;
+//       // Update the total for the specific product
+//       userCart.products[productIndex].total = userCart.products[productIndex].quantity * userCart.products[productIndex].product.discountPrice;
 
-      productTotal = userCart.products[productIndex].total
-      // Recalculate the subtotal and total for the entire cart
-      const newTotal = userCart.products.reduce((acc, item) => {
-        const itemTotal = item.total || 0; // Handle the case where item.total is undefined or NaN
+//       productTotal = userCart.products[productIndex].total
+//       // Recalculate the subtotal and total for the entire cart
+//       const newTotal = userCart.products.reduce((acc, item) => {
+//         const itemTotal = item.total || 0; // Handle the case where item.total is undefined or NaN
      
-        return acc + itemTotal;
-      }, 0);
+//         return acc + itemTotal;
+//       }, 0);
 
-      await userCart.save();
-      res.status(200).json({ success: true, total: newTotal, userCart ,productTotal});
-    } else {
-      res.status(404).json({ success: false, message: 'Product not found in the cart.' });
-    }
+//       await userCart.save();
+//       res.status(200).json({ success: true, total: newTotal, userCart ,productTotal});
+//     } else {
+//       res.status(404).json({ success: false, message: 'Product not found in the cart.' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, message: 'Internal server error' });
+//   }
+// };
+
+
+const updateQuantity = async (req, res) => {
+  try {
+      const userId = req.session.user_id;
+      const { productId, newQuantity } = req.body;
+
+      const userCart = await Cart.findOne({ user: userId }).populate('products.product');
+
+      if (!userCart) {
+          return res.status(404).json({ success: false, message: 'Cart not found for the user.' });
+      }
+
+      const productIndex = userCart.products.findIndex(item => item.product._id.toString() === productId);
+
+      if (productIndex !== -1) {
+          const product = userCart.products[productIndex].product;
+          const availableStock = product.quantity;
+
+          if (parseInt(newQuantity, 10) > availableStock) {
+              return res.status(200).json({ success: true, insufficientStock: true });
+          }
+
+          userCart.products[productIndex].quantity = parseInt(newQuantity, 10);
+          userCart.products[productIndex].total = userCart.products[productIndex].quantity * userCart.products[productIndex].product.sales_price;
+
+          const newTotal = userCart.products.reduce((acc, item) => {
+              const itemtotal = item.total || 0;
+              return acc + itemtotal;
+          }, 0);
+          // userCart.total = newTotal;
+
+          await userCart.save();
+          res.status(200).json({ success: true, total: newTotal, userCart });
+      } else {
+          res.status(404).json({ success: false, message: 'Product not found in the cart.' });
+      }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
+      console.log(error.message);
+      res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
-
-
 
 const removeProduct = async (req, res) => {
   try {
@@ -190,6 +230,4 @@ module.exports =
   loadCart,
   updateQuantity,
   removeProduct
-
-
 }

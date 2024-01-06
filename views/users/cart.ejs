@@ -47,15 +47,22 @@
 												</div><!-- End .product -->
 											</td>
 											<td class="price-col"><%=item.product.discountPrice%></td>
-											<td class="quantity-col">
+											<!-- <td class="quantity-col">
                                                 <div class="cart-product-quantity product">
                                                    
                                                     <input type="number" class="form-control quantity-input" value="<%= item.quantity %>" min="1" data-product-id="<%=item.product._id%>" >
                                                     
                                                 
                                                 </div><!-- End .cart-product-quantity -->
-                                            </td>
-                                                    
+                                            <!--</td> -->
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity product " data-product-id="<%= item.product._id %>">
+                                                    <button class="decrease-quantity" style="border: 1px solid #ccc;">-</button>
+                                                    <span class="product-quantity"><%= item.quantity %> </span>
+                                                    <button class="increase-quantity"  style="border: 1px solid #ccc;">+</button>
+                                                </div><!-- End .cart-product-quantity -->
+                                                </div><!-- End .product -->
+                                            </td>                                                      
                                                     
 
                                                 </div><!-- End .cart-product-quantity --> 
@@ -450,12 +457,99 @@
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
 
- <!-- Add this script section at the end of your cart.ejs file -->
 
- 
+<!-- Add this in the head section of your HTML file -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- <script>
+    function updateQuantity(productId, newQuantity) {
+        console.log('Updating quantity:', productId, newQuantity);
+
+        // Send an AJAX request to update the quantity in the database
+        $.ajax({
+            url: '/updateQuantity',
+            method: 'post',
+            data: {
+                productId,
+                newQuantity
+            },
+            dataType: 'json',  // Specify the expected data type of the response
+            success: function (data) {
+                console.log('Server response:', data);
+
+                // Check if the response is successful
+                if (data.success) {
+                    // Update the UI with the new quantity, total, and subtotal
+                    const totalElement = document.getElementById('cart-total');
+                    totalElement.innerHTML = data.total;
+
+                    // Redirect to the cart page
+                    window.location.href = "/cartPage";
+
+                    // If you have separate elements for quantity, subtotal, etc., update them accordingly
+                    // ...
+
+                    // Show a success message using SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Quantity updated successfully!',
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                } else {
+                    // Handle the error
+                    if (data.errorType === 'quantityExceeded') {
+                        // Show a SweetAlert error message for quantity exceeded
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'The new quantity exceeds the available quantity.',
+                        });
+                    } else {
+                        // Show a generic error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!',
+                        });
+                    }
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+
+                // Handle the error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                });
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(function (input) {
+            const productId = input.dataset.productId;
+
+            input.addEventListener('change', function () {
+                const newQuantity = input.value;
+
+                // Send an AJAX request to update the quantity in the database
+                updateQuantity(productId, newQuantity);
+            });
+        });
+    });
+</script> -->
 
 
-<script>
+
+
+<!-- <script>
     function updateQuantity(productId, newQuantity) {
         console.log('Updating quantity:', productId, newQuantity);
 
@@ -526,9 +620,72 @@
             });
         });
     });
+</script> -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const updateProduct = async (productId, newQuantity) => {
+            try {
+                console.log("\\\\\\",newQuantity);
+                const response = await fetch('/updateQuantity', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId, newQuantity })
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    if(responseData.insufficientStock){
+                        await Swal.fire('Error', 'insufficientStock', 'error');
+                        location.reload(); // Reload the page after successful update
+                    }else{
+                        location.reload(); // Reload the page after successful update
+                    }
+                } else {
+                    console.error('Failed to update product');
+                    // Handle error response if needed
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        document.querySelectorAll('.increase-quantity').forEach(button => {
+            button.addEventListener('click', async function () {
+                const $product = this.closest('.product');
+                const productId = $product.dataset.productId;
+
+                if (productId) {
+                    let quantity = parseInt($product.querySelector('.product-quantity').textContent);
+                    quantity++;
+                    $product.querySelector('.product-quantity').textContent = quantity;
+                    console.log(quantity);
+                    await updateProduct(productId, quantity);
+                }
+            });
+        });
+
+        document.querySelectorAll('.decrease-quantity').forEach(button => {
+            button.addEventListener('click', async function () {
+                const $product = this.closest('.product');
+                const productId = $product.dataset.productId;
+
+                if (productId) {
+                    let quantity = parseInt($product.querySelector('.product-quantity').textContent);
+                    if (quantity > 1) {
+                        quantity--;
+                        $product.querySelector('.product-quantity').textContent = quantity;
+                        console.log(quantity);
+                        await updateProduct(productId, quantity);
+                    }
+                }
+            });
+        });
+    });
 </script>
-
-
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

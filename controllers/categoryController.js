@@ -68,10 +68,14 @@ const addCategory = async(req,res)=>{
             res.render('addnewCategory',{message})
         }
         else{
+
+        const {discountPercentage} = req.body;
+
         const category =new Category ({
             name:name,
             description:description,
-            is_list:true
+            is_list:true,
+            offer:discountPercentage
         })
        
         await category.save();

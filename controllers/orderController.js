@@ -444,19 +444,29 @@ async function returnResponse(req, res) {
 const applyCoupon = async(req,res)=>{
   try {
     const enteredCode = req.body.CouponCode;
-    const coupon = await Coupon.findOne({CouponCode : enteredCode});
+    const coupon = await Coupon.find()
+    const appliedCoupon = await Coupon.findOne({CouponCode : enteredCode});
     const user = req.session.user_id;
     const userCart = await Cart.findOne({user:user})
+    const address = await Address.find({user});
+    const cart = await Cart.findOne({user}).populate('products.product')
 
-    if(coupon){
-      const newTotal = userCart.total - coupon.discount;
+    const existingUser = await Coupon.findOne({user: user})
+    if(existingUser){
+      const message = 'coupon not available for you'
+      res.render('checkOut',{user , address , cart , coupon, message})
+    }
+    if(appliedCoupon){
+      const newTotal = userCart.total - appliedCoupon.discount;
       userCart.total = newTotal;
-      userCart.appliedCoupon = coupon.CouponCode;
+      userCart.appliedCoupon = appliedCoupon.CouponCode;
 
+      appliedCoupon.user = user;
+      await appliedCoupon.save();
       await userCart.save();
     }
     else{
-      res.render('checkOut',{message:'coupon not available for you'})
+      res.render('checkOut',{user , address , cart , coupon, message})
     }
     res.redirect('/checkOut')
   } catch (error) {

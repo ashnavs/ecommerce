@@ -85,10 +85,13 @@
                                             <!-- </div>End .details-filter-row -->
 
                                             <div class="product-details-action">
-                                                <a href="/cart?productId=<%= products._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
-
+                                                <% if(products.quantity <= 0 ){ %>
+                                                    <p class="text-danger" style="text-align: center;">Out of stock</p>
+                                                <% }else{ %>
+                                                    <a href="/cart?productId=<%= products._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                    <%}%>
                                                 <div class="details-action-wrapper">
-                                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                                    <!-- <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a> -->
                                                     <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> -->
                                                 </div><!-- End .details-action-wrapper -->
                                             </div><!-- End .product-details-action -->
