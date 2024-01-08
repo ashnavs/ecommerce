@@ -421,7 +421,7 @@ function sendPasswordResetEmail(email, resetToken) {
         }
     });
 
-    const resetLink = `http://localhost:3001/resetPassword/${resetToken}`;
+    const resetLink = `https://lapkart.shop/resetPassword/${resetToken}`;
 
     const mailOptions = {
         from: 'your@email.com',
