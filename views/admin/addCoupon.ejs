@@ -1,6 +1,10 @@
 <%-include('../partials/adminHeader')%>
 <%- include('../partials/adminSidebar') %>
-
+<style>
+    .error {
+        color: red;
+    }
+</style>
 
             <!-- Create Coupon Table start -->
             <div class="page-body">
@@ -25,64 +29,121 @@
 
                                             <div class="tab-content" id="pills-tabContent">
                                                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel">
-                                                    <form class="theme-form theme-form-2 mega-form" method="post" action="/admin/addCoupon">
+                                                    <form id="couponForm" class="theme-form theme-form-2 mega-form" method="post" action="/admin/addCoupon" onsubmit="return validateForm()">
                                                         <div class="card-header-1">
                                                             <h5>General</h5>
                                                         </div>
-
+                                                    
                                                         <div class="row">
                                                             <div class="mb-4 row align-items-center">
-                                                                <label
-                                                                    class="form-label-title col-lg-2 col-md-3 mb-0">Coupon
-                                                                    Title</label>
+                                                                <label class="form-label-title col-lg-2 col-md-3 mb-0">Coupon Title</label>
                                                                 <div class="col-md-9 col-lg-10">
-                                                                    <input class="form-control" type="text" name="name" required  >
+                                                                    <input class="form-control" type="text" name="name" placeholder="Enter Coupon Title">
+                                                                    <small class="error" id="couponTitleError"></small>
                                                                 </div>
                                                             </div>
-              
-                                                            <div class="mb-4 row align-items-center">
-                                                                <label
-                                                                    class="col-lg-2 col-md-3 col-form-label form-label-title">Coupon
-                                                                    Code</label>
-                                                                <div class="col-md-9 col-lg-10">
-                                                                    <input class="form-control" type="number" name="code" required>
-                                                                </div>
-                                                            </div>
-              
-                                                            <div class="mb-4 row align-items-center">
-                                                              <label
-                                                                  class="col-lg-2 col-md-3 col-form-label form-label-title" >Discount Amount</label>
-                                                              <div class="col-md-9 col-lg-10">
-                                                                  <input class="form-control" type="number" name="discountAmount" required>
-                                                              </div>
-                                                          </div>
-              
-                                                            
-              
-                                                            <div class="mb-4 row align-items-center">
-                                                                <label
-                                                                    class="col-lg-2 col-md-3 col-form-label form-label-title">Expire
-                                                                    Date</label>
-                                                                <div class="col-md-9 col-lg-10">
-                                                                    <input class="form-control" type="date" name="expireDate" required>
-                                                                </div>
-                                                            </div>
-            
-              
-                                                            <div class="mb-4 row align-items-center">
-                                                              <label
-                                                                  class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum Cart Amount</label>
-                                                              <div class="col-md-9 col-lg-10">
-                                                                  <input class="form-control" type="number" name="minimumCartTotal" required>
-                                                              </div>
-                                                          </div>
-                                                          <div>
-                                                          <button type="submit"  class="btn btn-primary w-40  h-100 " fdprocessedid="9x9s8g">Add
-                                                            Coupon</button>
-                                                        </div>
                                                     
+                                                            <div class="mb-4 row align-items-center">
+                                                                <label class="col-lg-2 col-md-3 col-form-label form-label-title">Coupon Code</label>
+                                                                <div class="col-md-9 col-lg-10">
+                                                                    <input class="form-control" type="number" name="code" placeholder="Enter Coupon Code">
+                                                                    <small class="error" id="couponCodeError"></small>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="mb-4 row align-items-center">
+                                                                <label class="col-lg-2 col-md-3 col-form-label form-label-title">Discount Amount</label>
+                                                                <div class="col-md-9 col-lg-10">
+                                                                    <input class="form-control" type="number" name="discountAmount" placeholder="Enter Discount Amount">
+                                                                    <small class="error" id="discountAmountError"></small>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="mb-4 row align-items-center">
+                                                                <label class="col-lg-2 col-md-3 col-form-label form-label-title">Expire Date</label>
+                                                                <div class="col-md-9 col-lg-10">
+                                                                    <input class="form-control" type="date" name="expireDate">
+                                                                    <small class="error" id="expireDateError"></small>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="mb-4 row align-items-center">
+                                                                <label class="col-lg-2 col-md-3 col-form-label form-label-title">Minimum Cart Amount</label>
+                                                                <div class="col-md-9 col-lg-10">
+                                                                    <input class="form-control" type="number" name="minimumCartTotal" placeholder="Enter Minimum Cart Amount">
+                                                                    <small class="error" id="minCartAmountError"></small>
+                                                                </div>
+                                                            </div>
+                                                    
+                                                            <div class="mb-4 row align-items-center">
+                                                                <div class="col-md-9 col-lg-10 offset-lg-2">
+                                                                    <button type="submit" class="btn btn-primary w-40 h-100" fdprocessedid="9x9s8g">Add Coupon</button>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </form>
+                                                    
+                                                    <script>
+                                                        function validateForm() {
+                                                            // Reset previous error messages
+                                                            resetErrorMessages();
+                                                    
+                                                            // Validate Coupon Title
+                                                            var couponTitle = document.forms["couponForm"]["name"].value.trim();
+                                                            if (couponTitle === "") {
+                                                                displayError("couponTitleError", "Coupon Title must be filled out");
+                                                            }
+                                                    
+                                                            // Validate Coupon Code
+                                                            var couponCode = document.forms["couponForm"]["code"].value.trim();
+                                                            if (couponCode === "" || isNaN(couponCode) || couponCode < 0) {
+                                                                displayError("couponCodeError", "Invalid Coupon Code");
+                                                            }
+                                                    
+                                                            // Validate Discount Amount
+                                                            var discountAmount = document.forms["couponForm"]["discountAmount"].value.trim();
+                                                            if (discountAmount === "" || isNaN(discountAmount) || discountAmount < 0) {
+                                                                displayError("discountAmountError", "Invalid Discount Amount");
+                                                            }
+                                                    
+                                                            // Validate Expire Date
+                                                            var expireDate = document.forms["couponForm"]["expireDate"].value;
+                                                            if (expireDate === "") {
+                                                                displayError("expireDateError", "Expire Date must be filled out");
+                                                            }
+                                                    
+                                                            // Validate Minimum Cart Amount
+                                                            var minCartAmount = document.forms["couponForm"]["minimumCartTotal"].value.trim();
+                                                            if (minCartAmount === "" || isNaN(minCartAmount) || minCartAmount < 0) {
+                                                                displayError("minCartAmountError", "Invalid Minimum Cart Amount");
+                                                            }
+                                                    
+                                                            // Check if any errors occurred
+                                                            var errorElements = document.getElementsByClassName("error");
+                                                            for (var i = 0; i < errorElements.length; i++) {
+                                                                if (errorElements[i].innerHTML !== "") {
+                                                                    return false;
+                                                                }
+                                                            }
+                                                    
+                                                            return true;
+                                                        }
+                                                    
+                                                        function displayError(elementId, message) {
+                                                            var errorElement = document.getElementById(elementId);
+                                                            errorElement.innerHTML = message;
+                                                        }
+                                                    
+                                                        function resetErrorMessages() {
+                                                            var errorElements = document.getElementsByClassName("error");
+                                                            for (var i = 0; i < errorElements.length; i++) {
+                                                                errorElements[i].innerHTML = "";
+                                                            }
+                                                        }
+                                                    </script>
+                                                    
+                                                    
+                                                    
                                                 </div>
 
                                                 <div class="tab-pane fade" id="pills-profile" role="tabpanel">
@@ -138,9 +199,7 @@
 
                                                 <div class="tab-pane fade" id="pills-usage" role="tabpanel">
                                                     <form class="theme-form theme-form-2 mega-form">
-                                                        <div class="card-header-1">
-                                                            <h5>Usage Limits</h5>
-                                                        </div>
+                                                        
 
                                                         <div class="row">
                                                             <div class="mb-4 row align-items-center">
@@ -173,5 +232,7 @@
                 </div>
             </div>
             <!-- Create Coupon Table End -->
+
+     
 
             <%- include('../partials/adminFooter') %>
