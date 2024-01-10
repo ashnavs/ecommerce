@@ -244,10 +244,10 @@
                                                     <div class="mb-4 row align-items-center">
                                                         <label class="col-sm-3 form-label-title">Discount Price</label>
                                                         <div class="col-sm-9">
-                                                            <input type="number" name="discountPrice"
+                                                            <input type="number" name="discountPercentage"
                                                                 placeholder="Discount Price" class="form-control"
-                                                                value="<%=product.discountPrice%>" id="discountPrice">
-                                                                <small class="text-danger" id="discountPriceError"></small>
+                                                                value="<%=product.discountPercentage%>" id="discountPercentage">
+                                                                <small class="text-danger" id="discountPercentageError"></small>
 
 
                                                         </div>
@@ -321,14 +321,14 @@
         var os = document.getElementById('os').value.trim();
         var description = document.getElementById('description').value.trim();
         var price = document.getElementById('price').value.trim();
-        var discountPrice = document.getElementById('discountPrice').value.trim();
+        var discountPercentage = document.getElementById('discountPercentage').value.trim();
 
         // Check if at least one field is filled
         if (
             name === '' && brand === '' && quantity === '' && model === '' &&
             ram === '' && storage === '' && processor === '' && screenSize === '' &&
             graphicsCard === '' && osArchitecture === '' && os === '' &&
-            description === '' && price === '' && discountPrice === ''
+            description === '' && price === '' && discountPercentage === ''
         ) {
             document.getElementById('generalError').innerText = 'Please fill in at least one field';
             return false;
@@ -415,8 +415,8 @@
         }
 
         // Validate Discount Price
-        if (discountPrice === '' || isNaN(discountPrice) || parseFloat(discountPrice) <= 0) {
-            document.getElementById('discountPriceError').innerText = 'Please enter a valid discountPrice';
+        if (discountPercentage === '' || isNaN(discountPercentage) || parseFloat(discountPercentage) <= 0) {
+            document.getElementById('discountPercentageError').innerText = 'Please enter a valid discountPercentage';
             return false;
         }
 
@@ -430,7 +430,7 @@
             'nameError', 'brandError', 'quantityError', 'modelError',
             'ramError', 'storageError', 'processorError', 'screenSizeError',
             'graphicsCardError', 'osArchitectureError', 'osError',
-            'descriptionError', 'priceError', 'discountPriceError', 'generalError'
+            'descriptionError', 'priceError', 'discountPercentageError', 'generalError'
         ];
 
         errorIds.forEach(function (errorId) {

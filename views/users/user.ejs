@@ -210,7 +210,7 @@
                                                 <!-- Add a billing address form (initially hidden) -->
                                                 <div id="billingAddressForm" style="display: none;">
                                                     <form id="billingForm" action="/add-billing-address" method="post"
-                                                        onsubmit="return validateForm()">
+                                                        onsubmit="return validateForm(event)">
                                                         <!-- Your form fields go here -->
                                                         <div class="row">
                                                             <div class="col-lg-9">
@@ -302,6 +302,8 @@
 
                                                     </form>
                                                 </div>
+
+                                                <!--add address validation-->
                                                             <script>
                                                                 function validateForm() {
                                                                     // Reset previous error messages
@@ -441,20 +443,15 @@
 
                                             <div class="tab-pane fade" id="tab-account" role="tabpanel"
                                                 aria-labelledby="tab-account-link">
-                                                <form action="/editUserDetails" method="post" onsubmit="return validateForm(event)">
+                                                <form action="/editUserDetails" method="post" id="editUserDetails" >
 
                                                     <label>Display Name </label>
                                                         <input type="text" class="form-control" value="<%=userDetail.name%>" name="displayName" id="displayName">
                                                         <small class="error-message" id="displayNameError"></small>
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
                                                         <label>Phone Number</label>
                                                         <input type="number" class="form-control" value="<%=userDetail.mobile%>" name="phoneNumber" id="phoneNumber">
                                                         <small class="error-message text-danger" id="phoneNumberError"></small>
-                                                    
-
-                                                        <label>Email</label>
-                                                        <input type="email" class="form-control" value="<%=userDetail.email%>" name="email" id="email" >
-                                                        <small class="error-message" id="emailError"></small>
 
                                                     <label>Current password (leave blank to leave unchanged)</label>
                                                     <input type="password" class="form-control" name="currPass"
@@ -475,201 +472,65 @@
                                                         <span>SAVE CHANGES</span>
                                                         <i class="icon-long-arrow-right"></i>
                                                     </button>
-
                                                 </form>
 
-                                                <!-- <script>
-                                                    function validateForm(event) {
-                                                        event.preventDefault(); // Prevent the default form submission
-
-                                                        var displayName = document.getElementById('displayName').value.trim();
-                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
-                                                        var email = document.getElementById('email').value.trim();
-                                                        var newPassword = document.getElementById('newPass').value.trim();
-                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
-                                                
-                                                        var displayNameError = document.getElementById('displayNameError');
-                                                        var phoneNumberError = document.getElementById('phoneNumberError');
-                                                        var emailError = document.getElementById('emailError');
-                                                        var newPassError = document.getElementById('newPassError');
-                                                        var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
-                                                        var errorSummary = document.getElementById('errorSummary');
-                                                
-                                                        // Clear previous error messages
-                                                        displayNameError.textContent = '';
-                                                        phoneNumberError.textContent = '';
-                                                        emailError.textContent = '';
-                                                        newPassError.textContent = '';
-                                                        confirmNewPasswordError.textContent = '';
-                                                        errorSummary.textContent = '';
-                                                
-                                                        // Validate Display Name
-                                                        if (!displayName) {
-                                                            displayNameError.textContent = 'Display Name is required';
-                                                        }
-                                                
-                                                        // Validate Phone Number
-                                                        if (!phoneNumber) {
-                                                            phoneNumberError.textContent = 'Phone Number is required';
-                                                        }
-                                                
-                                                        // Validate Email
-                                                        if (!email) {
-                                                            emailError.textContent = 'Email is required';
-                                                        } else if (!isValidEmail(email)) {
-                                                            emailError.textContent = 'Please enter a valid email address';
-                                                        }
-                                                
-                                                        // Check if new password and confirm new password match
-                                                        if (newPassword && newPassword !== confirmNewPassword) {
-                                                            newPassError.textContent = 'Passwords do not match';
-                                                            confirmNewPasswordError.textContent = 'Passwords do not match';
-                                                        }
-                                                
-                                                        // Check if there are any validation errors
-                                                        if (displayNameError.textContent || phoneNumberError.textContent || emailError.textContent || newPassError.textContent || confirmNewPasswordError.textContent) {
-                                                            // If there are validation errors, prevent the form submission
-                                                            return false;
-                                                        }
-                                                
-                                                       
-                                                
-                                                        return true;
-                                                        
-                                                    }
-                                                
-                                                </script>    -->
-
-                                                <!-- <script>
-                                                    function validateForm(event) {
-                                                        event.preventDefault(); // Prevent the default form submission
-                                                
-                                                        var displayName = document.getElementById('displayName').value.trim();
-                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
-                                                        var email = document.getElementById('email').value.trim();
-                                                        var newPassword = document.getElementById('newPass').value.trim();
-                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
-                                                
-                                                        var displayNameError = document.getElementById('displayNameError');
-                                                        var phoneNumberError = document.getElementById('phoneNumberError');
-                                                        var emailError = document.getElementById('emailError');
-                                                        var newPassError = document.getElementById('newPassError');
-                                                        var confirmNewPasswordError = document.getElementById('confirmNewPasswordError');
-                                                        var errorSummary = document.getElementById('errorSummary');
-                                                
-                                                        // Clear previous error messages
-                                                        displayNameError.textContent = '';
-                                                        phoneNumberError.textContent = '';
-                                                        emailError.textContent = '';
-                                                        newPassError.textContent = '';
-                                                        confirmNewPasswordError.textContent = '';
-                                                        errorSummary.textContent = '';
-                                                
-                                                        // Validate Display Name
-                                                        if (!displayName) {
-                                                            displayNameError.textContent = 'Display Name is required';
-                                                        }
-                                                
-                                                        // Validate Phone Number
-                                                        if (!phoneNumber) {
-                                                            phoneNumberError.textContent = 'Phone Number is required';
-                                                        }
-                                                
-                                                        // Validate Email
-                                                        if (!email) {
-                                                            emailError.textContent = 'Email is required';
-                                                        } else if (!isValidEmail(email)) {
-                                                            emailError.textContent = 'Please enter a valid email address';
-                                                        }
-                                                
-                                                        // Check if new password and confirm new password match
-                                                        if (newPassword && newPassword !== confirmNewPassword) {
-                                                            newPassError.textContent = 'Passwords do not match';
-                                                            confirmNewPasswordError.textContent = 'Passwords do not match';
-                                                        }
-                                                
-                                                        // Check if there are any validation errors
-                                                        if (displayNameError.textContent || phoneNumberError.textContent || emailError.textContent || newPassError.textContent || confirmNewPasswordError.textContent) {
-                                                            // If there are validation errors, prevent the form submission
-                                                            return false;
-                                                        }
-                                                
-                                                        // If there are no validation errors, allow the form submission
-                                                        // Note: This will allow the form to submit even if the server response is an error,
-                                                        // so you may need to handle server errors separately on the client if needed.
-                                                        return true;
-                                                    }
-
-                                                    function isValidEmail(email) {
-                                                            // Add your email validation logic here
-                                                            // This is a basic example; you may want to use a regular expression or a more sophisticated validation library
-                                                            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-                                                        }
-                                                    </script> -->
-                                                
-                                                
-                                                <!-- <script>
-                                                    // Display validation errors from the server
-                                                    var urlParams = new URLSearchParams(window.location.search);
-                                                    var validationErrors = urlParams.get('validationErrors');
-                                                    if (validationErrors) {
-                                                        var errorSummary = document.getElementById('errorSummary');
-                                                        errorSummary.textContent = 'Validation errors occurred:';
-                                                        
-                                                        // Split the validation errors and display them in the error summary
-                                                        var errors = JSON.parse(decodeURIComponent(validationErrors));
-                                                        errors.forEach(function (error) {
-                                                            var errorItem = document.createElement('div');
-                                                            errorItem.textContent = error;
-                                                            errorSummary.appendChild(errorItem);
-                                                        });
-                                                    }
-                                                </script> -->
-
-                                                <!-- <script>
-                                                    function validateForm() {
-                                                        var displayName = document.getElementById('displayName').value.trim();
-                                                        var phoneNumber = document.getElementById('phoneNumber').value.trim();
-                                                        var email = document.getElementById('email').value.trim();
-                                                        var newPassword = document.getElementById('newPass').value.trim();
-                                                        var confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
-                                                
-                                                        displayError('displayNameError', displayName === '', 'Display Name is required');
-                                                        displayError('phoneNumberError', phoneNumber === '', 'Phone Number is required');
-                                                        displayError('emailError', email === '', 'Email is required');
-                                                
-                                                        // Check if new password and confirm new password match
-                                                        if (newPassword && newPassword !== confirmNewPassword) {
-                                                            displayError('newPassError', true, 'Passwords do not match');
-                                                            displayError('confirmNewPasswordError', true, 'Passwords do not match');
-                                                            return false;
-                                                        } else {
-                                                            displayError('newPassError', false, '');
-                                                            displayError('confirmNewPasswordError', false, '');
-                                                        }
-                                                
-                                                        return true; // Allow form submission
-                                                    }
-                                                
-                                                    function displayError(elementId, condition, message) {
-                                                        var errorElement = document.getElementById(elementId);
-                                                        errorElement.textContent = message;
-                                                
-                                                        // Display or hide the error message based on the condition
-                                                        if (condition) {
-                                                            errorElement.style.display = 'block';
-                                                        } else {
-                                                            errorElement.style.display = 'none';
-                                                        }
-                                                    }
-                                                </script> -->
-
-
+                                             
 
                                                     
 
                                                 
                                             </div>
+
+<!-- Add jQuery library (if not already included) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#editUserDetails").submit(function (event) {
+      // Clear previous error messages
+      $(".error-message").text("");
+
+      // Validate display name
+      var displayName = $("#displayName").val().trim();
+      if (displayName === "") {
+        $("#displayNameError").text("Display Name is required.");
+        event.preventDefault();
+      }
+
+      // Validate phone number
+      var phoneNumber = $("#phoneNumber").val().trim();
+      if (phoneNumber === "") {
+        $("#phoneNumberError").text("Phone Number is required.");
+        event.preventDefault();
+      } else if (isNaN(phoneNumber)) {
+        $("#phoneNumberError").text("Phone Number must be a number.");
+        event.preventDefault();
+      }
+
+      // Check if the current password is filled
+      var currPassValue = $("#currPass").val().trim();
+      if (currPassValue !== "") {
+        // Current password is filled, validate new password and confirm new password
+        var newPassValue = $("#newPass").val().trim();
+        var confirmNewPassValue = $("#confirmNewPassword").val().trim();
+
+        if (newPassValue === "") {
+          $("#newPassError").text("New password is required.");
+          event.preventDefault();
+        }
+
+        if (confirmNewPassValue === "") {
+          $("#confirmNewPasswordError").text("Confirm new password is required.");
+          event.preventDefault();
+        } else if (newPassValue !== confirmNewPassValue) {
+          $("#confirmNewPasswordError").text("Passwords do not match.");
+          event.preventDefault();
+        }
+      }
+    });
+  });
+</script>
+
                                             <!-- .End .tab-pane -->
 
                                         </div>
@@ -987,9 +848,7 @@
         </div><!-- End .modal -->
 
 
-
-
-
+ 
 
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>

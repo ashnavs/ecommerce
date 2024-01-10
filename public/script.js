@@ -1,11 +1,4 @@
-
-
-
-
-
-
 //Add category form validation
-
 const message = document.getElementById('message');
 const hide = () => {
     message.style.display = 'none';
@@ -39,7 +32,6 @@ function validateForm() {
 
 
 //Sign Up form validation 
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('regForm');
 
@@ -103,110 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//edit address
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     const message = document.getElementById('message');
-//     const hide = () => {
-//         message.style.display = 'none';
-//     }
-//     setTimeout(hide, 3000);
-
-//     const form = document.getElementById('editAddress');
-
-//     form.addEventListener('submit', function (event) {
-//         event.preventDefault();
-//         if (validateForm()) {
-//             form.submit();
-//         }
-//     });
-
-//     function validateForm() {
-//         // Reset error messages
-//         resetErrorMessages();
-
-//         // Get form values
-//         var name = document.getElementById('name').value.trim();
-//         var country = document.getElementById('country').value.trim();
-//         var street = document.getElementById('street').value.trim();
-//         var houseno = document.getElementById('houseno').value.trim();
-//         var city = document.getElementById('city').value.trim();
-//         var pincode = document.getElementById('pincode').value.trim();
-//         var mobile = document.getElementById('mobile').value.trim();
-//         var email = document.getElementById('email').value.trim();
-
-//         var nameRegex = /^[A-Za-z\s]+$/;
-//         var mobileRegex = /^[0-9]{10}$/;
-//         var emailRegex = /^\S+@\S+\.\S+$/;
-
-//         var hasErrors = false;
-
-//         if (name === '' || !nameRegex.test(name)) {
-//             showError('nameError', 'Please enter a valid name');
-//             hasErrors = true;
-//         }
-
-//         if (country === '') {
-//             showError('countryError', 'Please enter the country');
-//             hasErrors = true;
-//         }
-
-//         if (street === '') {
-//             showError('streetError', 'Please enter the street');
-//             hasErrors = true;
-//         }
-
-//         if (houseno === '') {
-//             showError('housenoError', 'Please enter the houseno');
-//             hasErrors = true;
-//         }
-
-//         if (city === '') {
-//             showError('cityError', 'Please enter the city');
-//             hasErrors = true;
-//         }
-
-//         if (pincode === '' || !/^\d+$/.test(pincode)) {
-//             showError('pincodeError', 'Enter a valid numeric Pincode.');
-//             hasErrors = true;
-//         }
-
-//         if (!mobileRegex.test(mobile)) {
-//             showError('mobileError', 'Please enter a valid 10-digit mobile number');
-//             hasErrors = true;
-//         }
-
-//         if (!emailRegex.test(email)) {
-//             showError('emailError', 'Please enter a valid email address');
-//             hasErrors = true;
-//         }
-
-//         if (hasErrors) {
-//             return false;
-//         }
-
-//         // Continue with form submission
-//         return true;
-//     }
-
-//     function showError(errorId, errorMessage) {
-//         var errorElement = document.getElementById(errorId);
-//         errorElement.innerText = errorMessage;
-//         errorElement.style.color = 'red';
-//     }
-
-//     function resetErrorMessages() {
-//         var errorIds = [
-//             'nameError', 'countryError', 'streetError',
-//             'housenoError', 'cityError', 'pincodeError',
-//             'mobileError', 'emailError'
-//         ];
-
-//         errorIds.forEach(function (errorId) {
-//             document.getElementById(errorId).innerText = '';
-//         });
-//     }
-// });
 
 
 

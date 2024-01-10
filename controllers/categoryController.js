@@ -161,23 +161,50 @@ const editCategory = async (req, res) => {
 
 
 
+// const updateCategory = async (req, res) => {
+//     try {
+//         const id = req.query.id;
+//         const newName = req.body.name;
+
+//         // Check if the new name already exists in the database
+//         const existingCategory = await Category.findOne({ name: newName });
+//         if (existingCategory) {
+//             // If the category already exists, display an error message
+//             req.session.errorMessage = 'Category name already exists';
+//             return res.redirect(`/admin/edit-category?id=${id}`);
+//         }
+
+//         // Update the category in the database
+//         await Category.findByIdAndUpdate(id, { name: newName });
+
+//         // Set success message in the session
+//         req.session.successMessage = 'Category edited successfully';
+
+//         // Redirect to the category listing page or any other appropriate page
+//         res.redirect('/admin/category');
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// };
+
+
 const updateCategory = async (req, res) => {
     try {
         const id = req.query.id;
         const newName = req.body.name;
+        const description = req.body.description
+        const discountPercentage =req.body.discountPercentage
 
-        // Check if the new name already exists in the database
-        const existingCategory = await Category.findOne({ name: newName });
-        if (existingCategory) {
-            // If the category already exists, display an error message
+        const existingCategory = await Category.findOne({ name:newName });
+
+        if (existingCategory && existingCategory._id.toString() !== id.toString()) {
             req.session.errorMessage = 'Category name already exists';
             return res.redirect(`/admin/edit-category?id=${id}`);
         }
 
         // Update the category in the database
-        await Category.findByIdAndUpdate(id, { name: newName });
+        await Category.findByIdAndUpdate(id, { name: newName, description, offer: discountPercentage});
 
-        // Set success message in the session
         req.session.successMessage = 'Category edited successfully';
 
         // Redirect to the category listing page or any other appropriate page
@@ -186,9 +213,6 @@ const updateCategory = async (req, res) => {
         console.log(error.message);
     }
 };
-
-
-
 
 
 module.exports = {

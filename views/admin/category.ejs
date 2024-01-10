@@ -67,11 +67,11 @@
                                             <td class="" style="text-align: center;">
                                                 <% if (category.is_list) { %>
                                                     <a href="javascript:void(0);" class="unlist-category" data-category-id="<%= category._id.toString() %>">
-                                                        <p class="text-danger">Unlist</p>
+                                                        <p class="text-primary">List</p>
                                                     </a>
                                                 <% } else { %>
                                                     <a href="javascript:void(0);" class="list-category" data-category-id="<%= category._id.toString() %>">
-                                                        <p class="text-primary">List</p>
+                                                        <p class="text-danger">Unlist</p>
                                                     </a>
                                                 <% } %>
                                             </td>

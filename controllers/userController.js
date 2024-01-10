@@ -181,18 +181,43 @@ const verifyOtp = async (req,res)=>{
 
 
 //home before signup
+// const loadLandingHome = async (req, res) => {
+//     try {
+//         const user = req.session.user_id;
+//         const allProduct = await Product.find().sort({ createdAt: -1}).limit(8);
+//         const newArrivals = await Product.find().sort({ createdAt: -1}).limit(6)
+       
+
+//         res.render('landingHome', { allProduct , newArrivals , user });
+//     } catch (error) {
+//         console.log(error.message);
+//     }
+// }09/01/2024
+
 const loadLandingHome = async (req, res) => {
     try {
         const user = req.session.user_id;
-        const allProduct = await Product.find().sort({ createdAt: -1}).limit(8);
-        const newArrivals = await Product.find().sort({ createdAt: -1}).limit(6)
-       
 
-        res.render('landingHome', { allProduct , newArrivals , user });
+        // Populate the 'category' field in the Product model
+        const allProduct = await Product.find({ list: true })
+            .populate({
+                path: 'category',
+                select: 'is_list',
+            })
+            .sort({ createdAt: -1 })
+            .limit(8);
+
+        // Filter products where the associated category's 'is_list' property is true
+        const filteredProducts = allProduct.filter(product => product.category && product.category.is_list);
+
+        const newArrivals = allProduct.filter(product => product.category && product.category.is_list);
+
+        res.render('landingHome', { allProduct: filteredProducts, newArrivals, user });
     } catch (error) {
         console.log(error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 
 //login after signup
@@ -231,9 +256,19 @@ const verifyLogin=async(req,res)=>{
             if(userData.is_blocked === false){
                 req.session.user_id=userData._id;
                 const user  = req.session.user_id;
-                const allProduct = await Product.find();
-                const newArrivals = await Product.find().sort({createdAt:-1}).limit(6)
-                res.render('landingHome',{ allProduct , newArrivals , user, })
+                const allProduct = await Product.find({ list: true })
+            .populate({
+                path: 'category',
+                select: 'is_list',
+            })
+            .sort({ createdAt: -1 })
+            .limit(8);
+
+        // Filter products where the associated category's 'is_list' property is true
+        const filteredProducts = allProduct.filter(product => product.category && product.category.is_list);
+
+        const newArrivals = allProduct.filter(product => product.category && product.category.is_list);
+                res.render('landingHome',{  allProduct: filteredProducts , newArrivals , user, })
             }
             else{
                 res.render('login',{message:'Your account has temporarily suspended'})
@@ -491,14 +526,15 @@ const resetPass = async (req, res) => {
 const loaduserProfile = async(req,res)=>{
     try {
         const user = req.session.user_id;
-       
+        const errorType  = ''
+        const errorMessage= ""
         const userDetail = await User.findById(req.session.user_id);
         const address = await Address.find({user:user})
         const orderDetails = await Order.find({user:user}).sort({createdAt:-1})
         
         const transactions = await transactionModel.find({ user: user }).sort({ date: -1 });
         
-        res.render('user' ,{ user , userDetail , address , orderDetails , transactions})
+        res.render('user' ,{ user , userDetail , address , orderDetails , transactions, errorType, errorMessage })
     } catch (error) {
         console.log(error.message);
     }
@@ -598,92 +634,6 @@ const addAddressCheckout = async (req, res) => {
     }
   };
   
-// const addBillingAddress = async (req, res) => {
-//     try {
-//         // Assuming user information is available in req.userDetail (you may need to modify this based on your setup)
-//         const userId = req.session.user_id;
-
-//         // Extract address data from the form submission
-//         const {
-//             name,
-//             email,
-//             mobile,
-//             houseno,
-//             street,
-//             landmark,
-//             pincode,
-//             city,
-//             country,
-//         } = req.body;
-
-//         // Create a new address instance
-//         const newAddress = new Address({
-//             user: userId,
-//             name,
-//             email,
-//             mobile,
-//             houseno,
-//             street,
-//             landmark,
-//             pincode,
-//             city,
-//             country,
-//         });
-
-//         // Save the new address to the database
-//         await newAddress.save();
-
-//         // Respond with success message
-//         res.json({ success: true, message: 'Address added successfully' });
-//     } catch (error) {
-//         // Handle any errors that may occur during the process
-//         console.error(error);
-//         res.status(500).json({ success: false, message: 'Internal server error' });
-//     }
-// };
-
-
-
-
-// const updateUserProfile = async(req,res) => {
-//     try {
-//         const userId = req.session.user_id;
-//         const {displayName , phoneNumber , currPass , newPass, confirmNewPassword} = req.body;
-
-//         const user = await User.findById(userId);
-
-//          // Check if the provided current password matches the stored hashed password
-//          if (currPass && !bcrypt.compareSync(currPass, user.password)) {
-//             return res.status(400).json({ success: false, message: 'Current password is incorrect' });
-//         }
-
-//         user.name = displayName;
-//         user.mobile = phoneNumber;
-
-//          // If a new password is provided, hash and update the password
-//          if (newPass) {
-//             if (newPass !== confirmNewPassword) {
-//                 return res.status(400).json({ success: false, message: 'New password and confirm password do not match' });
-//             }
-
-//             // Hash the new password
-//             const hashedPassword = bcrypt.hashSync(newPass, 10);
-//             user.password = hashedPassword;
-//         }
-
-//         // Save the updated user details to the database
-//         await user.save();
-
-//         // Redirect to the user profile page or display a success message
-//         res.redirect('/login');
-//     } catch (error) {
-//         console.error(error);
-//         // res.status(500).json({ success: false, message: 'Internal server error' });
-//           // Extract validation error messages
-//           const validationErrors = Object.values(error.errors).map(err => err.message);
-//           return res.status(400).json({ success: false, validationErrors });
-//     }
-// };
 
 const updateUserProfile = async (req, res) => {
     try {
@@ -772,7 +722,7 @@ const editAddress = async (req, res) => {
         return res.status(404).json({ success: false, message: 'Address not found' });
       }
   
-      // Update the existing address fields
+     
       existingAddress.name = name;
       existingAddress.email = email;
       existingAddress.mobile = mobile;
@@ -783,14 +733,12 @@ const editAddress = async (req, res) => {
       existingAddress.city = city;
       existingAddress.country = country;
   
-      // Save the updated address to the database
+     
       await existingAddress.save();
   
-      // Respond with success message
+  
       res.redirect('/user');
-      // res.json({ success: true, message: 'Address updated successfully' });
     } catch (error) {
-      // Handle any errors that may occur during the process
       console.error(error);
       res.status(500).json({ success: false, message: 'Internal server error' });
     }

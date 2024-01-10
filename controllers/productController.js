@@ -4,9 +4,7 @@ const { model } = require('mongoose');
 const path = require('path')
 const uploads = require('../helper/multer')
 const multer = require('multer');
-const sharp = require('sharp');
-const fs = require('fs-extra');
-const flash = require('flash');
+
 
 
 const async = require('async');
@@ -57,12 +55,82 @@ const async = require('async');
 
 
 
+// async function loadProducts(req, res) {
+//   try {
+//     const allCategory = await Category.distinct('name');
+//     const brands = await Product.distinct('brand');
+//     const categories = await Category.find({is_list:true});
+//     const user = req.session.user_id;
+//     const selectedCategory = req.query.category;
+//     const selectedBrand = req.query.brand;
+//     const searchQuery = req.query.q;
+
+//     const sortBy = req.query.sortby || 'priceLowToHigh';
+
+//     let sortQuery = {};
+//     if (sortBy === 'priceLowToHigh') {
+//       sortQuery = { discountPrice: 1 };
+//     } else if (sortBy === 'priceHighToLow') {
+//       sortQuery = { discountPrice: -1 };
+//     }
+
+//     const page = parseInt(req.query.page, 10) || 1;
+//     const productsPerPage = 4; 
+
+//     const filter = { list: true };
+//     if (selectedCategory) {
+//       const selectedCategoryName = await Category.findOne({ name: selectedCategory ,  is_list: true });
+//       filter['category'] = selectedCategoryName._id;
+//     }
+//     if (selectedBrand) {
+//       filter['brand'] = selectedBrand;
+//     }
+//     if (searchQuery) {
+//       // Use regex for case-insensitive search
+//       filter['$or'] = [
+//         { name: { $regex: new RegExp(searchQuery, 'i') } },
+//         { brand: { $regex: new RegExp(searchQuery, 'i') } },
+//         { category: { $in: await Category.find({ name: { $regex: new RegExp(searchQuery, 'i') } }).distinct('_id') } },
+//       ];
+//     }
+//     const results = await async.parallel({
+//       productdata: async function () {
+//         return Product.find(filter)
+//           .sort(sortQuery)
+//           .skip((page - 1) * productsPerPage)
+//           .limit(productsPerPage)
+//           .exec();
+//       },
+//       totalProducts: async function () {
+//         return Product.countDocuments(filter).exec();
+//       },
+//     });
+
+//     const { productdata, totalProducts } = results;
+
+
+//     res.render('productsView', {
+//       productdata,
+//       categories,
+//       brands,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalProducts / productsPerPage),
+//       user,
+//       allCategory,
+//       sortBy
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// } //09/01/2024
+
 async function loadProducts(req, res) {
   try {
     const allCategory = await Category.distinct('name');
     const brands = await Product.distinct('brand');
-    const categories = await Category.find({is_list:true});
-    const user = req.session.user_id
+    const categories = await Category.find({ is_list: true });
+    const user = req.session.user_id;
     const selectedCategory = req.query.category;
     const selectedBrand = req.query.brand;
     const searchQuery = req.query.q;
@@ -77,12 +145,18 @@ async function loadProducts(req, res) {
     }
 
     const page = parseInt(req.query.page, 10) || 1;
-    const productsPerPage = 4; 
+    const productsPerPage = 8;
 
-    const filter = {};
+    const filter = { list: true };
     if (selectedCategory) {
-      const selectedCategoryName = await Category.findOne({ name: selectedCategory });
-      filter['category'] = selectedCategoryName._id;
+      const selectedCategoryObject = await Category.findOne({ name: selectedCategory, is_list: true });
+      if (selectedCategoryObject) {
+        filter['category'] = { $in: [selectedCategoryObject._id] };
+      } else {
+        // Handle case where selected category doesn't exist or is not listed
+        res.status(404).send('Category not found or not listed');
+        return;
+      }
     }
     if (selectedBrand) {
       filter['brand'] = selectedBrand;
@@ -92,41 +166,198 @@ async function loadProducts(req, res) {
       filter['$or'] = [
         { name: { $regex: new RegExp(searchQuery, 'i') } },
         { brand: { $regex: new RegExp(searchQuery, 'i') } },
-        { category: { $in: await Category.find({ name: { $regex: new RegExp(searchQuery, 'i') } }).distinct('_id') } },
       ];
     }
 
-    const results = await async.parallel({
-      productdata: async function () {
-        return Product.find(filter)
-          .sort(sortQuery)
-          .skip((page - 1) * productsPerPage)
-          .limit(productsPerPage)
-          .exec();
-      },
-      totalProducts: async function () {
-        return Product.countDocuments().exec();
-      },
-    });
+    const results = await Promise.all([
+      Product.find(filter)
+        .populate({
+          path: 'category',
+          match: { is_list: true },
+        })
+        .sort(sortQuery)
+        .skip((page - 1) * productsPerPage)
+        .limit(productsPerPage)
+        .exec(),
+      Product.countDocuments(filter).exec(),
+    ]);
 
-    const { productdata, totalProducts } = results;
+    const [productdata, totalProducts] = results;
 
+    // Manually filter out products with categories where is_list is false
+    const filteredProductdata = productdata.filter(product => product.category !== null);
 
     res.render('productsView', {
-      productdata,
+      productdata: filteredProductdata,
       categories,
       brands,
       currentPage: page,
       totalPages: Math.ceil(totalProducts / productsPerPage),
       user,
       allCategory,
-      sortBy
+      sortBy,
     });
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Internal Server Error');
   }
 }
+
+
+
+// async function loadProducts(req, res) {
+//   try {
+//     const allCategory = await Category.distinct('name');
+//     const brands = await Product.distinct('brand');
+//     const categories = await Category.find({ is_list: true });
+//     const user = req.session.user_id;
+//     const selectedCategory = req.query.category;
+//     const selectedBrand = req.query.brand;
+//     const searchQuery = req.query.q;
+
+//     const sortBy = req.query.sortby || 'priceLowToHigh';
+
+//     let sortQuery = {};
+//     if (sortBy === 'priceLowToHigh') {
+//       sortQuery = { discountPrice: 1 };
+//     } else if (sortBy === 'priceHighToLow') {
+//       sortQuery = { discountPrice: -1 };
+//     }
+
+//     const page = parseInt(req.query.page, 10) || 1;
+//     const productsPerPage = 4;
+
+//     const filter = { list: true };
+//     if (selectedCategory) {
+//       const selectedCategoryObject = await Category.findOne({ name: selectedCategory, is_list: true });
+//       if (selectedCategoryObject) {
+//         filter['category'] = selectedCategoryObject._id;
+//       } else {
+//         // Handle case where selected category doesn't exist or is not listed
+//         res.status(404).send('Category not found or not listed');
+//         return;
+//       }
+//     }
+//     if (selectedBrand) {
+//       filter['brand'] = selectedBrand;
+//     }
+//     if (searchQuery) {
+//       // Use regex for case-insensitive search
+//       filter['$or'] = [
+//         { name: { $regex: new RegExp(searchQuery, 'i') } },
+//         { brand: { $regex: new RegExp(searchQuery, 'i') } },
+//         {
+//           'category.name': {  // Use 'category.name' to match the name of the referenced category
+//             $in: await Category.find({ name: { $regex: new RegExp(searchQuery, 'i') }, is_list: true }).distinct('_id'),
+//           },
+//         },
+//       ];
+//     }
+
+//     const results = await Promise.all([
+//       Product.find(filter)
+//         .populate('category') // Populate the 'category' field to get details
+//         .sort(sortQuery)
+//         .skip((page - 1) * productsPerPage)
+//         .limit(productsPerPage)
+//         .exec(),
+//       Product.countDocuments(filter).exec(),
+//     ]);
+
+//     const [productdata, totalProducts] = results;
+
+//     res.render('productsView', {
+//       productdata,
+//       categories,
+//       brands,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalProducts / productsPerPage),
+//       user,
+//       allCategory,
+//       sortBy,
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// }//abi
+// async function loadProducts(req, res) {
+//   try {
+//     const allCategory = await Category.distinct('name');
+//     const brands = await Product.distinct('brand');
+//     const categories = await Category.find({ is_list: true });
+//     const user = req.session.user_id;
+//     const selectedCategory = req.query.category;
+//     const selectedBrand = req.query.brand;
+//     const searchQuery = req.query.q;
+
+//     const sortBy = req.query.sortby || 'priceLowToHigh';
+
+//     let sortQuery = {};
+//     if (sortBy === 'priceLowToHigh') {
+//       sortQuery = { discountPrice: 1 };
+//     } else if (sortBy === 'priceHighToLow') {
+//       sortQuery = { discountPrice: -1 };
+//     }
+
+//     const page = parseInt(req.query.page, 10) || 1;
+//     const productsPerPage = 4;
+
+//     const filter = { list: true };
+//     if (selectedCategory) {
+//       const selectedCategoryObject = await Category.findOne({ name: selectedCategory, is_list: true });
+//       if (selectedCategoryObject) {
+//         filter['category'] = selectedCategoryObject._id;
+//       } else {
+//         // Handle case where selected category doesn't exist or is not listed
+//         res.status(404).send('Category not found or not listed');
+//         return;
+//       }
+//     }
+//     if (selectedBrand) {
+//       filter['brand'] = selectedBrand;
+//     }
+//     if (searchQuery) {
+//       // Use regex for case-insensitive search
+//       filter['$or'] = [
+//         { name: { $regex: new RegExp(searchQuery, 'i') } },
+//         { brand: { $regex: new RegExp(searchQuery, 'i') } },
+//         {
+//           'category.name': {  // Use 'category.name' to match the name of the referenced category
+//             $in: await Category.find({ name: { $regex: new RegExp(searchQuery, 'i') }, is_list: true }).distinct('_id'),
+//           },
+//         },
+//       ];
+//     }
+
+//     const results = await Promise.all([
+//       Product.find(filter)
+//         .populate('category') // Populate the 'category' field to get details
+//         .sort(sortQuery)
+//         .skip((page - 1) * productsPerPage)
+//         .limit(productsPerPage)
+//         .exec(),
+//       Product.countDocuments(filter).exec(),
+//     ]);
+
+//     const [productdata, totalProducts] = results;
+
+//     res.render('productsView', {
+//       productdata,
+//       categories,
+//       brands,
+//       currentPage: page,
+//       totalPages: Math.ceil(totalProducts / productsPerPage),
+//       user,
+//       allCategory,
+//       sortBy,
+//     });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send('Internal Server Error');
+//   }
+// }
+
 
 
 // const loadProductsView = async (req, res) => {
@@ -372,6 +603,101 @@ async function listProduct(req, res) {
 }
 
 
+// const updateProduct = async (req, res) => {
+//   try {
+//       const productId = req.query.id;
+//       const {
+//           name,
+//           description,
+//           model,
+//           screenSize,
+//           price,
+//           discountPrice,
+//           quantity,
+//           brand,
+//           ram,
+//           storage,
+//           processor,
+//           category,
+//           graphicsCard,
+//           osArchitecture,
+//           os
+//       } = req.body;
+
+      
+//       // Handle image update if a new image is provided
+//       if (req.files && req.files.length > 0) {
+//           // Assuming the productImages field in your Product model is an array
+//           const imagePaths = req.files.map((file) => file.filename);
+          
+//           // Update the product details along with productImages
+//           const updatedProduct = await Product.findByIdAndUpdate(
+//               { _id: productId },
+//               {
+//                   name,
+//                   description,
+//                   model,
+//                   screenSize,
+//                   price,
+//                   discountPrice,
+//                   quantity,
+//                   brand,
+//                   ram,
+//                   storage,
+//                   processor,
+//                   category,
+//                   graphicsCard,
+//                   osArchitecture,
+//                   os,
+//                   productImage: imagePaths
+//               },
+//               { new: true }
+//           );
+
+//           if (updatedProduct) {
+//               console.log('Product Updated:', updatedProduct);
+//           } else {
+//               console.log('Product not found or update failed.');
+//           }
+//       } else {
+//           // If no new image is provided, update other fields without changing productImages
+//           const updatedProduct = await Product.findByIdAndUpdate(
+//               { _id: productId },
+//               {
+//                   name,
+//                   description,
+//                   model,
+//                   screenSize,
+//                   price,
+//                   discountPrice,
+//                   quantity,
+//                   brand,
+//                   ram,
+//                   storage,
+//                   processor,
+//                   category,
+//                   graphicsCard,
+//                   osArchitecture,
+//                   os
+//               },
+//               { new: true }
+//           );
+
+//           if (updatedProduct) {
+//               console.log('Product Updated:', updatedProduct);
+//           } else {
+//               console.log('Product not found or update failed.');
+//           }
+//       }
+
+//       res.redirect('/admin/products');
+//   } catch (error) {
+//       console.log(error.message);
+//       res.status(500).send('Internal Server Error');
+//   }
+// };
+
+
 const updateProduct = async (req, res) => {
   try {
       const productId = req.query.id;
@@ -380,19 +706,34 @@ const updateProduct = async (req, res) => {
           description,
           model,
           screenSize,
-          price,
-          discountPrice,
           quantity,
           brand,
           ram,
           storage,
           processor,
-          category,
           graphicsCard,
           osArchitecture,
           os
       } = req.body;
 
+      const { discountPercentage, price, category } = req.body;
+      let offerPrice = 0;
+      let discountAmount = 0;
+      console.log("///////////////",{ discountPercentage, price, category });
+      const filteredCategory = await Category.findById({ _id: category });
+      console.log(filteredCategory);
+  
+      if (filteredCategory.offer > 0 ||filteredCategory.offer > discountPercentage ) {
+          offerPrice = (price * filteredCategory.offer) / 100;
+          console.log(offerPrice);
+          discountAmount = price - offerPrice;
+          console.log(discountAmount);
+      } else {
+        offerPrice = (price * discountPercentage) / 100;
+        console.log(offerPrice);
+        discountAmount = price - offerPrice;
+        console.log(discountAmount);
+      }     
       // Handle image update if a new image is provided
       if (req.files && req.files.length > 0) {
           // Assuming the productImages field in your Product model is an array
@@ -407,7 +748,7 @@ const updateProduct = async (req, res) => {
                   model,
                   screenSize,
                   price,
-                  discountPrice,
+                  discountPrice:discountAmount,
                   quantity,
                   brand,
                   ram,
@@ -437,7 +778,7 @@ const updateProduct = async (req, res) => {
                   model,
                   screenSize,
                   price,
-                  discountPrice,
+                  discountPrice:discountAmount,
                   quantity,
                   brand,
                   ram,
@@ -464,8 +805,6 @@ const updateProduct = async (req, res) => {
       res.status(500).send('Internal Server Error');
   }
 };
-
-
 
 module.exports = {
     loadProduct,
