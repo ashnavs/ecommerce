@@ -138,9 +138,7 @@
                                                             <li>
                                                                 <a class="dropdown-item" href="#" data-status="Order confirmed">Order confirmed</a>
                                                             </li>
-                                                            <li>
-                                                                <a class="dropdown-item" href="#" data-status="Cancel Order">Cancel order</a>
-                                                            </li>
+                                                            
                                                             <li>
                                                                 <a class="dropdown-item" href="#" data-status="Pending">Pending</a>
                                                             </li>
@@ -242,7 +240,7 @@
                 const statusDropdown = document.getElementById('statusDropdown');
                 const orderStatus = '<%= orderDetails.status %>';
             
-                if (orderStatus === 'Cancelled' || orderStatus === 'Delivered') {
+                if (orderStatus === 'Cancelled' || orderStatus === 'Delivered' || orderStatus === 'Returned') {
                     statusDropdown.querySelector('.btn').disabled = true;
                 }
             
