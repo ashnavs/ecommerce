@@ -222,52 +222,50 @@
                                                             <h4>payment method</h4>
                                                             <p><%=orderDetails.paymentMethod%></p>
                                                         </div>
-
-                                                        <% if (orderDetails.status==='Delivered' || 'Returned' ) { %>
-                                                            <!-- Content to display if order status is 'Canceled' -->
-    
-                                                            <% if(orderDetails.returnRequest==='accepted' ){ %>
+                                                        <% if (orderDetails.actionStatus) { %>
+                                                            <!-- Code for when an action is placed -->
+                                                            <button id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <button id="returnButton" class="btn btn-outline-secondary p-1 return-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                            <p style="text-align: center; color: green;">
+                                                                <%= orderDetails.actionType === 'cancel' ? 'Order has been successfully cancelled. Thank you!' : 'Return request has been accepted. Refund will be credited to your wallet shortly. Thank you for your patience!' %>
+                                                            </p>
+                                                        <% } else if (orderDetails.status === 'Delivered') { %>
+                                                            <!-- Content to display if order status is 'Delivered' -->
+                                                            <% if (orderDetails.returnRequest === 'accepted') { %>
                                                                 <h4 class="mb-0 text-warning">Return Request Accepted!</h4>
-                                                                <p class="mt-0 ">Your return request has been successfully
-                                                                    accepted! and the refund will be credited to your wallet
-                                                                    shortly. Thank you for your patience!</p>
-                                                                <% }else if(orderDetails.returnRequest==='rejected' ){ %>
-                                                                    ,<h4 class="mb-0 text-danger">Return Request rejected!
-                                                                    </h4>
-                                                                    <p class="mt-0 ">"Unfortunately, your return request has
-                                                                        been rejected. We apologize for any inconvenience
-                                                                        caused. If you have any concerns or need further
-                                                                        assistance, please don't hesitate to contact our
-                                                                        support team."</p>
-                                                                    <% }else{ %>
-                                                                        <button 
-                                                                            onclick="returnOrder('<%= orderDetails._id %>')"
-                                                                            id=returnButton class="btn btn-outline-secondary p-1 return-button"
-                                                                            data-order-id="<%= orderDetails._id %>"
-                                                                            
-                                                                            data-product-id="">Return order</button>
-                                                                        <% } %>
-    
-    
-    
-    
-                                                                            <% }else{ %>
-                                                                                <% if(orderDetails.status==='Cancelled' ||
-                                                                                    orderDetails.status==='Return Confirmed'
-                                                                                    ){ %>
-    
-                                                                                    <p
-                                                                                        style="text-align: center; color: red;">
-                                                                                        Canceled order Succefully</p>
-                                                                                    <% }else{ %>
-                                                                                        <button  onclick="disableButton()"
-                                                                                            id=cancelButton
-                                                                                            class=" btn btn-outline-danger p-1 cancel-button"
-                                                                                            data-order-id="<%= orderDetails._id %>"
-                                                                                            data-product-id="">cancel
-                                                                                            order</button>
-                                                                                        <% } %>
-                                                                                            <% } %>
+                                                                <p class="mt-0 ">
+                                                                    Your return request has been successfully accepted! and the refund will be credited to your wallet shortly. Thank you for your patience!
+                                                                </p>
+                                                                <button id="returnButton" class="btn btn-outline-secondary p-1 return-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                                <button id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <% } else if (orderDetails.returnRequest === 'rejected') { %>
+                                                                <h4 class="mb-0 text-danger">Return Request rejected!</h4>
+                                                                <p class="mt-0 ">
+                                                                    Unfortunately, your return request has been rejected. We apologize for any inconvenience caused. If you have any concerns or need further assistance, please don't hesitate to contact our support team.
+                                                                </p>
+                                                                <button id="returnButton" class="btn btn-outline-secondary p-1 return-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                                <button id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <% } else { %>
+                                                                <button onclick="returnOrder('<%= orderDetails._id %>')" id="returnButton" class="btn btn-outline-secondary p-1 return-button" data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                                <button id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <% } %>
+                                                        <% } else if (orderDetails.status === 'Cancelled' || orderDetails.status === 'Returned') { %>
+                                                            <!-- Code for other order statuses -->
+                                                            <button onclick="disableButton()" id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <button id="returnButton" class="btn btn-outline-secondary p-1 return-button" disabled data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                            <p style="text-align: center; color: red;">
+                                                                <%= orderDetails.status === 'Cancelled' ? 'Order has been cancelled successfully.' : 'Product has been returned. Further actions are disabled.' %>
+                                                            </p>
+                                                        <% } else { %>
+                                                            <!-- Code for other order statuses -->
+                                                            <button onclick="disableButton()" id="cancelButton" class="btn btn-outline-danger p-1 cancel-button" data-order-id="<%= orderDetails._id %>" data-product-id="">Cancel order</button>
+                                                            <button id="returnButton" class="btn btn-outline-secondary p-1 return-button" data-order-id="<%= orderDetails._id %>" data-product-id="">Return order</button>
+                                                        <% } %>
+                                                        
+                                                        
+                                                        
+                                                        
+                                                                                
                                                     </div>
                                                 </div>
                                             </div>

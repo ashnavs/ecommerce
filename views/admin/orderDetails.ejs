@@ -238,8 +238,64 @@
                 </div>
             </div>
             <!-- Modal end -->
-
             <script>
+                const statusDropdown = document.getElementById('statusDropdown');
+                const orderStatus = '<%= orderDetails.status %>';
+            
+                if (orderStatus === 'Cancelled' || orderStatus === 'Delivered') {
+                    statusDropdown.querySelector('.btn').disabled = true;
+                }
+            
+                const dropdownItems = document.querySelectorAll('.dropdown-item');
+            
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function (event) {
+                        event.preventDefault();
+            
+                        const newStatus = this.getAttribute('data-status');
+                        const orderId = '<%= orderDetails._id %>';
+                        console.log(orderId);
+                        console.log(newStatus);
+            
+                        updateOrderStatus(orderId, newStatus);
+                    });
+                });
+            
+                function updateOrderStatus(orderId, status) {
+                    const url = `/admin/ChangeOrderStatus`;
+            
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ orderId, status }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const updatedStatus = status;
+                            console.log(updatedStatus);
+                            updateFrontendStatus(updatedStatus);
+            
+                            console.log('Order status updated successfully:', updatedStatus);
+                        })
+                        .catch(error => {
+                            console.error('Error updating order status:', error);
+                        });
+                }
+            
+                function updateFrontendStatus(status) {
+                    const statusDetailsDiv = document.getElementById('statusDetails');
+                    if (statusDetailsDiv) {
+                        statusDetailsDiv.innerHTML = `<strong></strong><br>${status}`;
+                    }
+            
+                    console.log('Updating front-end with new status:', status);
+                }
+            </script>
+            
+
+            <!-- <script>
 
 
                 const statusDropdwon = document.getElementById('statusDropdown');
@@ -306,7 +362,7 @@
                     console.log('Updating front-end with new status:', status);
                 }
                 
-                </script>
+                </script> -->
         
 
             <!-- latest js -->
