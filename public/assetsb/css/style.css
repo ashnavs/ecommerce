@@ -15588,7 +15588,7 @@ table tbody tr td a .ri-delete-bin-line {
 .order-details-table .table-details .table tbody tr td {
     padding: 10px;
     min-width: 170px;
-    max-width: 150px;
+    max-width: 300px;
     border-bottom: none !important;
     color: #7e7e7e
 }
